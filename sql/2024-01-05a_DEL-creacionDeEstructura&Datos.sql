@@ -7,11 +7,18 @@ USE `daw_torneo`;
 -- Iniciar transacción
 START TRANSACTION;
 
+DROP TABLE IF EXISTS `rol`;
+CREATE TABLE `rol` (
+  `id` bigint PRIMARY KEY NOT NULL AUTO_INCREMENT,
+  `nombre` varchar(100) NOT NULL,
+  `descripcion` varchar(1000)
+);
+
 DROP TABLE IF EXISTS `torneo`;
 CREATE TABLE `torneo` (
   `id` bigint PRIMARY KEY NOT NULL AUTO_INCREMENT,
   `nombre` varchar(100) NOT NULL,
-  `descripcion` varchar(1000) NOT NULL,
+  `descripcion` varchar(1000),
   `participantes_max` int NOT NULL,
   `disciplina_id` bigint NOT NULL,
   `tipo_torneo_id` bigint NOT NULL,
@@ -133,8 +140,8 @@ CREATE TABLE `usuario` (
   `apellido1` varchar(100) NOT NULL,
   `apellido2` varchar(100) NOT NULL,
   `email` varchar(100) UNIQUE NOT NULL,
-  `rol` varchar(100),
-  `password` varchar(100) NOT NULL
+  `password` varchar(100) NOT NULL,
+  `rol_id` bigint
 );
 
 DROP TABLE IF EXISTS `participante`;
@@ -297,14 +304,23 @@ ALTER TABLE `reserva_pista` ADD FOREIGN KEY (`reserva_id`) REFERENCES `reserva` 
 
 ALTER TABLE `reserva_pista` ADD FOREIGN KEY (`pista_id`) REFERENCES `pista` (`id`);
 
+ALTER TABLE `usuario` ADD FOREIGN KEY (`rol_id`) REFERENCES `rol` (`id`);
+
 -- Confirmar la transacción
 COMMIT;
 
 -- DATA
 
--- Active: 1704395975940@@127.0.0.1@3306@daw_torneo
 -- Iniciar transacción
 START TRANSACTION;
+INSERT INTO rol (nombre, descripcion) VALUES
+    ('sysadmin', 'Tiene acceso a absolutamente todo'),
+    ('admin', 'Administrador del sistema'),
+    ('organizador', 'Usuario registrado que organiza torneos'),
+    ('gestor', 'Usuario registrado que gestiona equipos'),
+    ('participante', 'Usuario registrado que participa en torneos');
+    -- ('guest', 'Usuario no registrado');
+
 
 -- Insertar datos de prueba para la tabla 'disciplina'
 INSERT INTO disciplina (nombre, descripcion) VALUES
@@ -414,9 +430,12 @@ INSERT INTO equipo_participante (equipo_id, participante_id) VALUES
     (3, 3);
 
 -- Insertar datos de prueba para la tabla 'usuario'
-INSERT INTO usuario (nombre, apellido1, apellido2, email, rol, password) VALUES
-    ('Juan', 'Pérez', 'Gómez', 'juan@example.com', 'Admin', 'password123'),
-    ('María', 'García', 'López', 'maria@example.com', 'Usuario', 'securepass');
+INSERT INTO usuario (nombre, apellido1, apellido2, email, rol_id, password) VALUES
+    ('Juan', 'Pérez', 'Gómez', 'juan@example.com', 1, '123'),
+    ('María', 'García', 'López', 'maria@example.com', 2, '1234'),
+    ('Pedro', 'Martínez', 'Sánchez', 'pedrito@example.com', 3, '12345'),
+    ('Ana', 'Rodríguez', 'Fernández', 'anita@example.com', 4, '123456'),
+    ('Luis', 'González', 'García', 'surluisito29@example.com', 5, '1234567');
 
 
 -- Insertar datos de prueba para la tabla 'participante_documento'

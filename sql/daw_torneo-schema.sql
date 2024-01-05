@@ -1,30 +1,51 @@
+DROP DATABASE IF EXISTS `daw_torneo`;
+CREATE DATABASE `daw_torneo`
+    DEFAULT CHARACTER SET = 'utf8mb4';
+USE `daw_torneo`;
+
+-- SCHEMA
+-- Iniciar transacción
+START TRANSACTION;
+
+DROP TABLE IF EXISTS `rol`;
+CREATE TABLE `rol` (
+  `id` bigint PRIMARY KEY NOT NULL AUTO_INCREMENT,
+  `nombre` varchar(100) NOT NULL,
+  `descripcion` varchar(1000)
+);
+
+DROP TABLE IF EXISTS `torneo`;
 CREATE TABLE `torneo` (
   `id` bigint PRIMARY KEY NOT NULL AUTO_INCREMENT,
   `nombre` varchar(100) NOT NULL,
-  `descripcion` varchar(1000) NOT NULL,
+  `descripcion` varchar(1000),
   `participantes_max` int NOT NULL,
   `disciplina_id` bigint NOT NULL,
   `tipo_torneo_id` bigint NOT NULL,
   `clase_id` bigint NOT NULL
 );
 
+DROP TABLE IF EXISTS `torneo_imagen`;
 CREATE TABLE `torneo_imagen` (
   `torneo_id` bigint NOT NULL,
   `imagen_id` bigint,
   PRIMARY KEY (`torneo_id`, `imagen_id`)
 );
 
+DROP TABLE IF EXISTS `disciplina`;
 CREATE TABLE `disciplina` (
   `id` bigint PRIMARY KEY NOT NULL AUTO_INCREMENT,
   `nombre` varchar(100) UNIQUE NOT NULL,
   `descripcion` varchar(1000)
 );
 
+DROP TABLE IF EXISTS `tipo_torneo`;
 CREATE TABLE `tipo_torneo` (
   `id` bigint PRIMARY KEY NOT NULL AUTO_INCREMENT,
   `nombre` varchar(100) UNIQUE NOT NULL
 );
 
+DROP TABLE IF EXISTS `clase`;
 CREATE TABLE `clase` (
   `id` bigint PRIMARY KEY NOT NULL AUTO_INCREMENT,
   `titulo` varchar(100) NOT NULL,
@@ -32,6 +53,7 @@ CREATE TABLE `clase` (
   `imagen_id` bigint
 );
 
+DROP TABLE IF EXISTS `normativa`;
 CREATE TABLE `normativa` (
   `id` bigint PRIMARY KEY NOT NULL AUTO_INCREMENT,
   `nombre` varchar(250) UNIQUE NOT NULL,
@@ -39,12 +61,14 @@ CREATE TABLE `normativa` (
   `documento_id` bigint NOT NULL
 );
 
+DROP TABLE IF EXISTS `torneo_normativa`;
 CREATE TABLE `torneo_normativa` (
   `torneo_id` bigint NOT NULL,
   `normativa_id` bigint NOT NULL,
   PRIMARY KEY (`torneo_id`, `normativa_id`)
 );
 
+DROP TABLE IF EXISTS `categoria`;
 CREATE TABLE `categoria` (
   `id` bigint PRIMARY KEY NOT NULL AUTO_INCREMENT,
   `nombre` varchar(100) UNIQUE NOT NULL,
@@ -52,6 +76,7 @@ CREATE TABLE `categoria` (
   `edad_max` int NOT NULL
 );
 
+DROP TABLE IF EXISTS `premio`;
 CREATE TABLE `premio` (
   `id` bigint PRIMARY KEY NOT NULL AUTO_INCREMENT,
   `nombre` varchar(100) UNIQUE NOT NULL COMMENT 'trofeo',
@@ -61,12 +86,14 @@ CREATE TABLE `premio` (
   `equipo_id` bigint
 );
 
+DROP TABLE IF EXISTS `torneo_categoria`;
 CREATE TABLE `torneo_categoria` (
   `torneo_id` bigint NOT NULL,
   `categoria_id` bigint NOT NULL,
   PRIMARY KEY (`torneo_id`, `categoria_id`)
 );
 
+DROP TABLE IF EXISTS `partido`;
 CREATE TABLE `partido` (
   `id` bigint PRIMARY KEY NOT NULL AUTO_INCREMENT,
   `jornada` int NOT NULL,
@@ -75,6 +102,7 @@ CREATE TABLE `partido` (
   `direccion_id` bigint NOT NULL
 );
 
+DROP TABLE IF EXISTS `partido_equipo`;
 CREATE TABLE `partido_equipo` (
   `partido_id` bigint NOT NULL,
   `equipo_id` bigint NOT NULL,
@@ -82,12 +110,14 @@ CREATE TABLE `partido_equipo` (
   PRIMARY KEY (`partido_id`, `equipo_id`)
 );
 
+DROP TABLE IF EXISTS `torneo_equipo`;
 CREATE TABLE `torneo_equipo` (
   `torneo_id` bigint NOT NULL,
   `equipo_id` bigint NOT NULL,
   PRIMARY KEY (`torneo_id`, `equipo_id`)
 );
 
+DROP TABLE IF EXISTS `equipo`;
 CREATE TABLE `equipo` (
   `id` bigint PRIMARY KEY NOT NULL AUTO_INCREMENT,
   `nombre` varchar(100) UNIQUE NOT NULL,
@@ -96,22 +126,25 @@ CREATE TABLE `equipo` (
   `categoria_id` bigint NOT NULL
 );
 
+DROP TABLE IF EXISTS `equipo_participante`;
 CREATE TABLE `equipo_participante` (
   `equipo_id` bigint NOT NULL,
   `participante_id` bigint NOT NULL,
   PRIMARY KEY (`participante_id`, `equipo_id`)
 );
 
+DROP TABLE IF EXISTS `usuario`;
 CREATE TABLE `usuario` (
   `id` bigint PRIMARY KEY NOT NULL AUTO_INCREMENT,
   `nombre` varchar(100) NOT NULL,
   `apellido1` varchar(100) NOT NULL,
   `apellido2` varchar(100) NOT NULL,
   `email` varchar(100) UNIQUE NOT NULL,
-  `rol` varchar(100),
-  `password` varchar(100) NOT NULL
+  `password` varchar(100) NOT NULL,
+  `rol_id` bigint
 );
 
+DROP TABLE IF EXISTS `participante`;
 CREATE TABLE `participante` (
   `id` bigint PRIMARY KEY NOT NULL AUTO_INCREMENT,
   `fecha_nacimiento` date NOT NULL,
@@ -121,24 +154,28 @@ CREATE TABLE `participante` (
   `usuario_id` bigint UNIQUE
 );
 
+DROP TABLE IF EXISTS `participante_documento`;
 CREATE TABLE `participante_documento` (
   `participante_id` bigint NOT NULL,
   `documento_id` bigint NOT NULL,
   PRIMARY KEY (`participante_id`, `documento_id`)
 );
 
+DROP TABLE IF EXISTS `tipo_participante`;
 CREATE TABLE `tipo_participante` (
   `id` bigint PRIMARY KEY NOT NULL AUTO_INCREMENT,
   `nombre` varchar(100) UNIQUE NOT NULL,
   `descripcion` varchar(500)
 );
 
+DROP TABLE IF EXISTS `reserva`;
 CREATE TABLE `reserva` (
   `id` bigint PRIMARY KEY NOT NULL AUTO_INCREMENT,
   `fecha` date NOT NULL,
   `usuario_id` bigint NOT NULL
 );
 
+DROP TABLE IF EXISTS `material`;
 CREATE TABLE `material` (
   `id` bigint PRIMARY KEY NOT NULL AUTO_INCREMENT,
   `nombre` varchar(100) UNIQUE NOT NULL,
@@ -146,6 +183,7 @@ CREATE TABLE `material` (
   `descripcion` varchar(500)
 );
 
+DROP TABLE IF EXISTS `pista`;
 CREATE TABLE `pista` (
   `id` bigint PRIMARY KEY NOT NULL AUTO_INCREMENT,
   `nombre` varchar(100) UNIQUE NOT NULL,
@@ -153,18 +191,21 @@ CREATE TABLE `pista` (
   `direccion_id` bigint NOT NULL
 );
 
+DROP TABLE IF EXISTS `reserva_material`;
 CREATE TABLE `reserva_material` (
   `reserva_id` bigint NOT NULL,
   `material_id` bigint NOT NULL,
   PRIMARY KEY (`reserva_id`, `material_id`)
 );
 
+DROP TABLE IF EXISTS `reserva_pista`;
 CREATE TABLE `reserva_pista` (
   `reserva_id` bigint NOT NULL,
   `pista_id` bigint NOT NULL,
   PRIMARY KEY (`reserva_id`, `pista_id`)
 );
 
+DROP TABLE IF EXISTS `documento`;
 CREATE TABLE `direccion` (
   `id` bigint PRIMARY KEY NOT NULL AUTO_INCREMENT,
   `calle` varchar(100) NOT NULL,
@@ -175,11 +216,13 @@ CREATE TABLE `direccion` (
   `pais` varchar(100) NOT NULL
 );
 
+DROP TABLE IF EXISTS `documento`;
 CREATE TABLE `documento` (
   `id` bigint PRIMARY KEY NOT NULL AUTO_INCREMENT,
   `ruta` varchar(250) UNIQUE NOT NULL
 );
 
+DROP TABLE IF EXISTS `imagen`;
 CREATE TABLE `imagen` (
   `id` bigint PRIMARY KEY NOT NULL AUTO_INCREMENT,
   `ruta` varchar(250) UNIQUE NOT NULL
@@ -260,3 +303,8 @@ ALTER TABLE `reserva_material` ADD FOREIGN KEY (`material_id`) REFERENCES `mater
 ALTER TABLE `reserva_pista` ADD FOREIGN KEY (`reserva_id`) REFERENCES `reserva` (`id`);
 
 ALTER TABLE `reserva_pista` ADD FOREIGN KEY (`pista_id`) REFERENCES `pista` (`id`);
+
+ALTER TABLE `usuario` ADD FOREIGN KEY (`rol_id`) REFERENCES `rol` (`id`);
+
+-- Confirmar la transacción
+COMMIT;
