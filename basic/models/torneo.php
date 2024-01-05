@@ -15,8 +15,9 @@ class torneo extends Model
     public function rules()
     {
         return[
-            [['nombre','participantes_max','disciplina_id','tipo_torneo_id','clase_id'],'required'],
-        ];
+            [['nombre','descripcion','participantes_max','disciplina_id','tipo_torneo_id','clase_id'],'required'],
+            ['participantes_max', 'number'],
+        ];  
     }
 }
 ?>
