@@ -127,16 +127,16 @@ class SiteController extends Controller
         return $this->render('about');
     }
 
-    public function actionEntry()
+    public function actionForm_torneo()
     {
         $model = new torneo();
 
         if ($model-> load(Yii::$app->request->post()) && $model-> validate()){
 
-            return $this->render('entry-confirm', ['model' => $model]);
+            return $this->render('form_torneo', ['model' => $model]);
         } else {
             // either the page is initially displayed or there is some validation error
-            return $this->render('entry', ['model' => $model]);
+            return $this->render('form_torneo', ['model' => $model]);
         }
 
 
