@@ -1,3 +1,11 @@
+Table rol {
+  id bigint [pk, increment, not null]
+  nombre varchar(100) [not null]
+  descripcion varchar(1000)
+
+  Note: 'Tabla con los roles de los usuarios'
+}
+
 Table torneo {
   id bigint [pk, increment, not null]
   nombre varchar(100) [not null]
@@ -141,9 +149,9 @@ Table usuario {
   apellido1 varchar(100) [not null]
   apellido2 varchar(100) [not null]
   email varchar(100) [unique, not null]
-  rol varchar(100)
   password varchar(100) [not null]
 
+  rol_id bigint [ ref: > rol.id]
   
 }
 
