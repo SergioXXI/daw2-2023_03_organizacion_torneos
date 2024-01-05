@@ -9,6 +9,7 @@ use yii\web\Response;
 use yii\filters\VerbFilter;
 use app\models\LoginForm;
 use app\models\ContactForm;
+use app\models\torneo;
 
 class SiteController extends Controller
 {
@@ -124,5 +125,20 @@ class SiteController extends Controller
     public function actionAbout()
     {
         return $this->render('about');
+    }
+
+    public function actionEntry()
+    {
+        $model = new torneo();
+
+        if ($model-> load(Yii::$app->request->post()) && $model-> validate()){
+
+            return $this->render('entry-confirm', ['model' => $model]);
+        } else {
+            // either the page is initially displayed or there is some validation error
+            return $this->render('entry', ['model' => $model]);
+        }
+
+
     }
 }
