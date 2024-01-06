@@ -1,5 +1,5 @@
-DROP DATABASE IF EXISTS `daw_torneo`;
-CREATE DATABASE `daw_torneo`
+DROP DATABASE IF EXISTS `daw2_2023_03_organizacion_torneos`;
+CREATE DATABASE `daw2_2023_03_organizacion_torneos`
     DEFAULT CHARACTER SET = 'utf8mb4';
 USE `daw_torneo`;
 
