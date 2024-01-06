@@ -10,15 +10,14 @@ use yii\filters\VerbFilter;
 use app\models\LoginForm;
 use app\models\torneo;
 
-class torneos extends Controller
+class  TorneoController extends Controller
 {
-    public function actionform_torneo()
+    public function actionForm_torneo()
     {
-         
+        
         $model = new torneo();
 
         if ($model-> load(Yii::$app->request->post()) && $model-> validate()){
-            $model->nombre='Pepe';
             $model->save();
             return $this->render('entry-confirm', ['model' => $model]);
         } else {
@@ -26,6 +25,7 @@ class torneos extends Controller
             return $this->render('form_torneo', ['model' => $model]);
         }
         
+
     }
 
 }
