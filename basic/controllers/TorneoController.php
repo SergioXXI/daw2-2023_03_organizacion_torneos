@@ -12,18 +12,20 @@ use app\models\torneo;
 
 class torneos extends Controller
 {
-    public function actionEntry()
+    public function actionform_torneo()
     {
+         
         $model = new torneo();
 
         if ($model-> load(Yii::$app->request->post()) && $model-> validate()){
-
+            $model->nombre='Pepe';
+            $model->save();
             return $this->render('entry-confirm', ['model' => $model]);
         } else {
             // either the page is initially displayed or there is some validation error
-            return $this->render('entry', ['model' => $model]);
+            return $this->render('form_torneo', ['model' => $model]);
         }
-
+        
     }
 
 }

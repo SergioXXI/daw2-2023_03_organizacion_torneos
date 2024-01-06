@@ -1,23 +1,37 @@
 <?php
 namespace app\models;
 
-use yii;
-use yii\base\Model;
+use yii\db\ActiveRecord;
 
-class torneo extends Model
+class torneo extends ActiveRecord
 {
-    public $nombre;
-    public $descripcion;
-    public $participantes_max;
-    public $disciplina_id;//1-futbol,2-balencesto, 3-tenis
-    public $tipo_torneo_id;//1-Eliminatorias,2-Liga, 3-Amistoso
-    public $clase_id;//1-Nacional,2-local, 3-Intenacional
-    public function rules()
+    public static function torneo()
     {
-        return[
-            [['nombre','descripcion','participantes_max','disciplina_id','tipo_torneo_id','clase_id'],'required'],
-            ['participantes_max', 'number'],
-        ];  
+        return '{{%torneo}}'; // Replace 'your_table_name' with your actual table name
+    }
+
+    /*public function rules()
+    {
+        return [
+            [['column1', 'column2', 'column3', 'column4', 'column5'], 'required'],
+            [['column1', 'column2', 'column3', 'column4', 'column5'], 'safe'],
+            // Add more validation rules as needed
+        ];
+    }*/
+
+    // Assuming your table has columns: id, column1, column2, column3, column4, column5
+
+    public function attributeLabels()
+    {
+        return [
+            'id' => 'ID',
+            'nombre' => 'nombre',
+            'descripcion' => 'descripcion',
+            'participantes_max' => 'participantes_max',
+            'disciplina_id' => 'disciplina_id',
+            'tipo_torneo_id' => 'tipo_torneo_id',
+            'clase_id' => 'clase_id',
+        ];
     }
 }
 ?>
