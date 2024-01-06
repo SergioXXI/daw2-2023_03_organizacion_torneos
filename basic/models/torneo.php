@@ -5,19 +5,26 @@ use yii\db\ActiveRecord;
 
 class torneo extends ActiveRecord
 {
+
+    /*public $nombre;
+    public $descripcion;
+    public $participantes_max;
+    public $disciplina_id;
+    public $tipo_torneo_id;
+    public $clase_id;*/
+
     public static function torneo()
     {
         return '{{%torneo}}'; // Replace 'your_table_name' with your actual table name
     }
 
-    /*public function rules()
+    public function rules()
     {
         return [
-            [['column1', 'column2', 'column3', 'column4', 'column5'], 'required'],
-            [['column1', 'column2', 'column3', 'column4', 'column5'], 'safe'],
+            [['nombre', 'descripcion', 'participantes_max', 'disciplina_id', 'tipo_torneo_id', 'clase_id'], 'required'],
             // Add more validation rules as needed
         ];
-    }*/
+    }
 
     // Assuming your table has columns: id, column1, column2, column3, column4, column5
 

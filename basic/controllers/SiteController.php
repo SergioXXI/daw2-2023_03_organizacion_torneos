@@ -133,13 +133,6 @@ class SiteController extends Controller
         $model = new torneo();
 
         if ($model-> load(Yii::$app->request->post()) && $model-> validate()){
-            var_dump($model->load(Yii::$app->request->post()));
-            $model->nombre='Pepe';
-            $model->descripcion='Pepe';
-            $model->participantes_max='1';
-            $model->disciplina_id='1';
-            $model->tipo_torneo_id='1';
-            $model->clase_id='1';
             $model->save();
             return $this->render('entry-confirm', ['model' => $model]);
         } else {
