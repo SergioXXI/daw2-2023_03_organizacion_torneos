@@ -1,0 +1,325 @@
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Proyecto en Grupo - Analisis Inicial de Funciones y Tareas</title>
+</head>
+<body class="papel" style="background-color:#F0F0C0;">
+<style>
+table.tabla tbody td { text-align:center;}
+table.tabla tbody td:first-child { text-align:justify}
+</style>
+<div class="bloque" style="font-family:arial;font-size:1.25em;text-align:justify;border:1.5mm solid #508050;margin:0.25em;padding:1em;">
+
+<div class="titulo titulo0" style="margin:5mm;font-size:2.0em;font-weight:bold;color:#4040F0">Comenta Libros</div>
+<div class="titulo titulo1" style="margin:5mm;font-size:2.0em;font-weight:bold">Proyecto en Grupo</div>
+<div class="titulo titulo2" style="margin:5mm;font-size:1.5em;font-weight:bold">Analisis Inicial de Funciones y Tareas</div>
+
+<br/>
+&nbsp;&nbsp;&nbsp;De los requisitos iniciales planteados, se extraen una serie de funciones básicas a implementar, además de una serie de tareas adicionales a desarrollar dentro del sistema.
+<br/>
+<br/>
+
+<hr/>
+
+<div class="titulo titulo3" style="margin:0.5em 0;padding:0.5em;font-size:1.0em;font-weight:bold;background-color:#F0C060">Roles / Perfiles:</div>
+<div style="text-align:justify;margin:0em">
+<ul>
+  <li>
+  <strong>Usuario Invitado (guest): </strong>Cualquier usuario que navega por las partes públicas del portal, sin necesidad de estar registrado o validado en la aplicación.
+  </li>
+  <li>
+  <strong> Usuarios Participantes-Deportistas: </strong>Actúan como usuarios deportistas o participantes en los torneos.
+  </li>
+  <li>
+  <strong>Usuarios Participantes-Entrenadores/Técnicos </strong>Actúan como usuarios técnicos de un equipo, o de uno o varios deportistas.
+  </li>
+  <li>
+  <strong>Usuarios Gestores de Equipos </strong>Actúan como gestores/representantes de un equipo o club deportivo sin ser técnicos.
+  </li>
+  <li>
+  <strong>Usuarios Organizadores de torneo </strong> Actúan como organizadores de uno o varios torneos.
+  </li>
+  <li>
+  <strong>Administrador del Portal (admin): </strong>Pensado para aquellos usuarios que realizan las tareas de mantenimiento de los datos del sistema, pueden gestionar cualquier cosa de la parte privada como usuarios, libros y datos asociados, valoraciones/comentarios, géneros, etiquetas, anunciantes y anuncios, configuración, hacer copias de seguridad o restaurarlas.
+  </li>
+  <li>
+  <strong>Administrador del Sistema (sysadmin): </strong>Pensado para los programadores de la aplicación y/o administradores generales del sistema donde se instale, tendrá acceso a todas las funciones de la aplicación sin restricciones, y opcionalmente deberá poder activar el rol que desee para trabajar como un usuario de ese tipo.
+  </li>
+</ul>
+</div>
+
+<hr/>
+
+<div class="titulo titulo3" style="margin:0.5em 0;padding:0.5em;font-size:1.0em;font-weight:bold;background-color:#60B0D0">Funcionalidades de Gestión Interna:</div>
+<div style="text-align:justify;margin:0em">
+
+<table class="tabla" border="1" style="background-color:#C0E0F0;border:4px ridge #70D0F0;border-collapse:collapse;font-size:1.0em;">
+<thead style="background-color:#60B0D0">
+<tr>
+<th style="width:73em;padding-left:2.5em;">Páginas y Partes Privadas</th>
+<th style="width:3em;">G1</th>
+<th style="width:3em;">G2</th>
+<th style="width:3em;">G3</th>
+<th style="width:3em;">G4</th>
+
+</tr>
+</thead>
+<tbody>
+
+<tr><td style="padding-left:2em;">Paginas: Gestión de usuarios.</td>
+<td>&check;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td>
+</tr>
+<tr><td style="padding-left:4em;">Lista de roles</td>
+<td>&check;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td>
+</tr>
+<tr><td style="padding-left:4em;">Asignación de roles</td>
+<td>&check;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td>
+</tr>
+<tr><td style="padding-left:4em;">Revisión del registro de usuario</td>
+<td>&check;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td>
+</tr>
+<tr><td style="padding-left:4em;">Cambio de rol de usuario (administrador, gestor,etc)</td>
+<td>&check;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td>
+</tr>
+
+
+
+<tr><td style="padding-left:2em;">Gestión de torneos</td>
+<td>&nbsp;</td><td>&check;</td><td>&nbsp;</td><td>&nbsp;</td>
+</tr>
+<tr><td style="padding-left:4em;">Creación de torneos</td>
+<td>&nbsp;</td><td>&check;</td><td>&nbsp;</td><td>&nbsp;</td>
+</tr>
+<tr><td style="padding-left:4em;">Mantenimiento del torneo</td>
+<td>&nbsp;</td><td>&check;</td><td>&nbsp;</td><td>&nbsp;</td>
+</tr>
+<tr><td style="padding-left:4em;"> Mantenimiento de reservas</td>
+<td>&nbsp;</td><td>&check;</td><td>&nbsp;</td><td>&nbsp;</td>
+</tr>
+<tr><td style="padding-left:4em;">Mantenimiento del material deportivo </td>
+<td>&nbsp;</td><td>&check;</td><td>&nbsp;</td><td>&nbsp;</td>
+</tr>
+
+<tr><td style="padding-left:2em;">Mantenimiento de horarios y calendarios</td>
+<td>&nbsp;</td><td>&check;</td><td>&nbsp;</td><td>&nbsp;</td>
+</tr>
+<tr><td style="padding-left:4em;">Mantenimiento de partidos</td>
+<td>&nbsp;</td><td>&check;</td><td>&nbsp;</td><td>&nbsp;</td>
+</tr>
+
+<tr><td style="padding-left:2em;">Gestión de pistas</td>
+  <td>&nbsp;</td>&nbsp;<td></td><td>&nbsp;</td><td>&check;</td>
+  </tr>
+  <tr><td style="padding-left:4em;">Control de disponibilidad</td>
+  <td>&nbsp;</td>&nbsp;<td></td><td>&nbsp;</td><td>&check;</td>
+  </tr>
+  <tr><td style="padding-left:4em;">Registro de direcciones</td>
+  <td>&nbsp;</td>&nbsp;<td></td><td>&nbsp;</td><td>&check;</td>
+  </tr>
+
+<tr><td style="padding-left:2em;">Mantenimiento de equipos</td>
+  <td>&nbsp;</td>&nbsp;<td></td><td>&check;</td><td>&nbsp;</td>
+  </tr>
+  <tr><td style="padding-left:4em;">Control de jugadores del equipo</td>
+  <td>&nbsp;</td><td>&nbsp;</td><td>&check;</td><td>&nbsp;</td>
+  </tr>
+  <tr><td style="padding-left:4em;">Control de gestores de equipo</td>
+  <td>&nbsp;</td><td>&nbsp;</td><td>&check;</td><td>&nbsp;</td>
+  </tr>
+  <tr><td style="padding-left:4em;">Control de participación de equipos en torneos</td>
+  <td>&nbsp;</td><td>&nbsp;</td><td>&check;</td><td>&nbsp;</td>
+  </tr>
+  <tr><td style="padding-left:4em;">Control de participantes del equipo (tecnicos) </td>
+  <td>&nbsp;</td><td>&nbsp;</td><td>&check;</td><td>&nbsp;</td>
+  </tr>
+  
+  <tr><td style="padding-left:2em;">Estadísticas de resultados de equipos</td>
+  <td>&nbsp;</td><td>&nbsp;</td><td>&check;</td><td>&nbsp;</td>
+  </tr>
+  <tr><td style="padding-left:4em;">Estadísticas de resultados de participantes</td>
+  <td>&nbsp;</td><td>&nbsp;</td><td>&check;</td><td>&nbsp;</td>
+  </tr>
+</tr>
+
+<tr><td style="padding-left:2em;">Mantenimiento de registros</td>
+  <td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&check;</td>
+  </tr>
+  <tr><td style="padding-left:4em;">Listado de logs de eventos del sistema</td>
+  <td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&check;</td>
+  </tr>
+  <tr><td style="padding-left:4em;">Eliminación de registros obsoletos</td>
+  <td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&check;</td>
+</tr>
+
+
+<!-- tr>
+<td style="padding-left:0em;">xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx</td>
+<td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td>
+&check;
+&cross;
+&bull;
+&compfn;
+&otimes;
+&omicron;
+
+&#8226;   Bullet
+&#9885;   Outlined White Star 
+&#9733;   Black Star
+
+</tr -->
+
+</tbody>
+</table>
+</div>
+
+<hr/>
+
+<div class="titulo titulo3" style="margin:0.5em 0;padding:0.5em;font-size:1.0em;font-weight:bold;background-color:#60C060">Funcionalidades del Portal Web:</div>
+<div style="text-align:justify;margin:0em">
+
+<table class="tabla" border="1" style="background-color:#C0F0B0;border:4px ridge #70F070;border-collapse:collapse;font-size:1.0em;">
+<thead style="background-color:#60C060">
+<tr>
+<th style="width:73em;padding-left:2.5em;">Páginas y Partes Públicas</th>
+<th style="width:3em;">G1</th>
+<th style="width:3em;">G2</th>
+<th style="width:3em;">G3</th>
+<th style="width:3em;">G4</th>
+</tr>
+</thead>
+<tbody>
+
+<tr><td style="padding-left:2em;">Plantilla Principal:<br/>
+</td>
+<td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&check;</td>
+</tr>
+<tr><td style="padding-left:4em;">Parte: Menu Principal.</td>
+<td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&check;</td>
+</tr>
+<tr><td style="padding-left:4em;">Parte: Usuario conectado / Registro.</td>
+<td>&check;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td>
+</tr>
+<tr><td style="padding-left:4em;">Parte: visor de torneos</td>
+<td>&nbsp;</td><td>&check;</td><td>&nbsp;</td><td>&nbsp;</td>
+</tr>
+<tr><td style="padding-left:4em;">Parte: Nube Etiquetas. Búsqueda de libros(&ast;) por etiquetas.</td>
+<td>&nbsp;</td><td>&check;</td><td>&nbsp;</td><td>&nbsp;</td>
+
+</tr>
+
+<tr><td style="padding-left:2em;">Datos del torneo<br/>
+</td>
+<td>&nbsp;</td><td>&check;</td><td>&nbsp;</td><td>&nbsp;</td>
+</tr>
+<tr><td style="padding-left:4em;">Parte datos del torneo </td>
+<td>&nbsp;</td><td>&check;</td><td>&nbsp;</td><td>&nbsp;</td>
+</tr>
+<tr><td style="padding-left:4em;">Datos de los equipos que participan en el torneo</td>
+<td>&nbsp;</td><td>&check;</td><td>&nbsp;</td><td>&nbsp;</td>
+</tr>
+<tr><td style="padding-left:4em;">Vista de Bracket/Liga</td>
+<td>&nbsp;</td><td>&check;</td><td>&nbsp;</td><td>&nbsp;</td>
+</tr>
+<tr><td style="padding-left:4em;">-Vista de partido(Competidores, resultados, historial de otros encuentros…)</td>
+<td>&nbsp;</td><td>&check;</td><td>&nbsp;</td><td>&nbsp;</td>
+
+<tr><td style="padding-left:4em;">Vista de calendario de torneos </td>
+<td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&check;</td>
+</tr>
+<tr><td style="padding-left:2em;">Vistas de equipo<br/>
+</td>
+<td>&nbsp;</td><td>&nbsp;</td><td>&check;</td><td>&nbsp;</td>
+</tr>
+<tr><td style="padding-left:4em;">Vista de composición(Miembros, datos del equipo, estadísticas reseñables, en que torneos está actualmente)</td>
+<td>&nbsp;</td><td>&nbsp;</td><td>&check;</td><td>&nbsp;</td>
+</tr>
+<tr><td style="padding-left:4em;">-Vista de jugador(Datos del jugador, ratio de victorias, etc…)</td>
+<td>&nbsp;</td><td>&nbsp;</td><td>&check;</td><td>&nbsp;</td>
+<tr><td style="padding-left:4em;">Vista de técnico(Experiencia, equipos dirigidos…) </td>
+<td>&nbsp;</td><td>&nbsp;</td><td>&check;</td><td>&nbsp;</td>
+</tr>
+<tr><td style="padding-left:2em;">Página: acceso de usuario<br/>
+</td>
+<td>&check;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td>
+</tr>
+<tr><td style="padding-left:4em;">Acciones de vistas del formulario de acceso(login, logout)</td>
+<td>&check;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td>
+</tr>
+<tr><td style="padding-left:2em;">Pagina de registro de usuario<br/>
+</td>
+<td>&check;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td>
+</tr>
+<tr><td style="padding-left:4em;">-Registro de usuario</td>
+<td>&check;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td>
+</tr>
+<tr><td style="padding-left:2em;">Vista de mi usuario <br/>
+</td>
+<td>&check;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td>
+</tr>
+<tr><td style="padding-left:4em;">Mi perfil  mantenimiento de datos del usuario</td>
+<td>&check;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td>
+</tr>
+<tr><td style="padding-left:4em;">Mi perfil: Cambio de contraseña</td>
+<td>&check;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td>
+</tr>
+<tr><td style="padding-left:4em;">-Mi perfil: solicitud de baja</td>
+<td>&check;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td>
+</tr>
+<tr><td style="padding-left:4em;">Mant de torneos inscritos</td>
+<td>&nbsp;</td><td>&check;</td><td>&nbsp;</td><td>&nbsp;</td>
+</tr>
+<tr><td style="padding-left:4em;">Mant de equipos inscritos</td>
+<td>&nbsp;</td><td>&check;</td><td>&nbsp;</td><td>&nbsp;</td>
+</tr>
+</tr>
+<tr><td style="padding-left:2em;">Vistas de Gestión de equipos <br/>
+</td>
+<td>&nbsp;</td><td>&nbsp;</td><td>&check;</td><td>&nbsp;</td>
+</tr>
+<tr><td style="padding-left:4em;">-Creación de equipos</td>
+<td>&nbsp;</td><td>&nbsp;</td><td>&check;</td><td>&nbsp;</td>
+</tr>
+<tr><td style="padding-left:4em;">Gestión de miembros del equipo</td>
+<td>&nbsp;</td><td>&nbsp;</td><td>&check;</td><td>&nbsp;</td>
+</tr>
+<tr><td style="padding-left:4em;">Participación en torneos(Inscribirse o desapuntarse)</td>
+<td>&nbsp;</td><td>&nbsp;</td><td>&check;</td><td>&nbsp;</td>
+</tr>
+<tr><td style="padding-left:4em;">Eliminación de equipo</td>
+<td>&nbsp;</td><td>&nbsp;</td><td>&check;</td><td>&nbsp;</td>
+</tr>
+<tr><td style="padding-left:2em;">Vistas de pistas <br/>
+</td>
+<td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&check;</td>
+</tr>
+<tr><td style="padding-left:4em;">Consultar localización</td>
+<td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&check;</td>
+</tr>
+<tr><td style="padding-left:4em;">Consultar eventos en pista</td>
+<td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&check;</td>
+</tr>
+
+
+</tbody>
+</table>
+</div>
+
+<hr/>
+
+<div style="text-align:justify;margin:0em;background-color:#F0F080">
+<hr/>
+
+<div style="padding:0 0.5em;">
+<span style="padding-left:2em;">*** Los grupos que se formen deberán diseñar, implementar y documentar al menos dos de los bloques trabajo, uno de tareas privadas o &quot;Funcionalidades de Gestión Interna&quot; de código &quot;Gx&quot; y otro de tareas públicas o &quot;Funcionalidades del Portal Web&quot; de código &quot;Wx&quot;, de entre las indicadas anteriormente.</span>
+<br/>
+<span style="padding-left:2em;">*** Una combinación de bloques de trabajo más o menos apropiada para esta aplicación es:</span>
+<br/>
+<span style="padding-left:4em;">(G1,W1), (G2,W2), (G3,W3), (G4,W4), (G5,W5), (G6,W6), (G7,W7)</span>
+<br/>
+</div>
+
+<hr/>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,250 @@
+Table rol {
+  id bigint [pk, increment, not null]
+  nombre varchar(100) [not null]
+  descripcion varchar(1000)
+
+  Note: 'Tabla con los roles de los usuarios'
+}
+
+Table torneo {
+  id bigint [pk, increment, not null]
+  nombre varchar(100) [not null]
+  descripcion varchar(1000) [not null]
+  participantes_max int [not null]
+
+  disciplina_id bigint [not null, ref: > disciplina.id]
+  tipo_torneo_id bigint [not null, ref: > tipo_torneo.id]
+  clase_id bigint [not null, ref: > clase.id]
+
+  Note: 'Tabla principal de torneo'
+}
+
+Table torneo_imagen {
+  torneo_id bigint [not null, ref: > torneo.id]
+  imagen_id bigint [ref: > imagen.id]
+  indexes {
+    (torneo_id, imagen_id) [pk]
+  }
+}
+
+Table disciplina {
+  id bigint [pk, increment, not null]
+  nombre varchar(100) [unique, not null]
+  descripcion varchar(1000)
+
+  Note: 'Por ej si el torneo es de fútbol, baloncesto...'
+}
+
+// Seria una enumeración pero por si queremos
+// meter más tipos es mejor tabla
+Table tipo_torneo {
+  id bigint [pk, increment, not null]
+  nombre varchar(100) [unique, not null]
+
+  Note: 'Por ej: Triangular'
+}
+
+Table clase {
+  id bigint [pk, increment, not null]
+  titulo varchar(100) [not null]
+  descripcion varchar(1000)
+
+  imagen_id bigint [ref: - imagen.id]
+
+  Note: 'Por ej: Campeonato Nacional'
+}
+
+Table normativa {
+  id bigint [pk, increment, not null]
+  nombre varchar(250) [unique, not null]
+  descripcion varchar(1000)
+
+  // Se puede meter la ruta aqui pero es para
+  // tenerlo mas organizado
+  documento_id bigint [not null, ref: - documento.id]
+}
+
+Table torneo_normativa {
+  torneo_id bigint [not null, ref: > torneo.id]
+  normativa_id bigint [not null, ref: > normativa.id]
+  indexes {
+    (torneo_id, normativa_id) [pk]
+  }
+}
+
+Table categoria {
+  id bigint [pk, increment, not null]
+  nombre varchar(100) [unique, not null]
+  edad_min int [not null]
+  edad_max int [not null]
+}
+
+Table premio {
+  id bigint [pk, increment, not null]
+  nombre varchar(100) [unique, not null, note: 'trofeo']
+  descripcion varchar (500)
+
+  // La idea es que cada premio pertenece a una
+  // categoria y a su vez solo a un torneo
+  categoria_id bigint [not null, ref: > categoria.id]
+  torneo_id bigint [not null, ref: > torneo.id]
+  equipo_id bigint [ref: > equipo.id]
+}
+
+// Many to many
+Table torneo_categoria {
+  torneo_id bigint [not null, ref: > torneo.id]
+  categoria_id bigint [not null, ref: > categoria.id]
+  indexes {
+    (torneo_id, categoria_id) [pk]
+  }
+}
+
+Table partido {
+  id bigint [pk, increment, not null]
+  jornada int [not null]
+  fecha timestamp [not null]
+  
+  torneo_id bigint [not null, ref: > torneo.id]
+  direccion_id bigint [not null, ref: > direccion.id]
+}
+
+
+Table partido_equipo {
+  partido_id bigint [not null, ref: > partido.id]
+  equipo_id bigint [not null, ref: > equipo.id]
+  puntos int [not null, Note: 'Puntos de ese equipo en ese partido']
+  indexes {
+    (partido_id, equipo_id) [pk]
+  }
+}
+
+Table torneo_equipo {
+  torneo_id bigint [not null, ref: > torneo.id]
+  equipo_id bigint [not null, ref: > equipo.id]
+  indexes {
+    (torneo_id, equipo_id) [pk]
+  }
+}
+
+Table equipo {
+  id bigint [pk, increment, not null]
+  nombre varchar(100) [unique, not null]
+  descripcion varchar(10000)
+  licencia varchar(250) [unique, not null, Note: 'Numero de licencia']
+  categoria_id bigint [not null, ref: > categoria.id]
+}
+
+Table equipo_participante {
+  equipo_id bigint [not null, ref: > equipo.id]
+  participante_id bigint [not null, ref: > participante.id]
+  indexes {
+    (participante_id, equipo_id) [pk]
+  }
+}
+
+Table usuario {
+  id bigint [pk, increment, not null]
+  nombre varchar(100) [not null]
+  apellido1 varchar(100) [not null]
+  apellido2 varchar(100) [not null]
+  email varchar(100) [unique, not null]
+  password varchar(100) [not null]
+
+  rol_id bigint [ ref: > rol.id]
+  
+}
+
+// Hay dos enfoques distintos:
+// 1. Para ser participante hay que meter los
+//  datos de usuario
+// 2. Para ser participante NO es necesario
+//  meter los datos de usuario
+// Por lo que entiendo segun tomas, no necesitas los datos
+
+Table participante {
+  id bigint [pk, increment, not null]
+  fecha_nacimiento date [not null]
+  licencia varchar(250) [unique, not null]
+
+  tipo_participante_id bigint [not null, ref: > tipo_participante.id]  
+  imagen_id bigint [ref: - imagen.id]
+  usuario_id bigint [unique, ref: - usuario.id]
+}
+
+Table participante_documento {
+  participante_id bigint [not null, ref: > participante.id]
+  documento_id bigint [not null, ref: > documento.id]
+  indexes {
+    (participante_id, documento_id) [pk]
+  }
+}
+
+// Seria una enum pero mejor tabla para poder añadir
+// mas si necesitamos
+Table tipo_participante {
+  id bigint [pk, increment, not null]
+  nombre varchar(100) [unique, not null]
+  descripcion varchar(500)
+}
+
+Table reserva {
+  id bigint [pk, increment, not null]
+  fecha date [not null]
+
+  usuario_id bigint [not null, ref: > usuario.id]
+}
+
+Table material {
+  id bigint [pk, increment, not null]
+  nombre varchar(100) [unique, not null]
+  color varchar(20) [not null]
+  descripcion varchar(500)
+}
+
+Table pista {
+  id bigint [pk, increment, not null]
+  nombre varchar(100) [unique, not null]
+  descripcion varchar(100)
+// la idea es que en una direccion pueda haber varias pistas
+  direccion_id bigint [not null, ref: > direccion.id]
+}
+
+Table reserva_material {
+  reserva_id bigint [not null, ref: > reserva.id]
+  material_id bigint [not null, ref: > material.id]
+  indexes {
+    (reserva_id, material_id) [pk]
+  }
+}
+
+Table reserva_pista {
+  reserva_id bigint [not null, ref: > reserva.id]
+  pista_id bigint [not null, ref: > pista.id]
+  indexes {
+    (reserva_id, pista_id) [pk]
+  }
+}
+
+Table direccion {
+  id bigint [pk, increment, not null]
+  calle varchar(100) [not null]
+  numero int
+  cod_postal int [not null]
+  ciudad varchar(100) [not null]
+  provincia varchar(100) [not null]// se puede sacar a otra tabla
+  pais varchar(100) [not null]
+}
+
+Table documento {
+  id bigint [pk, increment, not null]
+  ruta varchar(250) [unique, not null]
+}
+
+Table imagen {
+  id bigint [pk, increment, not null]
+  ruta varchar(250) [unique, not null]
+}
+
+
+

@@ -1,0 +1,257 @@
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Proyecto en Grupo - Requisitos Iniciales</title>
+</head>
+<body class="papel" style="background-color:#F0F0C0;">
+<div class="bloque" style="font-family:arial;font-size:1.25em;text-align:justify;border:1.5mm solid #508050;margin:0.25em;padding:1em;">
+
+<div class="titulo titulo0" style="margin:5mm;font-size:2.0em;font-weight:bold;color:#4040F0">Organización de Torneos</div>
+<div class="titulo titulo1" style="margin:5mm;font-size:2.0em;font-weight:bold">Proyecto en Grupo</div>
+<div class="titulo titulo2" style="margin:5mm;font-size:1.5em;font-weight:bold">Requisitos Iniciales.</div>
+
+<br/>
+&nbsp;&nbsp;&nbsp;Se desea diseñar una aplicación web para la <strong>Gestión y Participación en Torneos Presenciales y Online</strong>.
+<br/>
+<br/>
+&nbsp;&nbsp;&nbsp;La aplicación será un portal web en el que principalmente se podrán ver, buscar y consultar torneos, con la intención de encontrar información detallada, categorías, premios y normativas de los mismos.<br/>
+<br/>
+&nbsp;&nbsp;&nbsp;Se podrán realizar búsquedas por el catálogo de torneos mediante un sistema de filtros por tipo de torneo (liga, eliminatorias, etc.), deporte, categoría de edad, ubicación, fechas, entre otros. El resultado se mostrará como una lista resumida de torneos que coincidan con el filtro seleccionado, siempre y cuando estén disponibles públicamente.
+<br/>
+&nbsp;&nbsp;&nbsp;Habrá un formulario simple para búsquedas generales y otro avanzado para búsquedas más específicas. La búsqueda avanzada permitirá filtrar por múltiples campos como nombre del torneo, deporte, categoría, ubicación, etc.
+<br/>
+&nbsp;&nbsp;&nbsp;Al seleccionar un torneo, se visualizará su ficha con detalle, incluyendo clase de torneo, descripción, categorías por edades, premios, imágenes, normativa, calendario, horarios, ubicación y cualquier otro dato relevante.
+
+<br/>
+<br/>
+&nbsp;&nbsp;&nbsp;Los usuarios registrados, especialmente aquellos con roles de organizadores y administradores, tendrán la capacidad de crear nuevos torneos, definiendo todos los aspectos relevantes como la categoría, normativa, premios, imágenes, y demás detalles necesarios para su promoción y gestión.
+<br/>
+&nbsp;&nbsp;&nbsp;Los usuarios registrados podrán mantener su perfil, inscribirse en torneos, crear y gestionar equipos, entre otras funciones.
+<br/>
+<br/>
+&nbsp;&nbsp;&nbsp;Habrá una sección para la gestión de participantes individuales y equipos, incluyendo fichas detalladas con información como nombre, foto, documentos, licencia federativa, etc.
+<br/>
+<br/>
+&nbsp;&nbsp;&nbsp;Se incluirá una sección para la visualización y gestión de los resultados del torneo, permitiendo a los usuarios ver clasificaciones, puntos y votaciones.
+<br/>
+<br/>
+&nbsp;&nbsp;&nbsp;Los usuarios podrán realizar reservas de espacios y gestionar el equipamiento necesario para los torneos.
+<br/>
+<br/>
+&nbsp;&nbsp;&nbsp;Habrá distintos roles de usuarios como Administradores, Organizadores de torneos, Gestores de Equipos, Participantes-Entrenadores/Técnicos y Participantes-Deportistas, cada uno con permisos y funcionalidades específicas.
+<br/>
+<br/>
+
+<hr/>
+<div class="titulo titulo3" style="margin:5mm;font-size:1.0em;font-weight:bold">Requerimientos para el Público en general:(MODIFICABLE)</div>
+<div style="text-align:justify;margin:0em">
+<ul>
+  
+  <li><strong>Portada &quot;Inicial&quot; sin filtro:</strong> Una página inicial con la presentación del portal, mostrando el logotipo, una barra de navegación (Inicio, Torneos, Equipos, etc.), y una zona de acceso (Login / Registro / Usuario+Logout).
+  <br/>
+  *** Una zona a la izquierda con dos bloques: el superior con un menú de selección de torneos por su clasificación (visible según dispositivo) y el inferior con una nube de etiquetas para selección directa de torneos.
+  <br/>
+  *** Una zona central con &quot;fichas resumen&quot; de los torneos más populares, recientes, o relevantes según la geolocalización del usuario.
+  <br/>
+  *** Un buscador simple en la parte superior y un enlace al formulario de &quot;búsqueda avanzada&quot;.
+  </li>
+  <br/>
+  
+  <li><strong>Portada &quot;Inicial&quot; con filtro:</strong> Misma página inicial, pero mostrando los resultados de los torneos según los filtros aplicados en la zona central. Lista de torneos paginada con opción de cambiar el número de resultados por página.
+  <br/>*** Si se desactiva cualquier filtro activo, se volverá a mostrar la vista inicial o página principal sin filtrar. Para desactivar el filtro se puede incluir en los buscadores un botón/enlace para &quot;quitar filtro&quot;.
+  </li>
+  <br/>
+  
+  <li><strong>Ver Torneo:</strong> Al seleccionar una ficha resumen, se accede a la ficha detallada del torneo
+    <ul>
+    
+      <li>La ficha del torneo incluirá toda la información relevante, fotos, equipos, partidos, jornadas, resultados, categorías, premios, etc.
+      <br/>
+      </li>
+    </ul>
+  </li>
+  <br/>
+  
+  <li><strong>Agrupaciones por Deporte/eSport o Categoría(online y presencial):</strong> Sección que muestra los torneos según clasificación de deportes o categorías.
+  </li>
+  <br/>
+  
+  <li><strong>Nube de Etiquetas temáticas:</strong> Apartado para mostrar etiquetas clave que categorizan los torneos, usándolas como filtro de búsqueda</li>
+  <br/>
+  
+  <li><strong>Organizadores y Participantes:</strong> Una página donde se muestran la lista de Organizadores y Participantes:
+    <br/>
+
+    *** <strong>Volver atrás:</strong> Al navegar entre páginas, se debería poder &quot;volver&quot; a la página anterior con un botón o enlace que recuerde la información necearia para ir a la página de donde se vino.
+  </li>
+  <br/>
+  
+  <li><strong>Registro y Acceso de Usuarios:</strong> Gestión de usuarios con registro público y validación por correo electrónico. Control de intentos fallidos de acceso y perfil de usuario con opciones de gestión de preferencias y seguimiento.
+  </li>
+  Para ello se dispondrá de una gestión de usuarios y de un registro de cara al público para que puedan introducir sus datos de acceso y crearse como usuarios del sistema, pero no podrán acceder hasta que no hayan confirmado su registro mediante una validación por correo electrónico y/o un administrador así lo considere.
+  <br/>
+  
+  <li><strong>Gestión de Torneos por Usuario:</strong> Secciones para que los usuarios registren, modifiquen o eliminen torneos.
+  </li>
+  <br/>
+  
+  <li><strong>Perfil de Usuario</strong>
+    <ul>
+      <li><strong>Mi Perfil:</strong> Los usuarios registrados pueden gestionar su propia ficha de registro, incluyendo datos básicos de acceso (cambio de contraseña, correo electrónico) y datos de perfil (identificación, localización, contacto, etc.)
+        <br/>
+      
+      <li><strong>Torneos Creados/Propuestos:</strong> Sección para que los usuarios naveguen y gestionen los torneos que hayan organizado o propuesto en el sistema
+        <br/>
+      *** Una vez aprobados, los torneos no podrán ser modificados o eliminados sin restricciones.
+      <br/>
+      *** Posibilidad de cambiar cierta información o cancelar torneos.
+      </li>
+
+      <li><strong>Equipo/s a los que pertenece:</strong>Sección para que los usuarios vean los equipos a los que pertenecen.
+      </li>
+
+      <li><strong>Torneos como Asistente:</strong>Sección para que los usuarios vean y gestionen su participación en torneos deportivos a los que se hayan apuntado.
+      </li>
+      
+      <li><strong>Comentarios de Torneos:</strong> Sección para que los usuarios vean y gestionen sus valoraciones y comentarios en torneos.
+        Los comentarios solo podrán ser modificados bajo ciertas condiciones y con autorización de un moderador o administrador.
+      </li>
+    
+      </li>
+    </ul>
+  </li>
+  <br/>
+  
+  <li><strong>Servicios Web:</strong> Todas las opciones que se puedan realizar desde el interfaz web deberían poderse realizar mediante un API propio, el cual pueda ser usado desde aplicaciones externas o desde una aplicación web tipo SPI (Single Page Interface) compilada para dispositivos móviles. Dicho API debe servir para poder realizar las tareas propias de cualquier tipo de usuario registrado en el portal, a excepción del usuario administrador del sistema.
+  </li>
+  <br/>
+  
+</ul>
+</div>
+
+<hr/>
+<div class="titulo titulo3" style="margin:5mm;font-size:1.0em;font-weight:bold">Requerimientos para las Partes Privadas (Usuarios Organizadores, Usuarios Gestores de equipos, Usuarios Participantes-Deportistas, Usuarios Participantes Entrenadores/Técnicos, Usuarios Administradores):</div>
+<div style="text-align:justify;margin:0em">
+<ul>
+  <li><strong>Mantenimiento de Usuarios:</strong>
+  Creación de usuarios bajo demanda para ser organizadores, participantes, gestor de equipo o administradores.
+  <br/>
+  Revisión de nuevos usuarios registrados automáticamente.
+  <br/>
+  Posibilidad de bloquear o desbloquear usuarios, visualizar registros de acceso, y eliminar registros antiguos.
+  <br/>
+  En la gestión de usuarios, posibilidad de asignar roles específicos (moderadores de torneos, administradores, etc.).
+  </li>
+  <br/>
+  
+  <li><strong>Mantenimiento de Categorías/Tipos de Torneo:</strong>
+  Gestión de las categorías o tipos de torneo, evitando la eliminación de categorías en uso.
+  <br/>
+  Posibilidad de unificar categorías similares bajo decisión administrativa.
+  </li>
+  <br/>
+  
+  <li><strong>Mantenimiento de Deportes/Actividades:</strong>
+  Gestión de las listas de deportes y actividades disponibles.
+  <br/>
+  Permite la propuesta de nuevos deportes/actividades por usuarios, sujetos a revisión administrativa.
+  </li>
+  <br/>
+  
+  <li><strong>Mantenimiento de Equipos y Participantes:</strong>
+  Gestión integral de equipos y participantes, incluyendo la creación y asociación de fichas detalladas.
+  </li>
+  <br/>
+  
+  <li><strong>Mantenimiento de Torneos:</strong>
+  Gestión generalizada de torneos a nivel administrativo.
+  <br/>
+  Incluye vinculación con imágenes y ubicaciones.
+  </li>
+  <br/>
+  
+  <li><strong>Mantenimiento de Resultados y Clasificaciones:</strong>
+  Gestión de los resultados de los torneos y actualización de clasificaciones.
+  </li>
+  <br/>
+  
+  <li><strong>Mantenimiento de Registros (LOG) y Utilidades:</strong>
+  Mantenimiento de registros de sistema para auditoría y seguridad.
+  <br/>
+  Procesos de limpieza de datos, configuración de parámetros del sistema, y gestión de copias de seguridad.
+  </li>
+  <br/>
+  
+</ul>
+</div>
+
+<hr/>
+<div class="titulo titulo3" style="margin:5mm;font-size:1.0em;font-weight:bold">Requisitos de Información / Datos:</div>
+<div style="text-align:justify;margin:0em">
+
+<ul>
+  <li><strong>Torneo:</strong>
+  Elemento con: nombre, descripción, tipo de torneo, organizador principal, [organizadores adicionales], deporte, categorías por edad, premios, imágenes del torneo, URLs externas, estados del torneo, comentarios, registro de usuario, notas administrador.
+  </li>
+  <br/>
+  
+  <li><strong>Organizador:</strong>
+  Elemento con: nombre o razón social, URL (opcional), descripción adicional (opcional), revisado por el administrador.
+  </li>
+  <br/>
+  
+  <li><strong>Participantes (deportistas y técnicos):</strong>
+  Elemento con: nombre o razón social, equipo, URL (opcional), descripción adicional (opcional), revisado por el administrador.
+  </li>
+  <br/>
+  
+  <li><strong>Gestor de equipos:</strong>
+  Elemento con: nombre, equipo asociado, URL (opcional), descripción adicional (opcional), revisado por el administrador.
+  </li>
+  <br/>
+  
+  <li><strong>Tipo de Torneo/Deporte:</strong>
+  Elemento de clasificación o agrupación de torneos.
+  <br/>
+  Con: nombre, descripción, icono (opcional), subtipos para jerarquías, revisado por moderador/administrador.
+  </li>
+  <br/>
+  
+  <li><strong>Categorías por Edad:</strong>
+  Elemento que clasifica los participantes por rango de edad.
+  <br/>
+  Con: nombre, descripción, rango de edad, revisado por moderador/administrador.
+  </li>
+  <br/>
+  
+  <li><strong>Equipos:</strong>
+  Elemento con: nombre del equipo, lista de participantes, técnico/s del equipo, categoría, foto del equipo, información adicional.
+  </li>
+  <br/>
+  
+  <li><strong>Resultados y Clasificaciones:</strong>
+  Elemento que registra los resultados de los encuentros y clasificaciones en el torneo.
+  </li>
+  <br/>
+  <li><strong>Configuraciones:</strong>
+  Elemento con variables de configuración del sistema, como número de torneos en portada, líneas por página en listados, número mínimo de denuncias para bloqueo, etc.
+  </li>
+  <br/>
+  
+  <li><strong>Registros de Usuarios y Roles:</strong>
+  Elementos que contienen información de los usuarios, incluyendo roles, permisos, datos personales y gestión de equipos y torneos.
+  </li>
+  <br/>
+  
+  <li><strong>Logs:</strong>
+  Elemento con registros de actividad en el sistema para auditoría y seguimiento, incluyendo fecha/hora, nivel de log, módulo de la aplicación, y texto descriptivo.
+  </li>
+  <br/>
+  
+</ul>
+</div>
+  
+</div>
+
+</body>
+</html>
