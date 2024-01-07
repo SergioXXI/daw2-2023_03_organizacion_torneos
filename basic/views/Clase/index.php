@@ -1,24 +1,24 @@
 <?php
 
-use app\models\Torneo;
+use app\models\Clase;
 use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\grid\ActionColumn;
 use yii\grid\GridView;
 
 /** @var yii\web\View $this */
-/** @var app\models\TorneoSearch $searchModel */
+/** @var app\models\ClaseSearch $searchModel */
 /** @var yii\data\ActiveDataProvider $dataProvider */
 
-$this->title = 'Torneos';
+$this->title = 'Clases';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="torneo-index">
+<div class="clase-index">
 
     <h1><?= Html::encode($this->title) ?></h1>
 
     <p>
-        <?= Html::a('Create Torneo', ['create'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a('Create Clase', ['create'], ['class' => 'btn btn-success']) ?>
     </p>
 
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
@@ -30,24 +30,12 @@ $this->params['breadcrumbs'][] = $this->title;
             ['class' => 'yii\grid\SerialColumn'],
 
             'id',
-            'nombre',
+            'titulo',
             'descripcion',
-            'participantes_max',
-            [
-                'attribute' => 'disciplina_id',
-                'value' => 'disciplina.nombre', 
-            ],
-            [
-                'attribute' => 'tipo_torneo_id',
-                'value' => 'tipo_torneo.nombre', 
-            ],
-            [
-                'attribute' => 'clase_id',
-                'value' => 'clase.titulo', 
-            ],
+            'imagen_id',
             [
                 'class' => ActionColumn::className(),
-                'urlCreator' => function ($action, Torneo $model, $key, $index, $column) {
+                'urlCreator' => function ($action, Clase $model, $key, $index, $column) {
                     return Url::toRoute([$action, 'id' => $model->id]);
                  }
             ],

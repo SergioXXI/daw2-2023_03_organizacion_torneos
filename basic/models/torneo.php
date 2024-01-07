@@ -52,7 +52,7 @@ class Torneo extends \yii\db\ActiveRecord
             [['disciplina_id'], 'exist', 'skipOnError' => true, 'targetClass' => Disciplina::class, 'targetAttribute' => ['disciplina_id' => 'id']],
             [['tipo_torneo_id'], 'exist', 'skipOnError' => true, 'targetClass' => TipoTorneo::class, 'targetAttribute' => ['tipo_torneo_id' => 'id']],
             [['clase_id'], 'exist', 'skipOnError' => true, 'targetClass' => Clase::class, 'targetAttribute' => ['clase_id' => 'id']],
-        ];
+        ];  //Las líneas comentadas se deberían descomentar cuando esten los modelos.
     }
 
     /**
