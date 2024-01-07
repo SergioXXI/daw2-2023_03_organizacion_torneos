@@ -13,7 +13,7 @@ use Yii;
  * @property int $direccion_id
  *
  * @property Direccion $direccion
- * @property ReservaPistum[] $reservaPista
+ * @property ReservaPista[] $reservaPista
  * @property Reserva[] $reservas
  */
 class Pista extends \yii\db\ActiveRecord
@@ -66,11 +66,11 @@ class Pista extends \yii\db\ActiveRecord
     /**
      * Gets query for [[ReservaPista]].
      *
-     * @return \yii\db\ActiveQuery|ReservaPistumQuery
+     * @return \yii\db\ActiveQuery|ReservaPistaQuery
      */
     public function getReservaPista()
     {
-        return $this->hasMany(ReservaPistum::class, ['pista_id' => 'id']);
+        return $this->hasMany(ReservaPista::class, ['pista_id' => 'id']);
     }
 
     /**

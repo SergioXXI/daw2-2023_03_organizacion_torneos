@@ -1,24 +1,24 @@
 <?php
 
-use app\models\Pista;
+use app\models\Reserva;
 use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\grid\ActionColumn;
 use yii\grid\GridView;
 use yii\widgets\Pjax;
 /** @var yii\web\View $this */
-/** @var app\models\PistaSearch $searchModel */
+/** @var app\models\ReservaSearch $searchModel */
 /** @var yii\data\ActiveDataProvider $dataProvider */
 
-$this->title = Yii::t('app', 'Pistas');
+$this->title = Yii::t('app', 'Reservas');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="pista-index">
+<div class="reserva-index">
 
     <h1><?= Html::encode($this->title) ?></h1>
 
     <p>
-        <?= Html::a(Yii::t('app', 'Create Pista'), ['create'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a(Yii::t('app', 'Create Reserva'), ['create'], ['class' => 'btn btn-success']) ?>
     </p>
 
     <?php Pjax::begin(); ?>
@@ -31,24 +31,11 @@ $this->params['breadcrumbs'][] = $this->title;
             ['class' => 'yii\grid\SerialColumn'],
 
             'id',
-            'nombre',
-            'descripcion',
-            
-            [
-                'format' => 'raw',
-                'attribute' => 'direccion_id',
-                'value' => function ($model) {
-                    $url = Url::toRoute(['direccion/view', 'id' => $model->direccion_id]);
-                    return Html::a($model->direccion_id, $url);
-                },
-
-            ],
-    
-
-
+            'fecha',
+            'usuario_id',
             [
                 'class' => ActionColumn::className(),
-                'urlCreator' => function ($action, Pista $model, $key, $index, $column) {
+                'urlCreator' => function ($action, Reserva $model, $key, $index, $column) {
                     return Url::toRoute([$action, 'id' => $model->id]);
                  }
             ],
