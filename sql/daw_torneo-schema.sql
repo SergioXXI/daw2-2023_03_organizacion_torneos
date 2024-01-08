@@ -24,7 +24,7 @@ CREATE TABLE `torneo` (
   `tipo_torneo_id` bigint NOT NULL,
   `clase_id` bigint NOT NULL,
   `fecha_inicio` timestamp NOT NULL,
-  `fecha_limite` timestamp NOT NULL
+  `fecha_limite` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
 DROP TABLE IF EXISTS `torneo_imagen`;
