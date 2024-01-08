@@ -1,6 +1,8 @@
 <?php
 
+use app\models\Direccion;
 use yii\helpers\Html;
+use yii\helpers\ArrayHelper;
 use yii\widgets\ActiveForm;
 
 /** @var yii\web\View $this */
@@ -14,9 +16,12 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'nombre')->textInput(['maxlength' => true]) ?>
 
+
     <?= $form->field($model, 'descripcion')->textInput(['maxlength' => true]) ?>
 
-    <?= $form->field($model, 'direccion_id')->textInput() ?>
+    <?php $var = ArrayHelper::map(Direccion::find()->all(), 'id', 'direccionCompleta'); ?>
+
+    <?= $form->field($model, 'direccion_id')->dropDownList($var, ['prompt' => 'Seleccione una dirección' ])->label('Dirección'); ?>
 
     <div class="form-group">
         <?= Html::submitButton(Yii::t('app', 'Save'), ['class' => 'btn btn-success']) ?>

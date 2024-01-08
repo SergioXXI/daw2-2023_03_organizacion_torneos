@@ -11,6 +11,9 @@ use app\models\Pista;
  */
 class PistaSearch extends Pista
 {
+
+    public $direccionCompleta;
+
     /**
      * {@inheritdoc}
      */
@@ -18,7 +21,7 @@ class PistaSearch extends Pista
     {
         return [
             [['id', 'direccion_id'], 'integer'],
-            [['nombre', 'descripcion'], 'safe'],
+            [['nombre', 'descripcion', 'direccionCompleta'], 'safe'],
         ];
     }
 
@@ -48,6 +51,13 @@ class PistaSearch extends Pista
             'query' => $query,
         ]);
 
+        //Esto permite ordenar segun la dirección
+        $orden = $dataProvider->getSort();
+        $orden->attributes['direccionCompleta'] = [
+            'asc' => ['calle' => SORT_ASC],
+            'desc' => ['calle' => SORT_DESC],
+        ];
+
         $this->load($params);
 
         if (!$this->validate()) {
@@ -64,6 +74,12 @@ class PistaSearch extends Pista
 
         $query->andFilterWhere(['like', 'nombre', $this->nombre])
             ->andFilterWhere(['like', 'descripcion', $this->descripcion]);
+
+        //Join con la tabla dirección
+        if(isset($orden->attributeOrders['direccionCompleta']) || !empty($this->direccionCompleta))
+            $query->joinWith(['direccion']);
+
+        $query->porDireccionCompleta($this->direccionCompleta);
 
         return $dataProvider;
     }

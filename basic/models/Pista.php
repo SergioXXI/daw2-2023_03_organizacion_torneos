@@ -32,7 +32,7 @@ class Pista extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['nombre', 'direccion_id'], 'required'],
+            [['nombre', 'direccion_id'], 'required', 'message' => 'Este campo es obligatorio'], //Mensaje personalizado en caso de fallo
             [['direccion_id'], 'integer'],
             [['nombre', 'descripcion'], 'string', 'max' => 100],
             [['nombre'], 'unique'],
@@ -50,6 +50,7 @@ class Pista extends \yii\db\ActiveRecord
             'nombre' => Yii::t('app', 'Nombre'),
             'descripcion' => Yii::t('app', 'Descripcion'),
             'direccion_id' => Yii::t('app', 'Direccion ID'),
+            'direccionCompleta' => Yii::t('app', 'Dirección Completa'),
         ];
     }
 
@@ -90,5 +91,15 @@ class Pista extends \yii\db\ActiveRecord
     public static function find()
     {
         return new PistaQuery(get_called_class());
+    }
+
+    //Función que obtiene el objeto dirección asociado a la pista llamando a la función getDirección y posteriormente devuelve una string
+    //con la dirección completa formateada uniendo los campos de la tabla Dirección
+    public function getDireccionCompleta()
+    {
+        $direccion = $this->direccion;
+        if($direccion !== null)
+            return $direccion->DireccionCompleta; //Llamada a la función getDirecciónCompleta
+        return null;
     }
 }

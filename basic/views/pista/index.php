@@ -1,5 +1,6 @@
 <?php
 
+use app\models\Direccion;
 use app\models\Pista;
 use yii\helpers\Html;
 use yii\helpers\Url;
@@ -19,6 +20,8 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <p>
         <?= Html::a(Yii::t('app', 'Create Pista'), ['create'], ['class' => 'btn btn-success']) ?>
+
+        <?= Html::a(Yii::t('app', 'Create Dirección'), Url::toRoute(['direccion/create']), ['class' => 'btn btn-success']) ?>
     </p>
 
     <?php Pjax::begin(); ?>
@@ -34,6 +37,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'nombre',
             'descripcion',
             
+            //Genera un enlace para poder ver la dirección de la pista asociada a la id mostrada
             [
                 'format' => 'raw',
                 'attribute' => 'direccion_id',
@@ -43,15 +47,25 @@ $this->params['breadcrumbs'][] = $this->title;
                 },
 
             ],
-    
+            
+            'direccionCompleta',
+            
 
+            /*[
+                'label' => 'Dirección',
+                'value' => function ($model) {
+                    return Direccion::find()->where(['id' => $model->direccion_id])->one()->direccionCompleta;
+                },
+            ],*/
 
+            //Botones de accion
             [
                 'class' => ActionColumn::className(),
                 'urlCreator' => function ($action, Pista $model, $key, $index, $column) {
                     return Url::toRoute([$action, 'id' => $model->id]);
                  }
             ],
+
         ],
     ]); ?>
 

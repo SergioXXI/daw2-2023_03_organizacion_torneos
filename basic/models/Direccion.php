@@ -84,4 +84,9 @@ class Direccion extends \yii\db\ActiveRecord
     {
         return new DireccionQuery(get_called_class());
     }
+
+    public function getDireccionCompleta()
+    {
+        return $this->calle . ' ' . $this->numero . ', ' . $this->ciudad . ', ' . $this->provincia . ', ' . $this->pais . ', CP: ' . $this->cod_postal;
+    }
 }

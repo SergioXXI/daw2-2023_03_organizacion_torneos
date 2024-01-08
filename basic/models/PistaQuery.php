@@ -31,4 +31,10 @@ class PistaQuery extends \yii\db\ActiveQuery
     {
         return parent::one($db);
     }
+
+    public function porDireccionCompleta($direccionCompleta)
+    {
+        $expresion = 'CONCAT(calle, " ", numero, ", ", ciudad, ", ", provincia, ", ", pais, ", CP: ", cod_postal)';
+        $this->andFilterWhere(['like', $expresion , $direccionCompleta]);
+    }
 }
