@@ -1,24 +1,24 @@
 <?php
 
-use app\models\Reserva;
+use app\models\Material;
 use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\grid\ActionColumn;
 use yii\grid\GridView;
 
 /** @var yii\web\View $this */
-/** @var app\models\ReservaSearch $searchModel */
+/** @var app\models\MaterialSearch $searchModel */
 /** @var yii\data\ActiveDataProvider $dataProvider */
 
-$this->title = 'Reservas';
+$this->title = 'Materials';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="reserva-index">
+<div class="material-index">
 
     <h1><?= Html::encode($this->title) ?></h1>
 
     <p>
-        <?= Html::a('Create Reserva', ['create'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a('Create Material', ['create'], ['class' => 'btn btn-success']) ?>
     </p>
 
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
@@ -30,14 +30,12 @@ $this->params['breadcrumbs'][] = $this->title;
             ['class' => 'yii\grid\SerialColumn'],
 
             'id',
-            'fecha',
-            [
-                'attribute' => 'usuario_id',
-                'value' => 'usuario.nombre', 
-            ],
+            'nombre',
+            'color',
+            'descripcion',
             [
                 'class' => ActionColumn::className(),
-                'urlCreator' => function ($action, Reserva $model, $key, $index, $column) {
+                'urlCreator' => function ($action, Material $model, $key, $index, $column) {
                     return Url::toRoute([$action, 'id' => $model->id]);
                  }
             ],
