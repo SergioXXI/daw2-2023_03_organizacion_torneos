@@ -32,11 +32,11 @@ INSERT INTO clase (titulo, descripcion, imagen_id) VALUES
     ('Torneo Local', 'Competición a nivel local', 2),
     ('Copa Internacional', 'Torneo con equipos de diferentes países', 3);
 
-INSERT INTO `torneo` (`nombre`, `descripcion`, `participantes_max`, `disciplina_id`, `tipo_torneo_id`, `clase_id`)
+INSERT INTO torneo (nombre, descripcion, participantes_max, disciplina_id, tipo_torneo_id, clase_id, fecha_inicio, fecha_limite)
 VALUES
-  ('Torneo de Fútbol', 'Torneo de fútbol a nivel nacional', 16, 1, 1, 1),
-  ('Torneo de Baloncesto', 'Torneo de baloncesto juvenil', 12, 2, 2, 2),
-  ('Torneo de Tenis', 'Torneo de tenis individual', 32, 3, 3, 3);
+  ('Torneo de Fútbol', 'Torneo de fútbol a nivel nacional', 16, 1, 1, 1, '2024-01-10', '2024-01-09'),
+  ('Torneo de Baloncesto', 'Torneo de baloncesto juvenil', 12, 2, 2, 2, '2024-01-10', '2024-01-09'),
+  ('Torneo de Tenis', 'Torneo de tenis individual', 32, 3, 3, 3, '2024-01-10', '2024-01-09');
 
 -- Insertar datos de prueba para la tabla 'documento'
 INSERT INTO documento (ruta) VALUES
@@ -100,7 +100,7 @@ INSERT INTO torneo_equipo (torneo_id, equipo_id) VALUES
 -- Insertar datos de prueba para la tabla 'tipo_participante'
 INSERT INTO tipo_participante (nombre, descripcion) VALUES
     ('Jugador', 'Participante que juega en equipos'),
-    ('Árbitro', 'Oficial encargado de hacer cumplir las reglas'),
+    ('Delegado de equipo', 'Oficial encargado del equipo'),
     ('Entrenador', 'Persona a cargo del entrenamiento del equipo');
 
 -- Insertar datos de prueba para la tabla 'participante'
@@ -143,10 +143,10 @@ INSERT INTO material (nombre, color, descripcion) VALUES
     ('Silbato', 'Plateado', 'Silbato para árbitro');
 
 -- Insertar datos de prueba para la tabla 'pista'
-INSERT INTO pista (nombre, descripcion, direccion_id) VALUES
-    ('Pista 1', 'Descripción de la Pista 1', 1),
-    ('Pista 2', 'Descripción de la Pista 2', 2),
-    ('Pista 3', 'Descripción de la Pista 3', 1);
+INSERT INTO pista (nombre, descripcion, disciplina_id, direccion_id) VALUES
+    ('Pista 1', 'Descripción de la Pista 1', 1, 1),
+    ('Pista 2', 'Descripción de la Pista 2', 2, 2),
+    ('Pista 3', 'Descripción de la Pista 3', 3, 1);
 
 -- Insertar datos de prueba para la tabla 'reserva_material'
 INSERT INTO reserva_material (reserva_id, material_id) VALUES
