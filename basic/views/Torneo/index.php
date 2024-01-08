@@ -38,7 +38,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'value' => 'disciplina.nombre', 
             ],
             [
-                'attribute' => 'tipo_torneo_id',....
+                'attribute' => 'tipo_torneo_id',
                 'value' => 'tipo_torneo.nombre', 
             ],
             [
