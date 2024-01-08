@@ -11,6 +11,8 @@ Table torneo {
   nombre varchar(100) [not null]
   descripcion varchar(1000) [not null]
   participantes_max int [not null]
+  fecha_inicio timestamp [not null]
+  fecha_limite timestamp [not null]
 
   disciplina_id bigint [not null, ref: > disciplina.id]
   tipo_torneo_id bigint [not null, ref: > tipo_torneo.id]

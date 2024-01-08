@@ -22,7 +22,9 @@ CREATE TABLE `torneo` (
   `participantes_max` int NOT NULL,
   `disciplina_id` bigint NOT NULL,
   `tipo_torneo_id` bigint NOT NULL,
-  `clase_id` bigint NOT NULL
+  `clase_id` bigint NOT NULL,
+  `fecha_inicio` timestamp NOT NULL,
+  `fecha_limite` timestamp NOT NULL
 );
 
 DROP TABLE IF EXISTS `torneo_imagen`;
