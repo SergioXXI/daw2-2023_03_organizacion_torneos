@@ -188,6 +188,7 @@ CREATE TABLE `pista` (
   `id` bigint PRIMARY KEY NOT NULL AUTO_INCREMENT,
   `nombre` varchar(100) UNIQUE NOT NULL,
   `descripcion` varchar(100),
+  `disciplina_id` bigint NOT NULL,
   `direccion_id` bigint NOT NULL
 );
 
@@ -295,6 +296,8 @@ ALTER TABLE `participante_documento` ADD FOREIGN KEY (`documento_id`) REFERENCES
 ALTER TABLE `reserva` ADD FOREIGN KEY (`usuario_id`) REFERENCES `usuario` (`id`);
 
 ALTER TABLE `pista` ADD FOREIGN KEY (`direccion_id`) REFERENCES `direccion` (`id`);
+
+ALTER TABLE `pista` ADD FOREIGN KEY (`disciplina_id`) REFERENCES `disciplina` (`id`);
 
 ALTER TABLE `reserva_material` ADD FOREIGN KEY (`reserva_id`) REFERENCES `reserva` (`id`);
 
