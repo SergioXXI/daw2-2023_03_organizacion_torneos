@@ -3,6 +3,7 @@
 namespace app\models;
 
 use Yii;
+use yii\helpers\ArrayHelper;
 
 /**
  * This is the model class for table "{{%direccion}}".
@@ -88,5 +89,10 @@ class Direccion extends \yii\db\ActiveRecord
     public function getDireccionCompleta()
     {
         return $this->calle . ' ' . $this->numero . ', ' . $this->ciudad . ', ' . $this->provincia . ', ' . $this->pais . ', CP: ' . $this->cod_postal;
+    }
+
+    public static function getListadoDirecciones()
+    {
+        return ArrayHelper::map(Direccion::find()->all(), 'id', 'direccionCompleta');
     }
 }

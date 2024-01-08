@@ -19,9 +19,8 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'descripcion')->textInput(['maxlength' => true]) ?>
 
-    <?php $var = ArrayHelper::map(Direccion::find()->all(), 'id', 'direccionCompleta'); ?>
+    <?= $form->field($model, 'direccion_id')->dropDownList(Direccion::getListadoDirecciones(), ['prompt' => 'Seleccione una dirección' ])->label('Dirección'); ?>
 
-    <?= $form->field($model, 'direccion_id')->dropDownList($var, ['prompt' => 'Seleccione una dirección' ])->label('Dirección'); ?>
 
     <div class="form-group">
         <?= Html::submitButton(Yii::t('app', 'Save'), ['class' => 'btn btn-success']) ?>

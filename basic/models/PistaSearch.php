@@ -13,6 +13,7 @@ class PistaSearch extends Pista
 {
 
     public $direccionCompleta;
+    public $busquedaGlobal;
 
     /**
      * {@inheritdoc}
@@ -21,7 +22,7 @@ class PistaSearch extends Pista
     {
         return [
             [['id', 'direccion_id'], 'integer'],
-            [['nombre', 'descripcion', 'direccionCompleta'], 'safe'],
+            [['nombre', 'descripcion', 'direccionCompleta', 'busquedaGlobal'], 'safe'],
         ];
     }
 
@@ -66,20 +67,36 @@ class PistaSearch extends Pista
             return $dataProvider;
         }
 
-        // grid filtering conditions
+
+        //Realizar el join con la tabla Direccion en caso de ser necesario
+        if(isset($orden->attributeOrders['direccionCompleta']) || !empty($this->direccionCompleta) || !empty($this->busquedaGlobal))
+            $query->joinWith(['direccion']);
+
+
+        //Filtros básicos por campo
         $query->andFilterWhere([
             'id' => $this->id,
             'direccion_id' => $this->direccion_id,
         ]);
-
         $query->andFilterWhere(['like', 'nombre', $this->nombre])
             ->andFilterWhere(['like', 'descripcion', $this->descripcion]);
 
-        //Join con la tabla dirección
-        if(isset($orden->attributeOrders['direccionCompleta']) || !empty($this->direccionCompleta))
-            $query->joinWith(['direccion']);
 
-        $query->porDireccionCompleta($this->direccionCompleta);
+
+        /* FILTROS DE BUSQUEDA POR DIRECCION COMPLETA */
+        
+        //Obtener la expresión usada para poder llevar a cabo este filtro
+        $expresionDireccionCompleta = $query->porDireccionCompleta($this->direccionCompleta);
+        $query->andFilterWhere(['like', $expresionDireccionCompleta , $this->direccionCompleta]);
+
+
+        /* FILTROS DE BUSQUEDA GLOBAL */
+
+        $query->andFilterWhere(['like', 'nombre', $this->busquedaGlobal])
+                ->orFilterWhere(['like', 'descripcion', $this->busquedaGlobal])
+                ->orFilterWhere(['like', 'pista.id', $this->busquedaGlobal])
+                ->orFilterWhere(['like', 'direccion_id', $this->busquedaGlobal])
+                ->orFilterWhere(['like', $expresionDireccionCompleta, $this->busquedaGlobal]);
 
         return $dataProvider;
     }

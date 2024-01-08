@@ -1,12 +1,12 @@
 <?php
 
 namespace app\controllers;
-
 use app\models\Pista;
 use app\models\PistaSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\data\Pagination;
 
 /**
  * PistaController implements the CRUD actions for Pista model.
@@ -32,11 +32,50 @@ class PistaController extends Controller
     }
 
     /**
-     * Lists all Pista models.
+     * Muestra todas las pistas al usuario para poder consultar datos y disponibilidad de las mismas
      *
      * @return string
      */
     public function actionIndex()
+    {
+    
+        $searchModel = new PistaSearch();
+        $dataProvider = $searchModel->search($this->request->queryParams);
+
+        $dataProvider->pagination->pageSize = \Yii::$app->params['limitePistas'];
+
+        /*echo '<pre>';
+        print_r($dataProvider->getModels());*/
+
+        /*$query = Pista::find();
+        $countQuery = clone $query;
+        $pages = new Pagination([
+            'totalCount' => $countQuery->count(),
+            'pageSize' => \Yii::$app->params['limitePistas'],
+        ]);
+        $models = $query->offset($pages->offset)
+            ->limit($pages->limit)
+            ->all();
+
+        return $this->render('pistas', [
+            'models' => $models,
+            'pages' => $pages,
+        ]);*/
+
+        return $this->render('pistas', [
+            'models' => $dataProvider,
+            'searchModel' => $searchModel,
+        ]);
+
+    }
+
+
+    /**
+     * Lists all Pista models.
+     *
+     * @return string
+     */
+    public function actionList()
     {
         $searchModel = new PistaSearch();
         $dataProvider = $searchModel->search($this->request->queryParams);
