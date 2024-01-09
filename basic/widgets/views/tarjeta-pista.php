@@ -9,6 +9,7 @@
       <p class="card-text mb-2 text-secondary fw-bold"> <?= Html::encode($model->disciplinaNombre) ?> </p>
       <p class="card-text my-2"> <?= Html::encode($model->descripcion) ?> </p>
       <p class="card-text my-2"> <?= Html::encode($model->direccionCompleta) ?> </p>
+      <?= Html::a('Consultar información', ['ver-pista', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
     </div>
 </div>
 </div>
