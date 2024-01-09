@@ -33,6 +33,7 @@ class TorneoController extends Controller
 
     /**
      * Lists all Torneo models.
+     * No admin view
      *
      * @return string
      */
@@ -42,6 +43,22 @@ class TorneoController extends Controller
         $dataProvider = $searchModel->search($this->request->queryParams);
 
         return $this->render('index', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+        ]);
+    }
+    /**
+     * Lists all Torneo models.
+     * Admmin view
+     *
+     * @return string
+     */
+    public function actionIndex_admin()
+    {
+        $searchModel = new TorneoSearch();
+        $dataProvider = $searchModel->search($this->request->queryParams);
+
+        return $this->render('index_admin', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
         ]);
@@ -56,6 +73,12 @@ class TorneoController extends Controller
     public function actionView($id)
     {
         return $this->render('view', [
+            'model' => $this->findModel($id),
+        ]);
+    }
+    public function actionView_admin($id)
+    {
+        return $this->render('view_admin', [
             'model' => $this->findModel($id),
         ]);
     }

@@ -7,7 +7,7 @@
 //return require( 'db_proyecto_03_organizacion_torneos.php');
 return [
     'class' => 'yii\db\Connection',
-    'dsn' => 'mysql:host=localhost;dbname=daw_torneo',
+    'dsn' => 'mysql:host=localhost;dbname=daw2_2023_03_organizacion_torneos',
     'username' => 'root',
     'password' => '',
     'charset' => 'utf8',

@@ -17,7 +17,9 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <h1><?= Html::encode($this->title) ?></h1>
 
-    
+    <p>
+        <?= Html::a('Create Torneo', ['create'], ['class' => 'btn btn-success']) ?>
+    </p>
 
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
@@ -37,7 +39,7 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
             [
                 'attribute' => 'tipo_torneo_id',
-                'value' => 'tipoTorneo.nombre', 
+                'value' => 'tipo_torneo.nombre', 
             ],
             [
                 'attribute' => 'clase_id',
@@ -46,7 +48,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'fecha_inicio',
             'fecha_limite',
             [
-                'class' => ActionColumn::className(),'template'=>'{view}',
+                'class' => ActionColumn::className(),
                 'urlCreator' => function ($action, Torneo $model, $key, $index, $column) {
                     return Url::toRoute([$action, 'id' => $model->id]);
                  }

@@ -18,7 +18,7 @@ class TorneoSearch extends Torneo
     {
         return [
             [['id', 'participantes_max', 'disciplina_id', 'tipo_torneo_id', 'clase_id'], 'integer'],
-            [['nombre', 'descripcion'], 'safe'],
+            [['nombre', 'descripcion', 'fecha_inicio', 'fecha_limite'], 'safe'],
         ];
     }
 
@@ -63,6 +63,8 @@ class TorneoSearch extends Torneo
             'disciplina_id' => $this->disciplina_id,
             'tipo_torneo_id' => $this->tipo_torneo_id,
             'clase_id' => $this->clase_id,
+            'fecha_inicio' => $this->fecha_inicio,
+            'fecha_limite' => $this->fecha_limite,
         ]);
 
         $query->andFilterWhere(['like', 'nombre', $this->nombre])

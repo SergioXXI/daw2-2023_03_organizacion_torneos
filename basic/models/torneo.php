@@ -9,11 +9,13 @@ use Yii;
  *
  * @property int $id
  * @property string $nombre
- * @property string $descripcion
+ * @property string|null $descripcion
  * @property int $participantes_max
  * @property int $disciplina_id
  * @property int $tipo_torneo_id
  * @property int $clase_id
+ * @property string $fecha_inicio
+ * @property string $fecha_limite
  *
  * @property Categoria[] $categorias
  * @property Clase $clase
@@ -45,14 +47,15 @@ class Torneo extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['nombre', 'descripcion', 'participantes_max', 'disciplina_id', 'tipo_torneo_id', 'clase_id'], 'required'],
+            [['nombre', 'participantes_max', 'disciplina_id', 'tipo_torneo_id', 'clase_id'], 'required'],
             [['participantes_max', 'disciplina_id', 'tipo_torneo_id', 'clase_id'], 'integer'],
+            [['fecha_inicio', 'fecha_limite'], 'safe'],
             [['nombre'], 'string', 'max' => 100],
             [['descripcion'], 'string', 'max' => 1000],
             [['disciplina_id'], 'exist', 'skipOnError' => true, 'targetClass' => Disciplina::class, 'targetAttribute' => ['disciplina_id' => 'id']],
             [['tipo_torneo_id'], 'exist', 'skipOnError' => true, 'targetClass' => TipoTorneo::class, 'targetAttribute' => ['tipo_torneo_id' => 'id']],
             [['clase_id'], 'exist', 'skipOnError' => true, 'targetClass' => Clase::class, 'targetAttribute' => ['clase_id' => 'id']],
-        ];  //Las líneas comentadas se deberían descomentar cuando esten los modelos.
+        ];
     }
 
     /**
@@ -68,6 +71,8 @@ class Torneo extends \yii\db\ActiveRecord
             'disciplina_id' => 'Disciplina ID',
             'tipo_torneo_id' => 'Tipo Torneo ID',
             'clase_id' => 'Clase ID',
+            'fecha_inicio' => 'Fecha Inicio',
+            'fecha_limite' => 'Fecha Limite',
         ];
     }
 

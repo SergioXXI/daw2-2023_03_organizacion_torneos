@@ -29,6 +29,10 @@ use yii\widgets\ActiveForm;
 
     <?php // echo $form->field($model, 'clase_id') ?>
 
+    <?php // echo $form->field($model, 'fecha_inicio') ?>
+
+    <?php // echo $form->field($model, 'fecha_limite') ?>
+
     <div class="form-group">
         <?= Html::submitButton('Search', ['class' => 'btn btn-primary']) ?>
         <?= Html::resetButton('Reset', ['class' => 'btn btn-outline-secondary']) ?>
