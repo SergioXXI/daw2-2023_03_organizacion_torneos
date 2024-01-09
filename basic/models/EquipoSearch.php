@@ -12,6 +12,7 @@ use app\models\Equipo;
 class EquipoSearch extends Equipo
 {
     public $numParticipantes;
+    public $categoriaNombre;
     
     /**
      * {@inheritdoc}
@@ -19,8 +20,8 @@ class EquipoSearch extends Equipo
     public function rules()
     {
         return [
-            [['id', 'categoria_id','numParticipantes'], 'integer'],
-            [['nombre', 'descripcion', 'licencia'], 'safe'],
+            [['id','numParticipantes'], 'integer'],
+            [['nombre', 'descripcion', 'categoriaNombre', 'licencia'], 'safe'],
         ];
     }
 
@@ -43,21 +44,27 @@ class EquipoSearch extends Equipo
     public function search($params)
     {
         $query = Equipo::find();
+        $query->joinWith(['categoria']);
 
         // add conditions that should always apply here
-
-        /*$query->joinWith(['participantes'])->groupBy('equipo.id'); //Hay que tener una relación 'participantes' en el modelo Equipo
+        $query->joinWith(['participantes'])->groupBy('equipo.id'); //Hay que tener una relación 'participantes' en el modelo Equipo
 
         //Se añade la lógica para contar el número de participantes
         $query->select([
             'equipo.*', //Se selecciona todos los campos de equipo
             'numParticipantes' => 'COUNT(equipo_participante.participante_id)' // Cuenta los participantes
-        ]);*/
+        ]);
         
         
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
         ]);
+
+        $dataProvider->sort->attributes['categoriaNombre'] = [
+            'asc' => ['categoria.nombre' => SORT_ASC],
+            'desc' => ['categoria.nombre' => SORT_DESC],
+        ];
+
 
         $this->load($params);
 
@@ -67,10 +74,11 @@ class EquipoSearch extends Equipo
             return $dataProvider;
         }
 
-        /*if ($this->numParticipantes != null) {
+        if ($this->numParticipantes != null) {
             $query->having(['numParticipantes' => $this->numParticipantes]);
-        }*/
+        }
 
+       
         $dataProvider->sort->attributes['numParticipantes']=[
 			'asc'=>['numParticipantes'=>SORT_ASC],
 			'desc'=>['numParticipantes'=>SORT_DESC],
@@ -78,14 +86,13 @@ class EquipoSearch extends Equipo
 
         // grid filtering conditions
         $query->andFilterWhere([
-            'id' => $this->id,
-            'categoria_id' => $this->categoria_id,
-            'numParticipantes' => $this->numParticipantes,
+            'equipo.id' => $this->id,
         ]);
 
-        $query->andFilterWhere(['like', 'nombre', $this->nombre])
-            ->andFilterWhere(['like', 'descripcion', $this->descripcion])
-            ->andFilterWhere(['like', 'licencia', $this->licencia]);
+        $query->andFilterWhere(['like', 'equipo.nombre', $this->nombre])
+            ->andFilterWhere(['like', 'categoria.nombre', $this->categoriaNombre])
+            ->andFilterWhere(['like', 'equipo.descripcion', $this->descripcion])
+            ->andFilterWhere(['like', 'equipo.licencia', $this->licencia]);
 
         return $dataProvider;
     }

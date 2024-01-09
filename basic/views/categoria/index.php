@@ -1,24 +1,24 @@
 <?php
 
-use app\models\Equipo;
+use app\models\Categoria;
 use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\grid\ActionColumn;
 use yii\grid\GridView;
 use yii\widgets\Pjax;
 /** @var yii\web\View $this */
-/** @var app\models\EquipoSearch $searchModel */
+/** @var app\models\CategoriaSearch $searchModel */
 /** @var yii\data\ActiveDataProvider $dataProvider */
 
-$this->title = Yii::t('app', 'Equipos');
+$this->title = Yii::t('app', 'Categorias');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="equipo-index">
+<div class="categoria-index">
 
     <h1><?= Html::encode($this->title) ?></h1>
 
     <p>
-        <?= Html::a(Yii::t('app', 'Create Equipo'), ['create'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a(Yii::t('app', 'Create Categoria'), ['create'], ['class' => 'btn btn-success']) ?>
     </p>
 
     <?php Pjax::begin(); ?>
@@ -32,21 +32,11 @@ $this->params['breadcrumbs'][] = $this->title;
 
             'id',
             'nombre',
-            'descripcion',
-            'licencia',
-            [
-                'attribute' => 'categoriaNombre',
-                'value' => 'categoria.nombre',
-            ],
-            [
-                'attribute' => 'numParticipantes',
-                'value' => function($model){
-                    return $model->numParticipantes;
-                },
-            ],
+            'edad_min',
+            'edad_max',
             [
                 'class' => ActionColumn::className(),
-                'urlCreator' => function ($action, Equipo $model, $key, $index, $column) {
+                'urlCreator' => function ($action, Categoria $model, $key, $index, $column) {
                     return Url::toRoute([$action, 'id' => $model->id]);
                  }
             ],
