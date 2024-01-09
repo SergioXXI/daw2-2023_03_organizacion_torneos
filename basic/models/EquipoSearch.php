@@ -11,13 +11,15 @@ use app\models\Equipo;
  */
 class EquipoSearch extends Equipo
 {
+    public $numParticipantes;
+    
     /**
      * {@inheritdoc}
      */
     public function rules()
     {
         return [
-            [['id', 'categoria_id'], 'integer'],
+            [['id', 'categoria_id','numParticipantes'], 'integer'],
             [['nombre', 'descripcion', 'licencia'], 'safe'],
         ];
     }
@@ -44,6 +46,15 @@ class EquipoSearch extends Equipo
 
         // add conditions that should always apply here
 
+        /*$query->joinWith(['participantes'])->groupBy('equipo.id'); //Hay que tener una relación 'participantes' en el modelo Equipo
+
+        //Se añade la lógica para contar el número de participantes
+        $query->select([
+            'equipo.*', //Se selecciona todos los campos de equipo
+            'numParticipantes' => 'COUNT(equipo_participante.participante_id)' // Cuenta los participantes
+        ]);*/
+        
+        
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
         ]);
@@ -56,10 +67,20 @@ class EquipoSearch extends Equipo
             return $dataProvider;
         }
 
+        /*if ($this->numParticipantes != null) {
+            $query->having(['numParticipantes' => $this->numParticipantes]);
+        }*/
+
+        $dataProvider->sort->attributes['numParticipantes']=[
+			'asc'=>['numParticipantes'=>SORT_ASC],
+			'desc'=>['numParticipantes'=>SORT_DESC],
+		];
+
         // grid filtering conditions
         $query->andFilterWhere([
             'id' => $this->id,
             'categoria_id' => $this->categoria_id,
+            'numParticipantes' => $this->numParticipantes,
         ]);
 
         $query->andFilterWhere(['like', 'nombre', $this->nombre])

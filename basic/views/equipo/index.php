@@ -36,6 +36,13 @@ $this->params['breadcrumbs'][] = $this->title;
             'licencia',
             'categoria_id',
             [
+                'attribute' => 'numParticipantes',
+                'value' => function($model){
+                    return $model->numParticipantes;
+                },
+                'label' => Yii::t('app','Numero Participantes'),
+            ],
+            [
                 'class' => ActionColumn::className(),
                 'urlCreator' => function ($action, Equipo $model, $key, $index, $column) {
                     return Url::toRoute([$action, 'id' => $model->id]);
