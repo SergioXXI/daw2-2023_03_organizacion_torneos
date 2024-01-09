@@ -7,6 +7,7 @@ use app\models\UserSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\db\IntegrityException;
 
 /**
  * UserController implements the CRUD actions for User model.
@@ -111,8 +112,18 @@ class UserController extends Controller
      */
     public function actionDelete($id)
     {
-        $this->findModel($id)->delete();
-
+        // try{
+        //     $this->findModel($id)->delete();
+        // } catch (\Exception $e) {
+        //     Yii::$app->session->setFlash('error', 'No se puede eliminar el usuario porque tiene datos asociados');
+        // }
+        
+        try{
+            $this->findModel($id)->delete();
+        } catch (IntegrityException $e) {
+            throw new \yii\web\HttpException(500,"No se puede eliminar este registro ya que está siendo utilizado por otra tabla.", 405);
+        }
+        
         return $this->redirect(['index']);
     }
 
