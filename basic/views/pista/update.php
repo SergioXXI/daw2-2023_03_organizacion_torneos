@@ -1,5 +1,6 @@
 <?php
 
+use app\models\Direccion;
 use yii\helpers\Html;
 
 /** @var yii\web\View $this */
@@ -17,11 +18,12 @@ $this->params['breadcrumbs'][] = Yii::t('app', 'Update');
 
     <h1><?= Html::encode($this->title) ?></h1>
 
-    <pre>
-    <?php print_r($model); ?>
+    
+    <?php //print_r($model); ?>
     
     <?= $this->render('_form', [
         'model' => $model,
+        'model_direccion' => $model_direccion,
     ]) ?>
 
 </div>

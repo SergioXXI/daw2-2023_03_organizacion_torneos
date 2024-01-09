@@ -20,9 +20,25 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'descripcion')->textInput(['maxlength' => true]) ?>
 
-    <?= $form->field($model, 'direccion_id')->dropDownList(Direccion::getListadoDirecciones(), ['prompt' => 'Seleccione una dirección' ])->label('Dirección'); ?>
-
     <?= $form->field($model, 'disciplina_id')->dropDownList(Disciplina::getListadoDisciplinas(), ['prompt' => 'Seleccione una disciplina' ])->label('Disciplina'); ?>
+    
+
+    <?= $form->field($model_direccion, 'calle')->textInput(['maxlength' => true]) ?>
+
+    <?= $form->field($model_direccion, 'numero')->textInput() ?>
+
+    <?= $form->field($model_direccion, 'cod_postal')->textInput() ?>
+
+    <?= $form->field($model_direccion, 'ciudad')->textInput(['maxlength' => true]) ?>
+
+    <?= $form->field($model_direccion, 'provincia')->textInput(['maxlength' => true]) ?>
+
+    <?= $form->field($model_direccion, 'pais')->textInput(['maxlength' => true]) ?>
+
+
+
+    <?php //<?= $form->field($model, 'direccion_id')->dropDownList(Direccion::getListadoDirecciones(), ['prompt' => 'Seleccione una dirección' ])->label('Dirección'); ?>
+
 
 
     <div class="form-group">

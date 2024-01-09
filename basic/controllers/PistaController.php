@@ -1,11 +1,13 @@
 <?php
 
 namespace app\controllers;
+use app\models\Direccion;
 use app\models\Pista;
 use app\models\PistaSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\db\Transaction;
 use yii\data\Pagination;
 
 /**
@@ -119,10 +121,23 @@ class PistaController extends Controller
     public function actionCreate()
     {
         $model = new Pista();
+        $model_direccion = new Direccion();
+
+        //Primero se intenta crear la dirección
+        //Para asegurar la integridad se van a realizar los guardados en formato transaccion
+        //ya que se están generando dos modelos, el direccion y el pista
+        $transaction = \Yii::$app->db->beginTransaction();
 
         if ($this->request->isPost) {
-            if ($model->load($this->request->post()) && $model->save()) {
-                return $this->redirect(['view', 'id' => $model->id]);
+            if($model_direccion->load($this->request->post()) && $model_direccion->save()) {
+                //Si se genera correctamente la entrada direccion se recoge la id dejada por la base de datos
+                //Esta id será la id a guardar en la tabla Pista columna direccion_id
+                $model->direccion_id = \Yii::$app->db->getLastInsertID();
+                if ($model->load($this->request->post()) && $model->save()) {
+                    //Si se llega a este punto se confirma la transaccion
+                    $transaction->commit();
+                    return $this->redirect(['view', 'id' => $model->id]);
+                }
             }
         } else {
             $model->loadDefaultValues();
@@ -130,6 +145,7 @@ class PistaController extends Controller
 
         return $this->render('create', [
             'model' => $model,
+            'model_direccion' => $model_direccion,
         ]);
     }
 
@@ -143,13 +159,17 @@ class PistaController extends Controller
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
+        $model_direccion = null;
+        if($model !== null)
+            $model_direccion = Direccion::findOne(['id' => $model->direccion_id]);
 
-        if ($this->request->isPost && $model->load($this->request->post()) && $model->save()) {
+        if ($this->request->isPost && $model->load($this->request->post()) && $model->save() && $model_direccion->load($this->request->post()) && $model_direccion->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
         }
 
         return $this->render('update', [
             'model' => $model,
+            'model_direccion' => $model_direccion,
         ]);
     }
 

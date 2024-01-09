@@ -10,7 +10,7 @@ use yii\widgets\Pjax;
 /** @var app\models\DireccionSearch $searchModel */
 /** @var yii\data\ActiveDataProvider $dataProvider */
 
-$this->title = Yii::t('app', 'Direccions');
+$this->title = Yii::t('app', 'Direcciones');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="direccion-index">
