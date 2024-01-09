@@ -99,6 +99,14 @@ class PistaController extends Controller
         ]);
     }
 
+
+    public function actionVerPista($id)
+    {
+        return $this->render('verpista', [
+            'model' => $this->findModel($id),
+        ]);
+    }
+
     /**
      * Creates a new Pista model.
      * If creation is successful, the browser will be redirected to the 'view' page.

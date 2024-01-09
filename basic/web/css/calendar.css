@@ -1,0 +1,25 @@
+#calendar .fc-day-today{
+    background-color: white !important;
+}
+
+#calendar a{
+    text-decoration: none;
+    color: black;
+}
+
+#calendar .fc-event-title{
+    font-weight: bold;
+    color: white;
+    font-size: medium;
+    text-align: center;
+}
+
+#calendar .fc-event{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#calendar .fc-toolbar-title:first-letter{
+    text-transform: capitalize;
+}
