@@ -24,7 +24,7 @@ CREATE TABLE `torneo` (
   `tipo_torneo_id` bigint NOT NULL,
   `clase_id` bigint NOT NULL,
   `fecha_inicio` timestamp NOT NULL,
-  `fecha_limite` timestamp NOT NULL
+  `fecha_limite` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
 DROP TABLE IF EXISTS `torneo_imagen`;
@@ -353,9 +353,9 @@ INSERT INTO clase (titulo, descripcion, imagen_id) VALUES
 
 INSERT INTO torneo (nombre, descripcion, participantes_max, disciplina_id, tipo_torneo_id, clase_id, fecha_inicio, fecha_limite)
 VALUES
-  ('Torneo de Fútbol', 'Torneo de fútbol a nivel nacional', 16, 1, 1, 1, '2024-01-10', '2024-01-09'),
-  ('Torneo de Baloncesto', 'Torneo de baloncesto juvenil', 12, 2, 2, 2, '2024-01-10', '2024-01-09'),
-  ('Torneo de Tenis', 'Torneo de tenis individual', 32, 3, 3, 3, '2024-01-10', '2024-01-09');
+  ('Torneo de Fútbol', 'Torneo de fútbol a nivel nacional', 16, 1, 1, 1, '2024-01-10 13:08:54.193', '2024-01-09 13:08:54.193'),
+  ('Torneo de Baloncesto', 'Torneo de baloncesto juvenil', 12, 2, 2, 2, '2024-01-10 13:08:54.193', '2024-01-09 13:08:54.193'),
+  ('Torneo de Tenis', 'Torneo de tenis individual', 32, 3, 3, 3, '2024-01-10 13:08:54.193', '2024-01-09 13:08:54.193');
 
 -- Insertar datos de prueba para la tabla 'documento'
 INSERT INTO documento (ruta) VALUES
