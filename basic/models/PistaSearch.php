@@ -79,7 +79,7 @@ class PistaSearch extends Pista
             $query->joinWith(['direccion']);
         
         //Realizar el join con la tabla Disciplina en caso de ser necesario
-        if(isset($orden->attributeOrders['disciplinaNombre']) || !empty($this->disciplinaNombre))
+        if(isset($orden->attributeOrders['disciplinaNombre']) || !empty($this->disciplinaNombre)  || !empty($this->busquedaGlobal))
             $query->joinWith(['disciplina']);
 
 
@@ -108,10 +108,11 @@ class PistaSearch extends Pista
 
         /* FILTROS DE BUSQUEDA GLOBAL */
 
-        $query->andFilterWhere(['like', 'nombre', $this->busquedaGlobal])
-                ->orFilterWhere(['like', 'descripcion', $this->busquedaGlobal])
+        $query->andFilterWhere(['like', 'pista.nombre', $this->busquedaGlobal])
+                ->orFilterWhere(['like', 'pista.descripcion', $this->busquedaGlobal])
                 ->orFilterWhere(['like', 'pista.id', $this->busquedaGlobal])
                 ->orFilterWhere(['like', 'direccion_id', $this->busquedaGlobal])
+                ->orFilterWhere(['like', 'disciplina.nombre', $this->busquedaGlobal])
                 ->orFilterWhere(['like', $expresionDireccionCompleta, $this->busquedaGlobal]);
 
         return $dataProvider;
