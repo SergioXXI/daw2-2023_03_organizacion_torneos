@@ -8,8 +8,9 @@ use yii\helpers\Html;
 $this->title = Yii::t('app', 'Update Pista: {name}', [
     'name' => $model->id,
 ]);
+
 $this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Pistas'), 'url' => ['index']];
-$this->params['breadcrumbs'][] = ['label' => $model->id, 'url' => ['view', 'id' => $model->id]];
+$this->params['breadcrumbs'][] = ['label' => $model->id . ' / ' . $model->nombre, 'url' => ['view', 'id' => $model->id]];
 $this->params['breadcrumbs'][] = Yii::t('app', 'Update');
 ?>
 <div class="pista-update">

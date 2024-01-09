@@ -1,6 +1,7 @@
 <?php
 
 use app\models\Direccion;
+use app\models\Disciplina;
 use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\widgets\DetailView;
@@ -9,7 +10,7 @@ use yii\widgets\DetailView;
 /** @var app\models\Pista $model */
 
 $this->title = $model->id . ' / ' . $model->nombre;
-$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Pistas'), 'url' => ['index']];
+$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Pistas'), 'url' => ['list']];
 $this->params['breadcrumbs'][] = $this->title;
 \yii\web\YiiAsset::register($this);
 ?>
@@ -48,6 +49,21 @@ $this->params['breadcrumbs'][] = $this->title;
             [
                 'label' => 'Dirección',
                 'value' => Direccion::find()->where(['id' => $model->direccion_id])->one()->direccionCompleta,
+            ],
+
+            [
+                'format' => 'raw',
+                'label' => 'Disciplina ID',
+                'value' => function ($model) {
+                    $url = Url::toRoute(['disciplina/view', 'id' => $model->disciplina_id]);
+                    return Html::a($model->disciplina_id, $url);
+                },
+
+            ],
+
+            [
+                'label' => 'Disciplina',
+                'value' => Disciplina::find()->where(['id' => $model->disciplina_id])->one()->nombre,
             ]
         ],
     ]) ?>

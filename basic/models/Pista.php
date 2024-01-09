@@ -11,7 +11,9 @@ use Yii;
  * @property string $nombre
  * @property string|null $descripcion
  * @property int $direccion_id
+ * @property int $disciplina_id
  *
+ * @property Direccion $direccion
  * @property Direccion $direccion
  * @property ReservaPista[] $reservaPista
  * @property Reserva[] $reservas
@@ -32,11 +34,12 @@ class Pista extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['nombre', 'direccion_id'], 'required', 'message' => 'Este campo es obligatorio'], //Mensaje personalizado en caso de fallo
-            [['direccion_id'], 'integer'],
+            [['nombre', 'direccion_id', 'disciplina_id'], 'required', 'message' => 'Este campo es obligatorio'], //Mensaje personalizado en caso de fallo
+            [['direccion_id', 'disciplina_id'], 'integer'],
             [['nombre', 'descripcion'], 'string', 'max' => 100],
             [['nombre'], 'unique'],
             [['direccion_id'], 'exist', 'skipOnError' => true, 'targetClass' => Direccion::class, 'targetAttribute' => ['direccion_id' => 'id']],
+            [['disciplina_id'], 'exist', 'skipOnError' => true, 'targetClass' => Direccion::class, 'targetAttribute' => ['disciplina_id' => 'id']],
         ];
     }
 
@@ -50,6 +53,8 @@ class Pista extends \yii\db\ActiveRecord
             'nombre' => Yii::t('app', 'Nombre'),
             'descripcion' => Yii::t('app', 'Descripcion'),
             'direccion_id' => Yii::t('app', 'Direccion ID'),
+            'disciplina_id' => Yii::t('app', 'Disciplina ID'),
+            'disciplinaNombre' => Yii::t('app', 'Disciplina'),
             'direccionCompleta' => Yii::t('app', 'Dirección Completa'),
         ];
     }
@@ -85,6 +90,16 @@ class Pista extends \yii\db\ActiveRecord
     }
 
     /**
+     * Gets query for [[Disciplina]].
+     *
+     * @return \yii\db\ActiveQuery|DisciplinaQuery
+     */
+    public function getDisciplina()
+    {
+        return $this->hasOne(Disciplina::class, ['id' => 'disciplina_id']);
+    }
+
+    /**
      * {@inheritdoc}
      * @return PistaQuery the active query used by this AR class.
      */
@@ -100,6 +115,16 @@ class Pista extends \yii\db\ActiveRecord
         $direccion = $this->direccion;
         if($direccion !== null)
             return $direccion->DireccionCompleta; //Llamada a la función getDirecciónCompleta
+        return null;
+    }
+
+    //Función que obtiene el objeto disciplina asociado a la pista llamando a la función getDisciplina y posteriormente devuelve una string
+    //con el valor del campo nombre de la tabla disciplina
+    public function getDisciplinaNombre()
+    {
+        $disciplina = $this->disciplina;
+        if($disciplina !== null)
+            return $disciplina->nombre; //Acceso al parametro nombre de disciplina
         return null;
     }
 }

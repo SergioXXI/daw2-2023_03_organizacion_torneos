@@ -13,6 +13,7 @@ class PistaSearch extends Pista
 {
 
     public $direccionCompleta;
+    public $disciplinaNombre;
     public $busquedaGlobal;
 
     /**
@@ -21,8 +22,8 @@ class PistaSearch extends Pista
     public function rules()
     {
         return [
-            [['id', 'direccion_id'], 'integer'],
-            [['nombre', 'descripcion', 'direccionCompleta', 'busquedaGlobal'], 'safe'],
+            [['id', 'direccion_id', 'disciplina_id'], 'integer'],
+            [['nombre', 'descripcion', 'direccionCompleta', 'disciplinaNombre', 'busquedaGlobal'], 'safe'],
         ];
     }
 
@@ -59,6 +60,11 @@ class PistaSearch extends Pista
             'desc' => ['calle' => SORT_DESC],
         ];
 
+        $orden->attributes['disciplinaNombre'] = [
+            'asc' => ['disciplina.nombre' => SORT_ASC],
+            'desc' => ['disciplina.nombre' => SORT_DESC],
+        ];
+
         $this->load($params);
 
         if (!$this->validate()) {
@@ -71,12 +77,17 @@ class PistaSearch extends Pista
         //Realizar el join con la tabla Direccion en caso de ser necesario
         if(isset($orden->attributeOrders['direccionCompleta']) || !empty($this->direccionCompleta) || !empty($this->busquedaGlobal))
             $query->joinWith(['direccion']);
+        
+        //Realizar el join con la tabla Disciplina en caso de ser necesario
+        if(isset($orden->attributeOrders['disciplinaNombre']) || !empty($this->disciplinaNombre))
+            $query->joinWith(['disciplina']);
 
 
         //Filtros básicos por campo
         $query->andFilterWhere([
             'id' => $this->id,
             'direccion_id' => $this->direccion_id,
+            'disciplina_id' => $this->disciplina_id,
         ]);
         $query->andFilterWhere(['like', 'nombre', $this->nombre])
             ->andFilterWhere(['like', 'descripcion', $this->descripcion]);
@@ -88,6 +99,11 @@ class PistaSearch extends Pista
         //Obtener la expresión usada para poder llevar a cabo este filtro
         $expresionDireccionCompleta = $query->porDireccionCompleta($this->direccionCompleta);
         $query->andFilterWhere(['like', $expresionDireccionCompleta , $this->direccionCompleta]);
+
+        /* FILTROS DE BUSQUEDA POR DISCIPLINA NOMBRE  */
+        
+        //Obtener la expresión usada para poder llevar a cabo este filtro
+        $query->andFilterWhere(['like','disciplina.nombre',$this->disciplinaNombre]);
 
 
         /* FILTROS DE BUSQUEDA GLOBAL */

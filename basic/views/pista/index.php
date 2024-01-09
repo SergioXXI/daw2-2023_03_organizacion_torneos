@@ -49,6 +49,19 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
             
             'direccionCompleta',
+
+            //Genera un enlace para poder ver la dirección de la pista asociada a la id mostrada
+            [
+                'format' => 'raw',
+                'attribute' => 'disciplina_id',
+                'value' => function ($model) {
+                    $url = Url::toRoute(['disciplina/view', 'id' => $model->disciplina_id]);
+                    return Html::a($model->disciplina_id, $url);
+                },
+
+            ],
+
+            'disciplinaNombre',
             
 
             /*[
