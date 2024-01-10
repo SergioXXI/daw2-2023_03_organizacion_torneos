@@ -24,9 +24,9 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'clase_id')->textInput() ?>
 
-    <?= $form->field($model, 'fecha_inicio')->textInput() ?>
+    <?= $form->field($model, 'fecha_inicio')->widget(\yii\jui\DatePicker::classname(), ['dateFormat' => 'yyyy-MM-dd'],) ?>
 
-    <?= $form->field($model, 'fecha_limite')->textInput() ?>
+    <?= $form->field($model, 'fecha_limite')->widget(\yii\jui\DatePicker::classname(), ['dateFormat' => 'yyyy-MM-dd']) ?>
 
     <div class="form-group">
         <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>

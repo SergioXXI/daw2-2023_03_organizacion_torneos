@@ -14,8 +14,8 @@ use Yii;
  * @property int $disciplina_id
  * @property int $tipo_torneo_id
  * @property int $clase_id
- * @property string $fecha_inicio
- * @property string $fecha_limite
+ * @property int $fecha_inicio
+ * @property int $fecha_limite
  *
  * @property Categoria[] $categorias
  * @property Clase $clase
@@ -40,7 +40,6 @@ class Torneo extends \yii\db\ActiveRecord
     {
         return 'torneo';
     }
-
     /**
      * {@inheritdoc}
      */
