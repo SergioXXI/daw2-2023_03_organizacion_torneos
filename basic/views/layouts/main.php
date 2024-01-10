@@ -43,14 +43,10 @@ $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/x-icon', 'href' => Yii
             ['label' => 'About', 'url' => ['/site/about']],
             ['label' => 'Contact', 'url' => ['/site/contact']],
             ['label' => 'Test', 'url' => ['/test/index']],
-<<<<<<< HEAD
             ['label' => 'Pistas', 'url' => ['/pista/index']],
             ['label' => 'Modificar Pistas', 'url' => ['/pista/list']],
             ['label' => 'Modificar Direccion', 'url' => ['/direccion/index']],
             ['label' => 'Modificar Direccion', 'url' => ['/torneo/index']],
-=======
-            ['label' => 'FormTorneo', 'url' => ['/torneo/index']],
->>>>>>> origin/G2-Torneos
             Yii::$app->user->isGuest
                 ? ['label' => 'Login', 'url' => ['/site/login']]
                 : '<li class="nav-item">'

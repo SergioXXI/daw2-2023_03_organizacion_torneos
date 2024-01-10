@@ -31,7 +31,6 @@ class PistaQuery extends \yii\db\ActiveQuery
     {
         return parent::one($db);
     }
-<<<<<<< HEAD
 
     //Devuelve la expresión a utilizar dentro de la query, hecho así para unificar frente a busquedas con distintos operadores
     public function porDireccionCompleta($direccionCompleta)
@@ -41,6 +40,4 @@ class PistaQuery extends \yii\db\ActiveQuery
         return $expresion;
     }
 
-=======
->>>>>>> origin/G2-Torneos
 }
