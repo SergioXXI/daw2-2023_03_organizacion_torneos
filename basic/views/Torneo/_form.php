@@ -23,11 +23,13 @@ use yii\widgets\ActiveForm;
     <?= $form->field($model, 'tipo_torneo_id')->textInput() ?>
 
     <?= $form->field($model, 'clase_id')->textInput() ?>
-
+    <br/>
     <?= $form->field($model, 'fecha_inicio')->widget(\yii\jui\DatePicker::classname(), ['dateFormat' => 'yyyy-MM-dd'],) ?>
-
+    <br/>
     <?= $form->field($model, 'fecha_limite')->widget(\yii\jui\DatePicker::classname(), ['dateFormat' => 'yyyy-MM-dd']) ?>
-
+    <br/>
+    <?= Html::fileInput('Imagen') ?>
+    <br/><br/>
     <div class="form-group">
         <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>
     </div>

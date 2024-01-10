@@ -31,5 +31,15 @@ $this->params['breadcrumbs'][] = $this->title;
             'fecha_limite',
         ],
     ]) ?>
+    <?php
+        $imageRoute = $model->getImagens()->select('ruta')->scalar();
+        // Check if $imageRoute is not false before displaying the image
+        if ($imageRoute !== false && $imageRoute !== null && $imageRoute !== '') {
+            echo '<img src="' . $imageRoute . '" alt="Image">';
+        } else {
+            echo 'No hay imagen para el torneo.';
+        }
+    ?>
+        
 
 </div>
