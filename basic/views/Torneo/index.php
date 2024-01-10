@@ -22,8 +22,12 @@ $this->params['breadcrumbs'][] = $this->title;
     <?php  //echo $this->render('_search', ['model' => $searchModel]); ?>
 
     <?php
-    if (Yii::$app->user->can('admin')) 
+        if (Yii::$app->user->can('admin')) 
     {
+        echo 
+        '<p>'.
+         Html::a('Create Torneo', ['create'], ['class' => 'btn btn-success']) 
+        .'</p>';
         echo GridView::widget([
             'dataProvider' => $dataProvider,
             'filterModel' => $searchModel,
