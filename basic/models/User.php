@@ -32,7 +32,7 @@ class User extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
 
     public static function findIdentityByAccessToken($token, $type = null)
     {
-        // Implementa la lógica para encontrar un usuario por su accessToken aquí
+        // Por el momento no usamos tokens
         return null;
     }
 
