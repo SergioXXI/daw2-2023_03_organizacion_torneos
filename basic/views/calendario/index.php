@@ -1,3 +1,4 @@
+
 <?php
 use yii\web\View;
 use yii\helpers\Html;
@@ -7,24 +8,31 @@ $this->registerJsFile('https://kit.fontawesome.com/6a8d4512ef.js', ['position' =
 $this->registerCssFile("/torneos/basic/web/css/calendar.css");
 
 $eventos = [];
-foreach ($reservas as $reserva) {
+
+print_r($torneos);
+exit(1);
+
+foreach ($torneos as $torneo) {
 	$eventos[] = [
-		'title' => 'Reservada',
-		'start' => $reserva->fecha,
-		'color' => 'red',
-		'display' => 'background'
-	];
+        'title' => 'Inicio',
+        'start' => $torneo->fecha_inicio,
+        'color' => 'green',
+    ];
+
+    if($model->fecha_fin !== null) {
+        $eventos[] = [
+            'title' => 'Fin',
+            'start' => $torneo->fecha,
+            'color' => 'red',
+        ];
+    }
 
 }
 $eventos = json_encode($eventos);
 
 ?>
 
-<h1> <?= $model->nombre ?> </h1>
-
-<p> <?= $model->direccionCompleta ?></p>
-
-<?= Html::a(Html::tag('i', '', ['class' => 'fa-solid fa-location-dot']) . ' Consultar en el mapa ', 'https://maps.google.com/maps?q=' . $model->direccionCompleta . '', ['class' => 'btn btn-outline-dark', 'title' => 'Consultar en el mapa', 'target' => '_blank']) ?>
+<h1>Calendario de eventos</h1>
 
 <div id="calendar"></div>
 

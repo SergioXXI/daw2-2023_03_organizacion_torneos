@@ -44,7 +44,7 @@ $config = [
                     'levels' => ['error', 'warning'],
                 ],
 
-                [
+                /* [
                     'class' => 'app\components\CustomDbTarget',
                     'levels' => ['info'],
                     'logTable' => 'log', // the name of the log table
@@ -63,7 +63,7 @@ $config = [
                     'class' => 'app\components\CustomDbTarget',
                     'levels' => ['trace'],
                     'logTable' => 'log', // the name of the log table
-                ],
+                ], */
                 
             ],
         ],
