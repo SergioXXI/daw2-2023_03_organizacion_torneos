@@ -2,37 +2,21 @@
 
 namespace app\controllers;
 
-use app\models\Torneo;
-use app\models\TorneoSearch;
+use app\models\User;
+use app\models\UserSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\db\IntegrityException;
 
 /**
- * TorneoController implements the CRUD actions for Torneo model.
+ * UserController implements the CRUD actions for User model.
  */
-class TorneoController extends Controller
+class UserController extends Controller
 {
     /**
      * @inheritDoc
      */
-/*  
-     public function behaviors()
-    {
-        return array_merge(
-            parent::behaviors(),
-            [
-                'verbs' => [
-                    'class' => VerbFilter::className(),
-                    'actions' => [
-                        'delete' => ['POST'],
-                    ],
-                ],
-            ]
-        );
-    }
-    */
-   
     public function behaviors()
     {
         return array_merge(
@@ -50,12 +34,12 @@ class TorneoController extends Controller
                         [
                             'actions' => ['index', 'view'],
                             'allow' => true,
-                            'roles' => ['sysadmin','admin', 'participante'],
+                            'roles' => ['admin', 'participante'],
                         ],
                         [
                             'actions' => ['create', 'update', 'delete'],
                             'allow' => true,
-                            'roles' => ['sysadmin','admin'],
+                            'roles' => ['admin'],
                         ],
                     ],
                 ],
@@ -63,15 +47,17 @@ class TorneoController extends Controller
         );
     }
     
+
+
+
     /**
-     * Lists all Torneo models.
-     * No admin view
+     * Lists all User models.
      *
      * @return string
      */
     public function actionIndex()
     {
-        $searchModel = new TorneoSearch();
+        $searchModel = new UserSearch();
         $dataProvider = $searchModel->search($this->request->queryParams);
 
         return $this->render('index', [
@@ -79,26 +65,10 @@ class TorneoController extends Controller
             'dataProvider' => $dataProvider,
         ]);
     }
-    /**
-     * Lists all Torneo models.
-     * Admmin view
-     *
-     * @return string
-     */
-    public function actionIndex_admin()
-    {
-        $searchModel = new TorneoSearch();
-        $dataProvider = $searchModel->search($this->request->queryParams);
-
-        return $this->render('index_admin', [
-            'searchModel' => $searchModel,
-            'dataProvider' => $dataProvider,
-        ]);
-    }
 
     /**
-     * Displays a single Torneo model.
-     * @param int $id ID
+     * Displays a single User model.
+     * @param int $id
      * @return string
      * @throws NotFoundHttpException if the model cannot be found
      */
@@ -108,21 +78,15 @@ class TorneoController extends Controller
             'model' => $this->findModel($id),
         ]);
     }
-    public function actionView_admin($id)
-    {
-        return $this->render('view_admin', [
-            'model' => $this->findModel($id),
-        ]);
-    }
 
     /**
-     * Creates a new Torneo model.
+     * Creates a new User model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return string|\yii\web\Response
      */
     public function actionCreate()
     {
-        $model = new Torneo();
+        $model = new User();
 
         if ($this->request->isPost) {
             if ($model->load($this->request->post()) && $model->save()) {
@@ -138,9 +102,9 @@ class TorneoController extends Controller
     }
 
     /**
-     * Updates an existing Torneo model.
+     * Updates an existing User model.
      * If update is successful, the browser will be redirected to the 'view' page.
-     * @param int $id ID
+     * @param int $id
      * @return string|\yii\web\Response
      * @throws NotFoundHttpException if the model cannot be found
      */
@@ -158,32 +122,42 @@ class TorneoController extends Controller
     }
 
     /**
-     * Deletes an existing Torneo model.
+     * Deletes an existing User model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
-     * @param int $id ID
+     * @param int $id
      * @return \yii\web\Response
      * @throws NotFoundHttpException if the model cannot be found
      */
     public function actionDelete($id)
     {
-        $this->findModel($id)->delete();
-
+        // try{
+        //     $this->findModel($id)->delete();
+        // } catch (\Exception $e) {
+        //     Yii::$app->session->setFlash('error', 'No se puede eliminar el usuario porque tiene datos asociados');
+        // }
+        
+        try{
+            $this->findModel($id)->delete();
+        } catch (IntegrityException $e) {
+            throw new \yii\web\HttpException(500,"No se puede eliminar este registro ya que está siendo utilizado por otra tabla.", 405);
+        }
+        
         return $this->redirect(['index']);
     }
 
     /**
-     * Finds the Torneo model based on its primary key value.
+     * Finds the User model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
-     * @param int $id ID
-     * @return Torneo the loaded model
+     * @param int $id
+     * @return User the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id)
     {
-        if (($model = Torneo::findOne(['id' => $id])) !== null) {
+        if (($model = User::findOne(['id' => $id])) !== null) {
             return $model;
         }
 
-        throw new NotFoundHttpException('The requested page does not exist.');
+        throw new NotFoundHttpException(Yii::t('app', 'The requested page does not exist.'));
     }
 }
