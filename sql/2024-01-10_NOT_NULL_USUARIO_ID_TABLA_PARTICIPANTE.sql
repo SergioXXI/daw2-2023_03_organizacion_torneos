@@ -1,5 +1,8 @@
--- añade fecha fin a la tabla torneos
-ALTER TABLE torneo
-ADD COLUMN fecha_fin TIMESTAMP NULL;
 
-UPDATE `torneo` SET `fecha_fin` = '2024-01-09 13:08:54' WHERE `torneo`.`id` = 1;
+-- añade fecha fin a la tabla torneos
+UPDATE `participante` SET `usuario_id` = '1' WHERE `participante`.`id` = 1;
+UPDATE `participante` SET `usuario_id` = '2' WHERE `participante`.`id` = 2;
+UPDATE `participante` SET `usuario_id` = '3' WHERE `participante`.`id` = 3;
+
+ALTER TABLE participante
+MODIFY COLUMN usuario_id bigint(20) NOT NULL;
