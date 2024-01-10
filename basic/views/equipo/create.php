@@ -5,7 +5,7 @@ use yii\helpers\Html;
 /** @var yii\web\View $this */
 /** @var app\models\Equipo $model */
 
-$this->title = Yii::t('app', 'Create Equipo');
+$this->title = Yii::t('app', 'Crear Equipo');
 $this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Equipos'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
@@ -15,6 +15,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <?= $this->render('_form', [
         'model' => $model,
+        'listaCategorias' => $listaCategorias,
     ]) ?>
 
 </div>

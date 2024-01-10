@@ -1,24 +1,24 @@
 <?php
 
-use app\models\Equipo;
+use app\models\Torneo;
 use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\grid\ActionColumn;
 use yii\grid\GridView;
 use yii\widgets\Pjax;
 /** @var yii\web\View $this */
-/** @var app\models\EquipoSearch $searchModel */
+/** @var app\models\TorneoSearch $searchModel */
 /** @var yii\data\ActiveDataProvider $dataProvider */
 
-$this->title = Yii::t('app', 'Equipos');
+$this->title = Yii::t('app', 'Torneos');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="equipo-index">
+<div class="torneo-index">
 
     <h1><?= Html::encode($this->title) ?></h1>
 
     <p>
-        <?= Html::a(Yii::t('app', 'Crear Equipo'), ['create'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a(Yii::t('app', 'Create Torneo'), ['create'], ['class' => 'btn btn-success']) ?>
     </p>
 
     <?php Pjax::begin(); ?>
@@ -33,20 +33,16 @@ $this->params['breadcrumbs'][] = $this->title;
             'id',
             'nombre',
             'descripcion',
-            'licencia',
-            [
-                'attribute' => 'categoriaNombre',
-                'value' => 'categoria.nombre',
-            ],
-            [
-                'attribute' => 'numParticipantes',
-                'value' => function($model){
-                    return $model->numParticipantes;
-                },
-            ],
+            'participantes_max',
+            'disciplina_id',
+            //'tipo_torneo_id',
+            //'clase_id',
+            //'fecha_inicio',
+            //'fecha_limite',
+            //'fecha_fin',
             [
                 'class' => ActionColumn::className(),
-                'urlCreator' => function ($action, Equipo $model, $key, $index, $column) {
+                'urlCreator' => function ($action, Torneo $model, $key, $index, $column) {
                     return Url::toRoute([$action, 'id' => $model->id]);
                  }
             ],
