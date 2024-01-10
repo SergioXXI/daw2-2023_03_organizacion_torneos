@@ -5,7 +5,11 @@ namespace app\models;
 use Yii;
 
 /**
+<<<<<<< HEAD
  * This is the model class for table "{{%reserva_pista}}".
+=======
+ * This is the model class for table "reserva_pista".
+>>>>>>> origin/G2-Torneos
  *
  * @property int $reserva_id
  * @property int $pista_id
@@ -20,7 +24,11 @@ class ReservaPista extends \yii\db\ActiveRecord
      */
     public static function tableName()
     {
+<<<<<<< HEAD
         return '{{%reserva_pista}}';
+=======
+        return 'reserva_pista';
+>>>>>>> origin/G2-Torneos
     }
 
     /**
@@ -33,7 +41,11 @@ class ReservaPista extends \yii\db\ActiveRecord
             [['reserva_id', 'pista_id'], 'integer'],
             [['reserva_id', 'pista_id'], 'unique', 'targetAttribute' => ['reserva_id', 'pista_id']],
             [['reserva_id'], 'exist', 'skipOnError' => true, 'targetClass' => Reserva::class, 'targetAttribute' => ['reserva_id' => 'id']],
+<<<<<<< HEAD
             [['pista_id'], 'exist', 'skipOnError' => true, 'targetClass' => Pistum::class, 'targetAttribute' => ['pista_id' => 'id']],
+=======
+            [['pista_id'], 'exist', 'skipOnError' => true, 'targetClass' => Pista::class, 'targetAttribute' => ['pista_id' => 'id']],
+>>>>>>> origin/G2-Torneos
         ];
     }
 
@@ -43,8 +55,13 @@ class ReservaPista extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
+<<<<<<< HEAD
             'reserva_id' => Yii::t('app', 'Reserva ID'),
             'pista_id' => Yii::t('app', 'Pista ID'),
+=======
+            'reserva_id' => 'Reserva ID',
+            'pista_id' => 'Pista ID',
+>>>>>>> origin/G2-Torneos
         ];
     }
 

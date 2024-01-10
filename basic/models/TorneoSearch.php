@@ -18,7 +18,11 @@ class TorneoSearch extends Torneo
     {
         return [
             [['id', 'participantes_max', 'disciplina_id', 'tipo_torneo_id', 'clase_id'], 'integer'],
+<<<<<<< HEAD
             [['nombre', 'descripcion', 'fecha_inicio', 'fecha_limite', 'fecha_fin'], 'safe'],
+=======
+            [['nombre', 'descripcion', 'fecha_inicio', 'fecha_limite'], 'safe'],
+>>>>>>> origin/G2-Torneos
         ];
     }
 
@@ -65,7 +69,10 @@ class TorneoSearch extends Torneo
             'clase_id' => $this->clase_id,
             'fecha_inicio' => $this->fecha_inicio,
             'fecha_limite' => $this->fecha_limite,
+<<<<<<< HEAD
             'fecha_fin' => $this->fecha_fin,
+=======
+>>>>>>> origin/G2-Torneos
         ]);
 
         $query->andFilterWhere(['like', 'nombre', $this->nombre])

@@ -7,7 +7,10 @@ use app\models\ReservaSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+<<<<<<< HEAD
 use yii\db\IntegrityException;
+=======
+>>>>>>> origin/G2-Torneos
 
 /**
  * ReservaController implements the CRUD actions for Reserva model.
@@ -112,11 +115,15 @@ class ReservaController extends Controller
      */
     public function actionDelete($id)
     {
+<<<<<<< HEAD
         try{
             $this->findModel($id)->delete();
         } catch (IntegrityException $e) {
             throw new \yii\web\HttpException(500,"No se puede eliminar este registro ya que está siendo utilizado por otra tabla.", 405);
         }
+=======
+        $this->findModel($id)->delete();
+>>>>>>> origin/G2-Torneos
 
         return $this->redirect(['index']);
     }
@@ -134,6 +141,10 @@ class ReservaController extends Controller
             return $model;
         }
 
+<<<<<<< HEAD
         throw new NotFoundHttpException(Yii::t('app', 'The requested page does not exist.'));
+=======
+        throw new NotFoundHttpException('The requested page does not exist.');
+>>>>>>> origin/G2-Torneos
     }
 }

@@ -16,7 +16,12 @@ class TorneoController extends Controller
     /**
      * @inheritDoc
      */
+<<<<<<< HEAD
     public function behaviors()
+=======
+/*  
+     public function behaviors()
+>>>>>>> origin/G2-Torneos
     {
         return array_merge(
             parent::behaviors(),
@@ -30,9 +35,47 @@ class TorneoController extends Controller
             ]
         );
     }
+<<<<<<< HEAD
 
     /**
      * Lists all Torneo models.
+=======
+    */
+   
+    public function behaviors()
+    {
+        return array_merge(
+            parent::behaviors(),
+            [
+                'verbs' => [
+                    'class' => VerbFilter::className(),
+                    'actions' => [
+                        'delete' => ['POST'],
+                    ],
+                ],
+                'access' => [
+                    'class' => \yii\filters\AccessControl::class,
+                    'rules' => [
+                        [
+                            'actions' => ['index', 'view'],
+                            'allow' => true,
+                            'roles' => ['admin', 'participante'],
+                        ],
+                        [
+                            'actions' => ['create', 'update', 'delete'],
+                            'allow' => true,
+                            'roles' => ['admin'],
+                        ],
+                    ],
+                ],
+            ]
+        );
+    }
+    
+    /**
+     * Lists all Torneo models.
+     * No admin view
+>>>>>>> origin/G2-Torneos
      *
      * @return string
      */
@@ -46,6 +89,25 @@ class TorneoController extends Controller
             'dataProvider' => $dataProvider,
         ]);
     }
+<<<<<<< HEAD
+=======
+    /**
+     * Lists all Torneo models.
+     * Admmin view
+     *
+     * @return string
+     */
+    public function actionIndex_admin()
+    {
+        $searchModel = new TorneoSearch();
+        $dataProvider = $searchModel->search($this->request->queryParams);
+
+        return $this->render('index_admin', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+        ]);
+    }
+>>>>>>> origin/G2-Torneos
 
     /**
      * Displays a single Torneo model.
@@ -59,6 +121,15 @@ class TorneoController extends Controller
             'model' => $this->findModel($id),
         ]);
     }
+<<<<<<< HEAD
+=======
+    public function actionView_admin($id)
+    {
+        return $this->render('view_admin', [
+            'model' => $this->findModel($id),
+        ]);
+    }
+>>>>>>> origin/G2-Torneos
 
     /**
      * Creates a new Torneo model.
@@ -129,6 +200,10 @@ class TorneoController extends Controller
             return $model;
         }
 
+<<<<<<< HEAD
         throw new NotFoundHttpException(Yii::t('app', 'The requested page does not exist.'));
+=======
+        throw new NotFoundHttpException('The requested page does not exist.');
+>>>>>>> origin/G2-Torneos
     }
 }

@@ -3,16 +3,25 @@
 namespace app\models;
 
 use Yii;
+<<<<<<< HEAD
 use yii\helpers\ArrayHelper;
 
 /**
  * This is the model class for table "{{%disciplina}}".
+=======
+
+/**
+ * This is the model class for table "disciplina".
+>>>>>>> origin/G2-Torneos
  *
  * @property int $id
  * @property string $nombre
  * @property string|null $descripcion
  *
+<<<<<<< HEAD
  * @property Pista[] $pista
+=======
+>>>>>>> origin/G2-Torneos
  * @property Torneo[] $torneos
  */
 class Disciplina extends \yii\db\ActiveRecord
@@ -22,7 +31,11 @@ class Disciplina extends \yii\db\ActiveRecord
      */
     public static function tableName()
     {
+<<<<<<< HEAD
         return '{{%disciplina}}';
+=======
+        return 'disciplina';
+>>>>>>> origin/G2-Torneos
     }
 
     /**
@@ -44,13 +57,20 @@ class Disciplina extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
+<<<<<<< HEAD
             'id' => Yii::t('app', 'ID'),
             'nombre' => Yii::t('app', 'Nombre'),
             'descripcion' => Yii::t('app', 'Descripcion'),
+=======
+            'id' => 'ID',
+            'nombre' => 'Nombre',
+            'descripcion' => 'Descripcion',
+>>>>>>> origin/G2-Torneos
         ];
     }
 
     /**
+<<<<<<< HEAD
      * Gets query for [[Pista]].
      *
      * @return \yii\db\ActiveQuery|PistaQuery
@@ -61,14 +81,23 @@ class Disciplina extends \yii\db\ActiveRecord
     }
 
     /**
+=======
+>>>>>>> origin/G2-Torneos
      * Gets query for [[Torneos]].
      *
      * @return \yii\db\ActiveQuery|TorneoQuery
      */
+<<<<<<< HEAD
     /*public function getTorneos()
     {
         return $this->hasMany(Torneo::class, ['disciplina_id' => 'id']);
     }*/
+=======
+    public function getTorneos()
+    {
+        return $this->hasMany(Torneo::class, ['disciplina_id' => 'id']);
+    }
+>>>>>>> origin/G2-Torneos
 
     /**
      * {@inheritdoc}
@@ -78,9 +107,12 @@ class Disciplina extends \yii\db\ActiveRecord
     {
         return new DisciplinaQuery(get_called_class());
     }
+<<<<<<< HEAD
 
     public static function getListadoDisciplinas()
     {
         return ArrayHelper::map(Disciplina::find()->all(), 'id', 'nombre');
     }
+=======
+>>>>>>> origin/G2-Torneos
 }
