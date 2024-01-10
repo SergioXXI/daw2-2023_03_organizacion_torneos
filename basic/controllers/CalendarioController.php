@@ -14,6 +14,9 @@ use yii\filters\VerbFilter;
 class CalendarioController extends Controller
 {
 
+    /**
+     * @inheritDoc
+     */
     public function behaviors()
     {
         return array_merge(
@@ -38,11 +41,13 @@ class CalendarioController extends Controller
     {
         $searchModel = new TorneoSearch();
 
-        print_r($searchModel);
+        //print_r($searchModel);
 
         $dataProvider = $searchModel->search($this->request->queryParams);
+        $dataProvider->pagination = false;
 
-        print_r($dataProvider);
+        //echo '<pre>';
+        //print_r($dataProvider->getModels());
         return $this->render('index', [
             'searchModel' => $searchModel,
             'torneos' => $dataProvider,

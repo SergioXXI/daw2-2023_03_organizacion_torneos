@@ -65,7 +65,6 @@ class TorneoSearch extends Torneo
             'clase_id' => $this->clase_id,
             'fecha_inicio' => $this->fecha_inicio,
             'fecha_limite' => $this->fecha_limite,
-            'fecha_fin' => $this->fecha_fin,
         ]);
 
         $query->andFilterWhere(['like', 'nombre', $this->nombre])

@@ -26,13 +26,13 @@ $eventos = json_encode($eventos);
 
 <?= Html::a(Html::tag('i', '', ['class' => 'fa-solid fa-location-dot']) . ' Consultar en el mapa ', 'https://maps.google.com/maps?q=' . $model->direccionCompleta . '', ['class' => 'btn btn-outline-dark', 'title' => 'Consultar en el mapa', 'target' => '_blank']) ?>
 
-<div id="calendar"></div>
+<div id="calendar-pista"></div>
 
 
 <script>
 
 	document.addEventListener('DOMContentLoaded', function () {
-		var calendarEl = document.getElementById('calendar');
+		var calendarEl = document.getElementById('calendar-pista');
 
 		var calendar = new FullCalendar.Calendar(calendarEl, {
 			locale: 'es',

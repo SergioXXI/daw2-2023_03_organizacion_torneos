@@ -1,25 +1,55 @@
-#calendar .fc-day-today{
+#calendar-pista .fc-day-today, #calendar-calendario .fc-day-today{
     background-color: white !important;
 }
 
-#calendar a{
+#calendar-pista a, #calendar-calendario a{
     text-decoration: none;
     color: black;
 }
 
-#calendar .fc-event-title{
+#calendar-pista .fc-event-title{
     font-weight: bold;
     color: white;
     font-size: medium;
     text-align: center;
 }
 
-#calendar .fc-event{
+#calendar-pista .fc-event{
     display: flex;
     justify-content: center;
     align-items: center;
 }
 
-#calendar .fc-toolbar-title:first-letter{
+#calendar-pista .fc-toolbar-title:first-letter, #calendar-calendario .fc-toolbar-title:first-letter{
     text-transform: capitalize;
+}
+
+#calendar-pista .fc-more-link, #calendar-calendario .fc-more-link{
+    margin-top: 10px;
+}
+
+#calendar-pista .fc-today-button, #calendar-calendario .fc-today-button{
+    margin-right: 10px;
+    border-radius: 0.25em;
+}
+
+#calendar-pista .fc-prev-button, #calendar-calendario .fc-prev-button{
+    border-bottom-left-radius: 0.25em;
+    border-top-left-radius: 0.25em;
+}
+
+#calendar-calendario .fc-list-event-time{
+    display: none;
+}
+
+#calendar-calendario .fc-event:hover{
+    background-color: #2b5068 !important;
+    border-color: #2b5068 !important;
+    font-weight: bold;
+}
+
+#calendar-calendario .fc-event-time, .fc-event-title {
+    text-overflow: ellipsis;
+    overflow: hidden;  
+    white-space: nowrap;
 }
