@@ -24,7 +24,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <?php
     if (Yii::$app->user->can('admin')) 
     {
-        GridView::widget([
+        echo GridView::widget([
             'dataProvider' => $dataProvider,
             'filterModel' => $searchModel,
             'columns' => [
@@ -40,7 +40,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 ],
                 [
                     'attribute' => 'tipo_torneo_id',
-                    'value' => 'tipo_torneo.nombre', 
+                    'value' => 'tipoTorneo.nombre', 
                 ],
                 [
                     'attribute' => 'clase_id',
