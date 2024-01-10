@@ -17,7 +17,7 @@ class UserSearch extends User
     public function rules()
     {
         return [
-            [['id', 'rol_id'], 'integer'],
+            [['id'], 'integer'],
             [['nombre', 'apellido1', 'apellido2', 'email', 'password'], 'safe'],
         ];
     }
@@ -59,7 +59,6 @@ class UserSearch extends User
         // grid filtering conditions
         $query->andFilterWhere([
             'id' => $this->id,
-            'rol_id' => $this->rol_id,
         ]);
 
         $query->andFilterWhere(['like', 'nombre', $this->nombre])

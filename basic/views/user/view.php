@@ -10,6 +10,20 @@ $this->title = $model->id;
 $this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Users'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 \yii\web\YiiAsset::register($this);
+
+$attributes = [
+    'nombre',
+    'apellido1',
+    'apellido2',
+    'email:email',
+    // 'password',
+];
+
+// si es admin le metemos los atributos que queramos
+if (Yii::$app->user->can('admin')) {
+    ['id'] + $attributes;
+}
+
 ?>
 <div class="user-view">
 
@@ -28,15 +42,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <?= DetailView::widget([
         'model' => $model,
-        'attributes' => [
-            'id',
-            'nombre',
-            'apellido1',
-            'apellido2',
-            'email:email',
-            // 'password',
-            Yii::$app->user->isGuest ? '' : 'rol_id',
-        ],
+        'attributes' => $attributes,
     ]) ?>
 
 </div>
