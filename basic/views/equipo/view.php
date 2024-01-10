@@ -33,8 +33,19 @@ $this->params['breadcrumbs'][] = $this->title;
             'nombre',
             'descripcion',
             'licencia',
-            'categoria_id',
+            'categoria.nombre',
         ],
     ]) ?>
+
+    <h2>Participantes</h2>
+    <ul>
+    <?php foreach ($participantes as $participante): ?>
+        <li>
+            <?= "ID: " . Html::encode($participante->id) ?>
+            <?= "Nombre: " . Html::encode($participante->usuario->nombre) ?>
+            <?= "Tipo: " . Html::encode($participante->tipo_participante->nombre) ?>
+        </li>
+    <?php endforeach; ?>
+    </ul>
 
 </div>

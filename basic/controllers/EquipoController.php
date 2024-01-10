@@ -3,6 +3,7 @@
 namespace app\controllers;
 
 use app\models\Equipo;
+use app\models\Participante;
 use app\models\Categoria;
 use app\models\EquipoSearch;
 use yii\web\Controller;
@@ -58,8 +59,18 @@ class EquipoController extends Controller
      */
     public function actionView($id)
     {
+
+        $model = $this->findModel($id);
+
+        // Obtener participantes del equipo
+        $participantes = Participante::find()
+            ->joinWith('usuario') // Asumiendo que existe una relación con 'usuario'
+            ->where(['equipo_id' => $id])
+            ->all();
+
         return $this->render('view', [
-            'model' => $this->findModel($id),
+            'model' => $model,
+            'participantes' => $participantes,
         ]);
     }
 

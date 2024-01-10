@@ -60,7 +60,7 @@ class Equipo extends \yii\db\ActiveRecord
             'nombre' => Yii::t('app', 'Nombre'),
             'descripcion' => Yii::t('app', 'Descripcion'),
             'licencia' => Yii::t('app', 'Licencia'),
-            'categoria_id' => Yii::t('app', 'Categoria ID'),
+            'categoria_id' => Yii::t('app', 'Categoria'),
             'numParticipantes' => Yii::t('app', 'Numero Participantes'),
         ];
     }
