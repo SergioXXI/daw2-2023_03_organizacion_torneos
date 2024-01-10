@@ -19,40 +19,77 @@ $this->params['breadcrumbs'][] = $this->title;
 
     
 
-    <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
+    <?php  //echo $this->render('_search', ['model' => $searchModel]); ?>
 
-    <?= GridView::widget([
-        'dataProvider' => $dataProvider,
-        'filterModel' => $searchModel,
-        'columns' => [
-            ['class' => 'yii\grid\SerialColumn'],
-
-            'id',
-            'nombre',
-            'descripcion',
-            'participantes_max',
-            [
-                'attribute' => 'disciplina_id',
-                'value' => 'disciplina.nombre', 
+    <?php
+    if (Yii::$app->user->can('admin')) 
+    {
+        GridView::widget([
+            'dataProvider' => $dataProvider,
+            'filterModel' => $searchModel,
+            'columns' => [
+                ['class' => 'yii\grid\SerialColumn'],
+    
+                'id',
+                'nombre',
+                'descripcion',
+                'participantes_max',
+                [
+                    'attribute' => 'disciplina_id',
+                    'value' => 'disciplina.nombre', 
+                ],
+                [
+                    'attribute' => 'tipo_torneo_id',
+                    'value' => 'tipo_torneo.nombre', 
+                ],
+                [
+                    'attribute' => 'clase_id',
+                    'value' => 'clase.titulo', 
+                ],
+                'fecha_inicio',
+                'fecha_limite',
+                [
+                    'class' => ActionColumn::className(),
+                    'urlCreator' => function ($action, Torneo $model, $key, $index, $column) {
+                        return Url::toRoute([$action, 'id' => $model->id]);
+                     }
+                ],
             ],
-            [
-                'attribute' => 'tipo_torneo_id',
-                'value' => 'tipoTorneo.nombre', 
+        ]);
+    }else{
+        echo GridView::widget([
+            'dataProvider' => $dataProvider,
+            'filterModel' => $searchModel,
+            'columns' => [
+                ['class' => 'yii\grid\SerialColumn'],
+    
+                'id',
+                'nombre',
+                'descripcion',
+                'participantes_max',
+                [
+                    'attribute' => 'disciplina_id',
+                    'value' => 'disciplina.nombre', 
+                ],
+                [
+                    'attribute' => 'tipo_torneo_id',
+                    'value' => 'tipoTorneo.nombre', 
+                ],
+                [
+                    'attribute' => 'clase_id',
+                    'value' => 'clase.titulo', 
+                ],
+                'fecha_inicio',
+                'fecha_limite',
+                [
+                    'class' => ActionColumn::className(),'template'=>'{view}',      
+                    'urlCreator' => function ($action, Torneo $model, $key, $index, $column) {
+                        return Url::toRoute([$action, 'id' => $model->id]);
+                     }
+                ],
             ],
-            [
-                'attribute' => 'clase_id',
-                'value' => 'clase.titulo', 
-            ],
-            'fecha_inicio',
-            'fecha_limite',
-            [
-                'class' => ActionColumn::className(),'template'=>'{view}',
-                'urlCreator' => function ($action, Torneo $model, $key, $index, $column) {
-                    return Url::toRoute([$action, 'id' => $model->id]);
-                 }
-            ],
-        ],
-    ]); ?>
-
+        ]); 
+    }
+        ?>
 
 </div>

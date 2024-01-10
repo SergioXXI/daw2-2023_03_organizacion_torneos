@@ -16,6 +16,23 @@ class TorneoController extends Controller
     /**
      * @inheritDoc
      */
+/*  
+     public function behaviors()
+    {
+        return array_merge(
+            parent::behaviors(),
+            [
+                'verbs' => [
+                    'class' => VerbFilter::className(),
+                    'actions' => [
+                        'delete' => ['POST'],
+                    ],
+                ],
+            ]
+        );
+    }
+    */
+   
     public function behaviors()
     {
         return array_merge(
@@ -45,7 +62,7 @@ class TorneoController extends Controller
             ]
         );
     }
-
+    
     /**
      * Lists all Torneo models.
      * No admin view
