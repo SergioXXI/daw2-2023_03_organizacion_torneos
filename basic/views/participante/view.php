@@ -6,7 +6,7 @@ use yii\widgets\DetailView;
 /** @var yii\web\View $this */
 /** @var app\models\Participante $model */
 
-$this->title = $model->id;
+$this->title = $model->usuario->nombre;
 $this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Participantes'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 \yii\web\YiiAsset::register($this);
@@ -15,27 +15,31 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <h1><?= Html::encode($this->title) ?></h1>
 
-    <p>
-        <?= Html::a(Yii::t('app', 'Update'), ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
-        <?= Html::a(Yii::t('app', 'Delete'), ['delete', 'id' => $model->id], [
-            'class' => 'btn btn-danger',
-            'data' => [
-                'confirm' => Yii::t('app', 'Are you sure you want to delete this item?'),
-                'method' => 'post',
-            ],
-        ]) ?>
-    </p>
-
     <?= DetailView::widget([
-        'model' => $model,
-        'attributes' => [
-            'id',
-            'fecha_nacimiento',
-            'licencia',
-            'tipo_participante_id',
-            'imagen_id',
-            'usuario_id',
+    'model' => $model,
+    'attributes' => [
+        'id',
+        [
+            'label' => 'Nombre del Usuario',
+            'value' => $model->usuario->nombre, // Ajusta estos atributos según tu modelo
         ],
-    ]) ?>
+        [
+            'label' => 'Primer Apellido',
+            'value' => $model->usuario->apellido1,
+        ],
+        [
+            'label' => 'Segundo Apellido',
+            'value' => $model->usuario->apellido2,
+        ],
+        'fecha_nacimiento',
+        'licencia',
+        [
+            'label' => 'Tipo Participante',
+            'value' => $model->tipoParticipante->nombre, // Ajusta estos atributos según tu modelo
+        ],
+        'imagen_id',
+        
+    ],
+]) ?>
 
 </div>

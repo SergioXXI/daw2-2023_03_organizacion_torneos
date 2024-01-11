@@ -31,6 +31,18 @@ $this->params['breadcrumbs'][] = $this->title;
             ['class' => 'yii\grid\SerialColumn'],
 
             'id',
+            [
+                'attribute' => 'usuario.nombre',
+                'label' => 'Nombre del Usuario',
+            ],
+            [
+                'attribute' => 'usuario.apellido1',
+                'label' => 'Primer Apellido',
+            ],
+            [
+                'attribute' => 'usuario.apellido2',
+                'label' => 'Segundo Apellido',
+            ],
             'fecha_nacimiento',
             'licencia',
             'tipo_participante_id',

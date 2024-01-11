@@ -1,12 +1,14 @@
 <?php
-
+use yii\grid\ActionColumn;
+use yii\helpers\Url;
 use yii\helpers\Html;
 use yii\widgets\DetailView;
+use yii\grid\GridView;
 
 /** @var yii\web\View $this */
 /** @var app\models\Equipo $model */
 
-$this->title = $model->id;
+$this->title = $model->nombre;
 $this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Equipos'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 \yii\web\YiiAsset::register($this);
@@ -16,8 +18,8 @@ $this->params['breadcrumbs'][] = $this->title;
     <h1><?= Html::encode($this->title) ?></h1>
 
     <p>
-        <?= Html::a(Yii::t('app', 'Update'), ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
-        <?= Html::a(Yii::t('app', 'Delete'), ['delete', 'id' => $model->id], [
+        <?= Html::a(Yii::t('app', 'Actualizar'), ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
+        <?= Html::a(Yii::t('app', 'Borrar'), ['delete', 'id' => $model->id], [
             'class' => 'btn btn-danger',
             'data' => [
                 'confirm' => Yii::t('app', 'Are you sure you want to delete this item?'),
@@ -38,14 +40,27 @@ $this->params['breadcrumbs'][] = $this->title;
     ]) ?>
 
     <h2>Participantes</h2>
-    <ul>
-    <?php foreach ($participantes as $participante): ?>
-        <li>
-            <?= "ID: " . Html::encode($participante->id) ?>
-            <?= "Nombre: " . Html::encode($participante->usuario->nombre) ?>
-            <?= "Tipo: " . Html::encode($participante->tipo_participante->nombre) ?>
-        </li>
-    <?php endforeach; ?>
-    </ul>
+    <?= GridView::widget([
+    'dataProvider' => $dataProvider,
+    'columns' => [
+        'id',
+        [
+            'attribute' => 'usuario.nombre',
+            'label' => 'Nombre del Usuario',
+        ],
+        [
+            'attribute' => 'tipoParticipante.nombre',
+            'label' => 'Tipo de Participante',
+        ],
+        [
+            'class' => ActionColumn::className(),
+            'template' => '{view}', // Solo incluye la acción 'view'
+            'urlCreator' => function ($action, $model, $key, $index, $column) {
+                return Url::toRoute(["participante/{$action}", 'id' => $model->id]);
+            }
+        ]
+        // Otros atributos que desees mostrar
+    ],
+]) ?>
 
 </div>

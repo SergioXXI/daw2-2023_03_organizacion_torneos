@@ -6,11 +6,17 @@ use yii\base\Model;
 use yii\data\ActiveDataProvider;
 use app\models\Participante;
 
+
 /**
  * ParticipanteSearch represents the model behind the search form of `app\models\Participante`.
  */
 class ParticipanteSearch extends Participante
 {
+
+    public $nombreUsuario;
+    public $apellido1Usuario;
+    public $apellido2Usuario;
+
     /**
      * {@inheritdoc}
      */
@@ -18,7 +24,7 @@ class ParticipanteSearch extends Participante
     {
         return [
             [['id', 'tipo_participante_id', 'imagen_id', 'usuario_id'], 'integer'],
-            [['fecha_nacimiento', 'licencia'], 'safe'],
+            [['fecha_nacimiento', 'licencia','nombreUsuario', 'apellido1Usuario', 'apellido2Usuario'], 'safe'],
         ];
     }
 
@@ -40,7 +46,7 @@ class ParticipanteSearch extends Participante
      */
     public function search($params)
     {
-        $query = Participante::find();
+        $query = Participante::find()->joinWith('usuario');
 
         // add conditions that should always apply here
 
@@ -58,15 +64,20 @@ class ParticipanteSearch extends Participante
 
         // grid filtering conditions
         $query->andFilterWhere([
-            'id' => $this->id,
-            'fecha_nacimiento' => $this->fecha_nacimiento,
-            'tipo_participante_id' => $this->tipo_participante_id,
-            'imagen_id' => $this->imagen_id,
-            'usuario_id' => $this->usuario_id,
+            'participante.id' => $this->id,
+            'participante.fecha_nacimiento' => $this->fecha_nacimiento,
+            'participante.tipo_participante_id' => $this->tipo_participante_id,
+            'participante.imagen_id' => $this->imagen_id,
+            'participante.usuario_id' => $this->usuario_id,
+
         ]);
+        $query->andFilterWhere(['like', 'usuario.nombre', $this->nombreUsuario])
+              ->andFilterWhere(['like', 'usuario.apellido1', $this->apellido1Usuario])
+              ->andFilterWhere(['like', 'usuario.apellido2', $this->apellido2Usuario]);
 
         $query->andFilterWhere(['like', 'licencia', $this->licencia]);
 
         return $dataProvider;
     }
+
 }
