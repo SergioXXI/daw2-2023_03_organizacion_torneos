@@ -31,6 +31,7 @@ $this->title = Yii::t('app', 'Pistas');
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
         'summary' => 'Mostrando ' . Html::tag('b', '{begin}-{end}') . ' de ' .  Html::tag('b', '{totalCount}') . ' elementos', //Para cambiar el idioma del texto del summary
+        'emptyText' => 'No hay resultados',
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
 

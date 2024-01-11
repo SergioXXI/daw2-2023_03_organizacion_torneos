@@ -8,6 +8,7 @@ use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\db\IntegrityException;
+use yii\data\ArrayDataProvider;
 
 /**
  * DireccionController implements the CRUD actions for Direccion model.
@@ -56,8 +57,21 @@ class DireccionController extends Controller
      */
     public function actionView($id)
     {
+        $model = $this->findModel($id);
+
+        $pistasProvider = new ArrayDataProvider([
+            'allModels' => $model->pista,
+            'sort' => [
+                'attributes' => ['id', 'nombre'],
+            ],
+            'pagination' => [
+                'pageSize' => 10,
+            ],
+        ]);
+
         return $this->render('view', [
-            'model' => $this->findModel($id),
+            'model' => $model,
+            'pistasProvider' => $pistasProvider,
         ]);
     }
 

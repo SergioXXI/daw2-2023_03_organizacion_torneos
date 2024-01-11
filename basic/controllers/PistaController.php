@@ -8,6 +8,7 @@ use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\db\IntegrityException;
+use yii\data\ArrayDataProvider;
 
 /**
  * PistaController implements the CRUD actions for Pista model.
@@ -37,12 +38,12 @@ class PistaController extends Controller
                     'class' => \yii\filters\AccessControl::class,
                     'rules' => [
                         [
-                            'actions' => ['index', 'view', 'update', 'create'],
+                            'actions' => ['index', 'view', 'update', 'create', 'delete'],
                             'allow' => true,
                             'roles' => ['admin', 'sysadmin'],
                         ],
                         [
-                            'actions' => ['pistas', 'verpista',],
+                            'actions' => ['pistas', 'ver-pista',],
                             'allow' => true,
                             'roles' => ['@', '?']
                         ],
@@ -115,8 +116,21 @@ class PistaController extends Controller
      */
     public function actionView($id)
     {
+        $model = $this->findModel($id);
+
+        $pistasProvider = new ArrayDataProvider([
+            'allModels' => $model->reservas,
+            'sort' => [
+                'attributes' => ['id', 'fecha'],
+            ],
+            'pagination' => [
+                'pageSize' => 10,
+            ],
+        ]);
+
         return $this->render('view', [
-            'model' => $this->findModel($id),
+            'model' => $model,
+            'reservasProvider' => $pistasProvider,
         ]);
     }
 

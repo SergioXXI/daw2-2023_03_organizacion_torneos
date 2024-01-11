@@ -11,14 +11,13 @@ use yii\widgets\Pjax;
 /** @var yii\data\ActiveDataProvider $dataProvider */
 
 $this->title = Yii::t('app', 'Direcciones');
-$this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="direccion-index">
 
-    <h1><?= Html::encode($this->title) ?></h1>
+    <h1 class='mb-4'><?= Html::encode($this->title) ?></h1>
 
     <p>
-        <?= Html::a(Yii::t('app', 'Create Direccion'), ['create'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a(Yii::t('app', 'Crear Dirección'), ['create'], ['class' => 'btn btn-success']) ?>
     </p>
 
     <?php Pjax::begin(); ?>
@@ -27,6 +26,8 @@ $this->params['breadcrumbs'][] = $this->title;
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
+        'summary' => 'Mostrando ' . Html::tag('b', '{begin}-{end}') . ' de ' .  Html::tag('b', '{totalCount}') . ' elementos', //Para cambiar el idioma del texto del summary
+        'emptyText' => 'No hay resultados',
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
 
@@ -35,8 +36,8 @@ $this->params['breadcrumbs'][] = $this->title;
             'numero',
             'cod_postal',
             'ciudad',
-            //'provincia',
-            //'pais',
+            'provincia',
+            'pais',
             [
                 'class' => ActionColumn::className(),
                 'urlCreator' => function ($action, Direccion $model, $key, $index, $column) {
