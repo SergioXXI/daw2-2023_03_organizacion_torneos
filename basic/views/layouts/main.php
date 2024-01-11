@@ -42,11 +42,12 @@ $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/x-icon', 'href' => Yii
             ['label' => 'Home', 'url' => ['/site/index']],
             ['label' => 'About', 'url' => ['/site/about']],
             ['label' => 'Contact', 'url' => ['/site/contact']],
-            ['label' => 'User', 'url' => ['/user']],
             ['label' => 'Test', 'url' => ['/test/index']],
+            ['label' => '/Usuarios', 'url' => ['/user']],
             Yii::$app->user->isGuest
                 ? ['label' => 'Login', 'url' => ['/site/login']]
-                : '<li class="nav-item">'
+                : ['label' => 'Mi Cuenta', 'url' => ['/user/view/', 'id' => Yii::$app->user->identity->id]],
+                    '<li class="nav-item">'
                     . Html::beginForm(['/site/logout'])
                     . Html::submitButton(
                         'Logout (' . Yii::$app->user->identity->email . ')',
