@@ -108,7 +108,7 @@ DROP TABLE IF EXISTS `partido_equipo`;
 CREATE TABLE `partido_equipo` (
   `partido_id` bigint NOT NULL,
   `equipo_id` bigint NOT NULL,
-  `puntos` int NOT NULL COMMENT 'Puntos de ese equipo en ese partido',
+  `puntos` int COMMENT 'Puntos de ese equipo en ese partido',
   PRIMARY KEY (`partido_id`, `equipo_id`)
 );
 
