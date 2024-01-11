@@ -7,11 +7,10 @@ USE `daw2_2023_03_organizacion_torneos`;
 -- Iniciar transacción
 START TRANSACTION;
 
-DROP TABLE IF EXISTS `rol`;
-CREATE TABLE `rol` (
+DROP TABLE IF EXISTS `imagen`;
+CREATE TABLE `imagen` (
   `id` bigint PRIMARY KEY NOT NULL AUTO_INCREMENT,
-  `nombre` varchar(100) NOT NULL,
-  `descripcion` varchar(1000)
+  `ruta` varchar(250) UNIQUE NOT NULL
 );
 
 DROP TABLE IF EXISTS `torneo`;
@@ -24,7 +23,8 @@ CREATE TABLE `torneo` (
   `tipo_torneo_id` bigint NOT NULL,
   `clase_id` bigint NOT NULL,
   `fecha_inicio` timestamp NOT NULL,
-  `fecha_limite` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
+  `fecha_limite` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `fecha_fin` timestamp NULL
 );
 
 DROP TABLE IF EXISTS `torneo_imagen`;
@@ -108,7 +108,7 @@ DROP TABLE IF EXISTS `partido_equipo`;
 CREATE TABLE `partido_equipo` (
   `partido_id` bigint NOT NULL,
   `equipo_id` bigint NOT NULL,
-  `puntos` int NOT NULL COMMENT 'Puntos de ese equipo en ese partido',
+  `puntos` int COMMENT 'Puntos de ese equipo en ese partido',
   PRIMARY KEY (`partido_id`, `equipo_id`)
 );
 
@@ -142,8 +142,7 @@ CREATE TABLE `usuario` (
   `apellido1` varchar(100) NOT NULL,
   `apellido2` varchar(100) NOT NULL,
   `email` varchar(100) UNIQUE NOT NULL,
-  `password` varchar(100) NOT NULL,
-  `rol_id` bigint
+  `password` varchar(100)
 );
 
 DROP TABLE IF EXISTS `participante`;
@@ -153,7 +152,7 @@ CREATE TABLE `participante` (
   `licencia` varchar(250) UNIQUE NOT NULL,
   `tipo_participante_id` bigint NOT NULL,
   `imagen_id` bigint,
-  `usuario_id` bigint UNIQUE
+  `usuario_id` bigint NOT NULL
 );
 
 DROP TABLE IF EXISTS `participante_documento`;
@@ -308,8 +307,5 @@ ALTER TABLE `reserva_material` ADD FOREIGN KEY (`material_id`) REFERENCES `mater
 ALTER TABLE `reserva_pista` ADD FOREIGN KEY (`reserva_id`) REFERENCES `reserva` (`id`);
 
 ALTER TABLE `reserva_pista` ADD FOREIGN KEY (`pista_id`) REFERENCES `pista` (`id`);
-
-ALTER TABLE `usuario` ADD FOREIGN KEY (`rol_id`) REFERENCES `rol` (`id`);
-
 -- Confirmar la transacción
 COMMIT;
