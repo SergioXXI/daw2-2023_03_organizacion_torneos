@@ -2,10 +2,11 @@
 
 namespace app\controllers;
 
-use app\models\Insertar_imagenes;
+use app\models\TorneoImagen;
 use app\models\Imagen;
 use app\models\Torneo;
 use app\models\TorneoSearch;
+use yii\web\UploadedFile;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -109,19 +110,26 @@ class TorneoController extends Controller
      */
     public function actionCreate()
     {
-        $model = new Torneo();
-        $imagen_archivo = new Insertar_imagenes();
+        $model = new torneo();
         $imagen = new Imagen();
+        $union = new TorneoImagen();
 
-        if ($this->request->isPost) {
-            if ($model->load($this->request->post()) && $model->save()) {
-                $imagen_archivo=$model->imageFile;
-                $imagen->ruta=$imagen_archivo->getBaseName();
+        if ($model->load($this->request->post()) && $model->save())  {
+            $destino = '/imagenes';
+            $model->imageFile = UploadedFile::getInstance($model, 'imageFile');
+            $rutaFichero = $destino . '/' . $model->imageFile;
+            if ($model->subirImagen($destino)) {
+                // file is uploaded successfully
+                $imagen->ruta = $rutaFichero;
                 $imagen->save();
-                return $this->redirect(['view', 'id' => $model->id]);
+
+                $union->torneo_id = $model->id;
+                $union->imagen_id = $imagen->id;
+                $union->save();
+                return $this->render('view', [
+                    'model' => $model,
+                ]);;
             }
-        } else {
-            $model->loadDefaultValues();
         }
 
         return $this->render('create', [

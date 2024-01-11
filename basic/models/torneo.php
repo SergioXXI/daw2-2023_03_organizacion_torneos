@@ -3,6 +3,8 @@
 namespace app\models;
 
 use Yii;
+use yii\web\UploadedFile;
+
 
 /**
  * This is the model class for table "torneo".
@@ -75,8 +77,8 @@ class Torneo extends \yii\db\ActiveRecord
             'fecha_limite' => 'Fecha Limite',
         ];
     }
-
-    public function create($destino)
+    
+    public function subirImagen($destino)
     {
         if ($this->validate()) {
             $destino = \Yii::getAlias('@webroot') . '/' . $destino;
@@ -85,10 +87,6 @@ class Torneo extends \yii\db\ActiveRecord
             }
             $rutaFichero = $destino . '/' . $this->imageFile->baseName . '.' . $this->imageFile->extension;
             return $this->imageFile->saveAs($rutaFichero);
-
-            /*$this->imageFile->saveAs('imagenes/' . $this->imageFile->baseName . '.' . $this->imageFile->extension);
-            echo "Funciona";
-            return true;*/
         } else {
             return false;
         }
