@@ -70,11 +70,10 @@ class PartidoController extends Controller
     public function actionCreate()
     {
         $model = new Partido();
-        $model_equipo = new PartidoEquipo();
 
         if ($this->request->isPost) {
             if ($model->load($this->request->post()) && $model->save()) {
-                return $this->redirect(['view', 'id' => $model->id]);
+                return $this->redirect(['equipos_partidos', 'id_partido' => $model->id,'id_torneo' => $model->torneo_id]);
             }
         } else {
             $model->loadDefaultValues();
@@ -82,7 +81,6 @@ class PartidoController extends Controller
 
         return $this->render('create', [
             'model' => $model,
-            'model_equipo' => $model_equipo,
         ]);
     }
 
@@ -134,5 +132,26 @@ class PartidoController extends Controller
         }
 
         throw new NotFoundHttpException(Yii::t('app', 'The requested page does not exist.'));
+    }
+
+    public function actionEquipos_partidos($id_partido,$id_torneo)
+    {
+        $model_equipo1 = new PartidoEquipo();
+        $model_equipo2 = new PartidoEquipo();
+
+        if ($this->request->isPost && $model_equipo1->load($this->request->post())  && $model_equipo2->load($this->request->post()) ) {
+            $model_equipo1->partido_id=$id_partido;
+            $model_equipo1->puntos=0;
+            $model_equipo2->partido_id=$id_partido;
+            $model_equipo2->puntos=0;
+            $model_equipo1->save();
+            $model_equipo2->save();
+            return $this->redirect(['index']);
+        }
+        return $this->render('equipos_partidos', [
+            'id' => $id_torneo,
+            'model_equipo1' => $model_equipo1,
+            'model_equipo2' => $model_equipo2,
+        ]);
     }
 }
