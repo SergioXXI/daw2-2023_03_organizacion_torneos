@@ -83,11 +83,17 @@ INSERT INTO direccion (calle, numero, cod_postal, ciudad, provincia, pais) VALUE
     ('Calle Principal', 123, 12345, 'Ciudad A', 'Provincia X', 'País Y'),
     ('Avenida Secundaria', 456, 54321, 'Ciudad B', 'Provincia Z', 'País W');
 
+-- Insertar datos de prueba para la tabla 'reserva'
+INSERT INTO reserva (fecha, usuario_id) VALUES
+    ('2024-01-15', 1),
+    ('2024-02-20', 2),
+    ('2024-03-25', 1);
+
 -- Insertar datos de prueba para la tabla 'partido'
-INSERT INTO partido (jornada, fecha, torneo_id, direccion_id) VALUES
+INSERT INTO partido (jornada, fecha, torneo_id, reserva_id) VALUES
     (1, '2024-01-01', 1, 1),
     (2, '2024-02-01', 2, 2),
-    (3, '2024-03-01', 3, 1);
+    (3, '2024-03-01', 3, NULL);
 
 -- Insertar datos de prueba para la tabla 'partido_equipo'
 INSERT INTO partido_equipo (partido_id, equipo_id, puntos) VALUES
@@ -124,12 +130,6 @@ INSERT INTO participante_documento (participante_id, documento_id) VALUES
     (1, 1),
     (2, 2),
     (3, 3);
-
--- Insertar datos de prueba para la tabla 'reserva'
-INSERT INTO reserva (fecha, usuario_id) VALUES
-    ('2024-01-15', 1),
-    ('2024-02-20', 2),
-    ('2024-03-25', 1);
 
 -- Insertar datos de prueba para la tabla 'material'
 INSERT INTO material (nombre, color, descripcion) VALUES
