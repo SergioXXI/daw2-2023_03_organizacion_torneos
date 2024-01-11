@@ -119,12 +119,56 @@ class EquipoController extends Controller
     {
         $model = $this->findModel($id);
 
+        $inscritoEnTorneos = (new \yii\db\Query())
+            ->from('torneo_equipo')
+            ->where(['equipo_id' => $id])
+            ->exists();
+
+        if ($inscritoEnTorneos) {
+            // Lógica para clonar el equipo
+            $nuevoEquipo = new Equipo();
+            $nuevoEquipo->attributes = $model->attributes; // Copia los atributos
+            //$nuevoEquipo->nombre .= " (Clon)"; // Opcional: Modifica el nombre para indicar que es un clon
+            $nuevoEquipo->save(false); // Guarda el nuevo equipo, asumiendo que la validación no es necesaria
+
+            // Clonar las relaciones con los participantes
+            foreach ($model->participantes as $participante) {
+                $nuevaRelacion = new EquipoParticipante();
+                $nuevaRelacion->equipo_id = $nuevoEquipo->id;
+                $nuevaRelacion->participante_id = $participante->id;
+                $nuevaRelacion->save(false);
+            }
+
+            // Redirige a la acción de actualizar para el nuevo equipo clonado
+            return $this->redirect(['update', 'id' => $nuevoEquipo->id]);
+        }
+
+       
+
+        // Obtener todas las categorías
+        $categorias = Categoria::find()
+            ->orderBy('nombre')
+            ->all();
+
+        // Convertir a un array para el desplegable, usando 'id' como clave y 'nombre' como valor
+        $listaCategorias = ArrayHelper::map($categorias, 'id', 'nombre');
+
+        // Obtener participantes del equipo
+        $dataProvider = new \yii\data\ActiveDataProvider([
+            'query' => Participante::find()
+                ->joinWith(['usuario', 'tipoParticipante'])
+                ->innerJoin('equipo_participante', 'equipo_participante.participante_id = participante.id')
+                ->where(['equipo_participante.equipo_id' => $id]),
+        ]);
+
         if ($this->request->isPost && $model->load($this->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
         }
 
         return $this->render('update', [
             'model' => $model,
+            'listaCategorias' => $listaCategorias,
+            'dataProvider' => $dataProvider,
         ]);
     }
 
