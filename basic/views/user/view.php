@@ -20,14 +20,21 @@ $attributes = [
 ];
 
 // si es admin le metemos los atributos que queramos
-if (Yii::$app->user->can('admin')) {
-    ['id'] + $attributes;
+if (Yii::$app->user->can('admin') || Yii::$app->user->can('sysadmin')) {
+    // Añadimos id y rol
+    array_push($attributes, 'id', [
+        'attribute' => 'roles',
+        'label' => Yii::t('app', 'Rol'),
+        'value' => function ($model) {
+            $roles = Yii::$app->authManager->getRolesByUser($model->id);
+            return implode(', ', array_keys($roles));
+        },
+    ]); 
 }
-
 ?>
 <div class="user-view">
 
-    <h1><?= Html::encode($this->title) ?></h1>
+    <h1><?= Html::encode($model->nombre . ' ' . $model->apellido1) ?></h1>
 
     <p>
         <?= Html::a(Yii::t('app', 'Update'), ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>

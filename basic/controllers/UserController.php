@@ -34,12 +34,12 @@ class UserController extends Controller
                         [
                             'actions' => ['index', 'view'],
                             'allow' => true,
-                            'roles' => ['admin', 'participante'],
+                            'roles' => ['admin', 'sysadmin', 'participante'],
                         ],
                         [
                             'actions' => ['create', 'update', 'delete'],
                             'allow' => true,
-                            'roles' => ['admin'],
+                            'roles' => ['admin', 'sysadmin'],
                         ],
                     ],
                 ],
