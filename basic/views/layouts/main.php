@@ -43,6 +43,11 @@ $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/x-icon', 'href' => Yii
             ['label' => 'About', 'url' => ['/site/about']],
             ['label' => 'Contact', 'url' => ['/site/contact']],
             ['label' => 'Test', 'url' => ['/test/index']],
+            [
+                'label' => 'Registro',
+                'url' => ['/register/register'],
+                'visible' => Yii::$app->user->isGuest || Yii::$app->user->can('admin') || Yii::$app->user->can('sysadmin'),
+            ],
             Yii::$app->user->isGuest
                 ? ['label' => 'Login', 'url' => ['/site/login']]
                 : '<li class="nav-item">'
