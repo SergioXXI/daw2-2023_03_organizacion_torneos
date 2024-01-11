@@ -2,10 +2,16 @@
 
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
+use yii\helpers\ArrayHelper; // Add this line to import the ArrayHelper class
 
 /** @var yii\web\View $this */
 /** @var app\models\User $model */
 /** @var yii\widgets\ActiveForm $form */
+
+$rolesUsuario = Yii::$app->authManager->getRolesByUser($model->id);
+// Se supone que cada usuario solo tiene un rol
+$rolUsuario = !empty($rolesUsuario) ? reset($rolesUsuario) : null;
+
 ?>
 
 <div class="user-form">
@@ -24,7 +30,13 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'password')->passwordInput(['maxlength' => true]) ?>
 
-    <?// = $form->field($model, 'rol_id')->textInput() ?>
+    <?= $form->field($model, 'rol')->dropDownList(
+        ArrayHelper::map($roles, 'name', 'name'),
+        // Ponemos el rol del usuario como seleccionado
+        ['options' => [$rolUsuario ? $rolUsuario->name : null => ['selected' => true]]]
+    ) ?>
+
+
 
     <div class="form-group">
         <?= Html::submitButton(Yii::t('app', 'Save'), ['class' => 'btn btn-success']) ?>

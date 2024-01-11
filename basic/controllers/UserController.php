@@ -160,4 +160,13 @@ class UserController extends Controller
 
         throw new NotFoundHttpException(Yii::t('app', 'The requested page does not exist.'));
     }
+
+    protected function updateRol($id, $rol) 
+    {
+        if ($rol != 'vacio') {
+            $auth = Yii::$app->authManager;
+            $auth->revokeAll($id);
+            $auth->assign($auth->getRole($rol), $id);
+        }
+    }
 }

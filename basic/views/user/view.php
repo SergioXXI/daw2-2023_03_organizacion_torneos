@@ -30,6 +30,7 @@ if (Yii::$app->user->can('admin') || Yii::$app->user->can('sysadmin')) {
             return implode(', ', array_keys($roles));
         },
     ]); 
+
 }
 ?>
 <div class="user-view">

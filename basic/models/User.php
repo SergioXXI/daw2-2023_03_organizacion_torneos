@@ -23,6 +23,7 @@ class User extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
 
     public $authKey;
     public $username;
+    public $rol;
 
     public static function findIdentity($id)
     {
