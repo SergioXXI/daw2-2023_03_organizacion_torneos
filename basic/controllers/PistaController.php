@@ -122,24 +122,37 @@ class PistaController extends Controller
         $model = new Pista();
         $model_direccion = new Direccion();
 
-        //Primero se intenta crear la dirección
-        //Para asegurar la integridad se van a realizar los guardados en formato transaccion
-        //ya que se están generando dos modelos, el direccion y el pista
-        $transaction = \Yii::$app->db->beginTransaction();
-
+        
         if ($this->request->isPost) {
-            if($model_direccion->load($this->request->post()) && $model_direccion->save()) {
-                //Si se genera correctamente la entrada direccion se recoge la id dejada por la base de datos
-                //Esta id será la id a guardar en la tabla Pista columna direccion_id
-                $model->direccion_id = \Yii::$app->db->getLastInsertID();
+            
+            //Primero se intenta crear la dirección
+            //Para asegurar la integridad se van a realizar los guardados en formato transaccion
+            //ya que se están generando dos modelos, el direccion y el pista
+            $transaction = \Yii::$app->db->beginTransaction();
+            
+            if($model_direccion->load($this->request->post())) {
+
+                //En caso de existir una dirección con los mismos parametros no se creará y simplemente
+                //se asociara la direccion_ïd de la pista a esta dirección ya existente
+                $existe = Direccion::findOne($model_direccion->getAttributes($model_direccion->fields())); //Al usar fields con get attributes solo se usan los campos rellenados, dejando así excluido el id de la busqueda
+                if($existe !== null) {
+                    //Si ya existe la dirección se asigna el id de la misma al nuevo modelo creado
+                    $model->direccion_id = $existe->id;
+                } else {
+                    //Si no existe la dirección se crear una nueva y se le asigna el id de la creación
+                    if($model_direccion->save()) {
+                        //Si se genera correctamente la entrada direccion se recoge la id dejada por la base de datos
+                        //Esta id será la id a guardar en la tabla Pista columna direccion_id
+                        $model->direccion_id = \Yii::$app->db->getLastInsertID();
+                    }
+                }
+
                 if ($model->load($this->request->post()) && $model->save()) {
                     //Si se llega a este punto se confirma la transaccion
                     $transaction->commit();
                     return $this->redirect(['view', 'id' => $model->id]);
-                }
+                }   
             }
-        } else {
-            $model->loadDefaultValues();
         }
 
         return $this->render('create', [
@@ -157,13 +170,46 @@ class PistaController extends Controller
      */
     public function actionUpdate($id)
     {
-        $model = $this->findModel($id);
-        $model_direccion = null;
-        if($model !== null)
-            $model_direccion = Direccion::findOne(['id' => $model->direccion_id]);
+        $model = $this->findModel($id); 
+        //No haría falta comprobar si existe el modelo con dicha id ya que esa función lanza una excepcion si no existe
+        $model_direccion = Direccion::findOne(['id' => $model->direccion_id]);
 
-        if ($this->request->isPost && $model->load($this->request->post()) && $model->save() && $model_direccion->load($this->request->post()) && $model_direccion->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+        
+        //Si la dirección ha sido editada se comprueba si la nueva ya existe para asignarle dicha id,
+        //si no se crea una nueva dirección y se le asigna esta nueva id generada
+        if ($this->request->isPost) {
+            
+            //Para asegurar la integridad se van a realizar los guardados en formato transaccion
+            //ya que se están generando dos modelos, el direccion y el pista
+            $transaction = \Yii::$app->db->beginTransaction();
+            
+            if($model_direccion->load($this->request->post())) {
+
+                
+                //En caso de existir una dirección con los mismos parametros no se creará y simplemente
+                //se asociara la direccion_ïd de la pista a esta dirección ya existente
+                unset($model_direccion->id);
+                $existe = Direccion::findOne($model_direccion->getAttributes($model_direccion->fields())); //Al usar fields con get attributes solo se usan los campos rellenados, dejando así excluido el id de la busqueda
+                if($existe !== null) {
+                    //Si ya existe la dirección se asigna el id de la misma al nuevo modelo creado
+                    $model->direccion_id = $existe->id;
+                } else {
+                    //Si no existe la dirección se crear una nueva y se le asigna el id de la creación
+                    if($model_direccion->save()) {
+                        //Si se genera correctamente la entrada direccion se recoge la id dejada por la base de datos
+                        //Esta id será la id a guardar en la tabla Pista columna direccion_id
+                        $model->direccion_id = \Yii::$app->db->getLastInsertID();
+                    }
+                }
+
+                if ($model->load($this->request->post()) && $model->save()) {
+                    //Si se llega a este punto se confirma la transaccion
+                    $transaction->commit();
+                    return $this->redirect(['view', 'id' => $model->id]);
+                }   
+            }
+        } else {
+            $model->loadDefaultValues();
         }
 
         return $this->render('update', [
@@ -203,6 +249,6 @@ class PistaController extends Controller
             return $model;
         }
 
-        throw new NotFoundHttpException(Yii::t('app', 'The requested page does not exist.'));
+        throw new NotFoundHttpException(\Yii::t('app', 'The requested page does not exist.'));
     }
 }

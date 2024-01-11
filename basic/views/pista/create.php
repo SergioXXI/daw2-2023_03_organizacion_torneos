@@ -9,6 +9,7 @@ $this->title = Yii::t('app', 'Create Pista');
 $this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Pistas'), 'url' => ['list']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
+
 <div class="pista-create">
 
     <h1><?= Html::encode($this->title) ?></h1>
