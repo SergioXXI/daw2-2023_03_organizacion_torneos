@@ -6,13 +6,13 @@ use yii\helpers\Html;
 /** @var yii\web\View $this */
 /** @var app\models\Pista $model */
 
-$this->title = Yii::t('app', 'Update Pista: {name}', [
-    'name' => $model->id,
+$this->title = Yii::t('app', 'Editar {name} ({id})', [
+    'id' => $model->id,
+    'name' => Html::encode($model->nombre),
 ]);
 
 $this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Pistas'), 'url' => ['index']];
-$this->params['breadcrumbs'][] = ['label' => $model->id . ' / ' . $model->nombre, 'url' => ['view', 'id' => $model->id]];
-$this->params['breadcrumbs'][] = Yii::t('app', 'Update');
+$this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="pista-update">
 

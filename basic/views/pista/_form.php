@@ -43,7 +43,7 @@ use yii\widgets\ActiveForm;
         </div>
 
         <div class="form-group text-end me-2">
-            <?= Html::a('Cancelar', ['list'], ['class' => 'btn btn-secondary pe-3 mx-1']) ?>
+            <?= Html::a('Cancelar', ['index'], ['class' => 'btn btn-secondary pe-3 mx-1']) ?>
             <?= Html::submitButton(Yii::t('app', 'Guardar'), ['class' => 'btn btn-success pe-3 mx-1']) ?>
         </div>
 

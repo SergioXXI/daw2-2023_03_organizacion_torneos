@@ -14,6 +14,9 @@ use yii\db\IntegrityException;
  */
 class PistaController extends Controller
 {
+
+    public $defaultAction = 'pistas';
+
     /**
      * @inheritDoc
      */
@@ -28,6 +31,23 @@ class PistaController extends Controller
                         'delete' => ['POST'],
                     ],
                 ],
+
+                //Regular acciones permitidas del controlador para los diversos usuarios
+                'access' => [
+                    'class' => \yii\filters\AccessControl::class,
+                    'rules' => [
+                        [
+                            'actions' => ['index', 'view', 'update', 'create'],
+                            'allow' => true,
+                            'roles' => ['admin', 'sysadmin'],
+                        ],
+                        [
+                            'actions' => ['pistas', 'verpista',],
+                            'allow' => true,
+                            'roles' => ['@', '?']
+                        ],
+                    ],
+                ],
             ]
         );
     }
@@ -37,7 +57,7 @@ class PistaController extends Controller
      *
      * @return string
      */
-    public function actionIndex()
+    public function actionPistas()
     {
     
         $searchModel = new PistaSearch();
@@ -76,7 +96,7 @@ class PistaController extends Controller
      *
      * @return string
      */
-    public function actionList()
+    public function actionIndex()
     {
         $searchModel = new PistaSearch();
         $dataProvider = $searchModel->search($this->request->queryParams);

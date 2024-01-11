@@ -8,7 +8,7 @@ use yii\widgets\ActiveForm;
 <?php
 $form = ActiveForm::begin([
     'method' => 'get',
-    'action' => ['index'], // Replace 'search' with the actual action for searching
+    'action' => ['pistas'], 
 ]); 
 ?>
 

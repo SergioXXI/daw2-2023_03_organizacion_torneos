@@ -2,7 +2,7 @@
 
 <?php //print_r($model->attributes); ?>
 
-<div class="col-md-4 mb-4">
+<div class="col-md-6 mb-4">
 <div class="card">
     <div class="card-body">
       <h5 class="card-title"> <?= Html::encode($model->nombre) ?></h5>

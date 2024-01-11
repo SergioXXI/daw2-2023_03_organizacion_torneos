@@ -9,8 +9,8 @@ use yii\widgets\DetailView;
 /** @var yii\web\View $this */
 /** @var app\models\Pista $model */
 
-$this->title = $model->id . ' / ' . $model->nombre;
-$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Pistas'), 'url' => ['list']];
+$this->title = Html::encode($model->nombre) . ' (' . $model->id . ')';
+$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Pistas'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 \yii\web\YiiAsset::register($this);
 ?>

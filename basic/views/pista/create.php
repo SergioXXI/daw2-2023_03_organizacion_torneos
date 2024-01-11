@@ -5,8 +5,8 @@ use yii\helpers\Html;
 /** @var yii\web\View $this */
 /** @var app\models\Pista $model */
 
-$this->title = Yii::t('app', 'Create Pista');
-$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Pistas'), 'url' => ['list']];
+$this->title = Yii::t('app', 'Crear Pista');
+$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Pistas'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 

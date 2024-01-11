@@ -43,8 +43,8 @@ $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/x-icon', 'href' => Yii
             ['label' => 'About', 'url' => ['/site/about']],
             ['label' => 'Contact', 'url' => ['/site/contact']],
             ['label' => 'Test', 'url' => ['/test/index']],
-            ['label' => 'Pistas', 'url' => ['/pista/index']],
-            ['label' => 'Modificar Pistas', 'url' => ['/pista/list']],
+            ['label' => 'Pistas', 'url' => ['/pista/pistas']],
+            ['label' => 'Modificar Pistas', 'url' => ['/pista/index']],
             ['label' => 'Modificar Direccion', 'url' => ['/direccion/index']],
             ['label' => 'Calendario', 'url' => ['/calendario/index']],
             Yii::$app->user->isGuest
@@ -66,7 +66,10 @@ $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/x-icon', 'href' => Yii
 <main id="main" class="flex-shrink-0" role="main">
     <div class="container mt-5">
         <?php if (!empty($this->params['breadcrumbs'])): ?>
-            <?= Breadcrumbs::widget(['links' => $this->params['breadcrumbs']]) ?>
+            <?= Breadcrumbs::widget([ 
+                    'links' => $this->params['breadcrumbs'],
+                    'homeLink' => false,
+                ]) ?>
         <?php endif ?>
         <?= Alert::widget() ?>
         <?= $content ?>

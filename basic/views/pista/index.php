@@ -12,16 +12,16 @@ use yii\widgets\Pjax;
 /** @var yii\data\ActiveDataProvider $dataProvider */
 
 $this->title = Yii::t('app', 'Pistas');
-$this->params['breadcrumbs'][] = $this->title;
+
 ?>
 <div class="pista-index">
 
-    <h1><?= Html::encode($this->title) ?></h1>
+    <h1 class='mb-4'><?= Html::encode($this->title) ?></h1>
 
     <p>
-        <?= Html::a(Yii::t('app', 'Create Pista'), ['create'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a(Yii::t('app', 'Crear Pista'), ['create'], ['class' => 'btn btn-success']) ?>
 
-        <?= Html::a(Yii::t('app', 'Create Dirección'), Url::toRoute(['direccion/create']), ['class' => 'btn btn-success']) ?>
+        <?= Html::a(Yii::t('app', 'Crear Dirección'), Url::toRoute(['direccion/create']), ['class' => 'btn btn-success']) ?>
     </p>
 
     <?php Pjax::begin(); ?>
