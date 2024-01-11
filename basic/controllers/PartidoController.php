@@ -2,24 +2,22 @@
 
 namespace app\controllers;
 
-use app\models\Insertar_imagenes;
-use app\models\Imagen;
-use app\models\Torneo;
-use app\models\TorneoSearch;
+use app\models\Equipo;
+use app\models\Partido;
+use app\models\PartidoEquipo;
+use app\models\PartidoSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
 /**
- * TorneoController implements the CRUD actions for Torneo model.
+ * PartidoController implements the CRUD actions for Partido model.
  */
-class TorneoController extends Controller
+class PartidoController extends Controller
 {
     /**
      * @inheritDoc
      */
-
-   
     public function behaviors()
     {
         return array_merge(
@@ -31,34 +29,18 @@ class TorneoController extends Controller
                         'delete' => ['POST'],
                     ],
                 ],
-                'access' => [
-                    'class' => \yii\filters\AccessControl::class,
-                    'rules' => [
-                        [
-                            'actions' => ['index', 'view'],
-                            'allow' => true,
-                            'roles' => ['sysadmin','admin', 'participante'],
-                        ],
-                        [
-                            'actions' => ['create', 'update', 'delete'],
-                            'allow' => true,
-                            'roles' => ['sysadmin','admin'],
-                        ],
-                    ],
-                ],
             ]
         );
     }
-    
+
     /**
-     * Lists all Torneo models.
-     * No admin view
+     * Lists all Partido models.
      *
      * @return string
      */
     public function actionIndex()
     {
-        $searchModel = new TorneoSearch();
+        $searchModel = new PartidoSearch();
         $dataProvider = $searchModel->search($this->request->queryParams);
 
         return $this->render('index', [
@@ -66,25 +48,9 @@ class TorneoController extends Controller
             'dataProvider' => $dataProvider,
         ]);
     }
-    /**
-     * Lists all Torneo models.
-     * Admmin view
-     *
-     * @return string
-     */
-    public function actionIndex_admin()
-    {
-        $searchModel = new TorneoSearch();
-        $dataProvider = $searchModel->search($this->request->queryParams);
-
-        return $this->render('index_admin', [
-            'searchModel' => $searchModel,
-            'dataProvider' => $dataProvider,
-        ]);
-    }
 
     /**
-     * Displays a single Torneo model.
+     * Displays a single Partido model.
      * @param int $id ID
      * @return string
      * @throws NotFoundHttpException if the model cannot be found
@@ -95,29 +61,19 @@ class TorneoController extends Controller
             'model' => $this->findModel($id),
         ]);
     }
-    public function actionView_admin($id)
-    {
-        return $this->render('view_admin', [
-            'model' => $this->findModel($id),
-        ]);
-    }
 
     /**
-     * Creates a new Torneo model.
+     * Creates a new Partido model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return string|\yii\web\Response
      */
     public function actionCreate()
     {
-        $model = new Torneo();
-        $imagen_archivo = new Insertar_imagenes();
-        $imagen = new Imagen();
+        $model = new Partido();
+        $model_equipo = new PartidoEquipo();
 
         if ($this->request->isPost) {
             if ($model->load($this->request->post()) && $model->save()) {
-                $imagen_archivo=$model->imageFile;
-                $imagen->ruta=$imagen_archivo->getBaseName();
-                $imagen->save();
                 return $this->redirect(['view', 'id' => $model->id]);
             }
         } else {
@@ -126,11 +82,12 @@ class TorneoController extends Controller
 
         return $this->render('create', [
             'model' => $model,
+            'model_equipo' => $model_equipo,
         ]);
     }
 
     /**
-     * Updates an existing Torneo model.
+     * Updates an existing Partido model.
      * If update is successful, the browser will be redirected to the 'view' page.
      * @param int $id ID
      * @return string|\yii\web\Response
@@ -150,7 +107,7 @@ class TorneoController extends Controller
     }
 
     /**
-     * Deletes an existing Torneo model.
+     * Deletes an existing Partido model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
      * @param int $id ID
      * @return \yii\web\Response
@@ -164,18 +121,18 @@ class TorneoController extends Controller
     }
 
     /**
-     * Finds the Torneo model based on its primary key value.
+     * Finds the Partido model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
      * @param int $id ID
-     * @return Torneo the loaded model
+     * @return Partido the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id)
     {
-        if (($model = Torneo::findOne(['id' => $id])) !== null) {
+        if (($model = Partido::findOne(['id' => $id])) !== null) {
             return $model;
         }
 
-        throw new NotFoundHttpException('The requested page does not exist.');
+        throw new NotFoundHttpException(Yii::t('app', 'The requested page does not exist.'));
     }
 }

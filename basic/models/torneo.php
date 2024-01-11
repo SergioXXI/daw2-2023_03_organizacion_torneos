@@ -36,6 +36,7 @@ class Torneo extends \yii\db\ActiveRecord
     /**
      * {@inheritdoc}
      */
+    public $imageFile;
     public static function tableName()
     {
         return 'torneo';
