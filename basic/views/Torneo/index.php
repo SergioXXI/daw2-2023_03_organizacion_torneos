@@ -95,5 +95,12 @@ $this->params['breadcrumbs'][] = $this->title;
         ]); 
     }
         ?>
+       
+<?php
+echo \yii\widgets\LinkPager::widget([
+    'pagination' => $dataProvider->pagination,
+]);
+
+?>
 
 </div>

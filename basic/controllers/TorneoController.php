@@ -6,6 +6,7 @@ use app\models\TorneoImagen;
 use app\models\Imagen;
 use app\models\Torneo;
 use app\models\TorneoSearch;
+use yii\data\ActiveDataProvider;
 use yii\web\UploadedFile;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -60,7 +61,14 @@ class TorneoController extends Controller
     public function actionIndex()
     {
         $searchModel = new TorneoSearch();
-        $dataProvider = $searchModel->search($this->request->queryParams);
+        $query = Torneo::find();
+        $dataProvider = new ActiveDataProvider([
+            'query' => $query,
+            'pagination' => [
+                'pageSize' => 10, // Numero de paginas
+            ],
+        ]);
+        //$dataProvider = $searchModel->search($this->request->queryParams);
 
         return $this->render('index', [
             'searchModel' => $searchModel,
@@ -76,7 +84,14 @@ class TorneoController extends Controller
     public function actionIndex_admin()
     {
         $searchModel = new TorneoSearch();
-        $dataProvider = $searchModel->search($this->request->queryParams);
+        $query = Torneo::find();
+        $dataProvider = new ActiveDataProvider([
+            'query' => $query,
+            'pagination' => [
+                'pageSize' => 10, // Numero de paginas
+            ],
+        ]);
+        //$dataProvider = $searchModel->search($this->request->queryParams);
 
         return $this->render('index_admin', [
             'searchModel' => $searchModel,
