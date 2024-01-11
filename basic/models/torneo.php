@@ -76,6 +76,24 @@ class Torneo extends \yii\db\ActiveRecord
         ];
     }
 
+    public function create($destino)
+    {
+        if ($this->validate()) {
+            $destino = \Yii::getAlias('@webroot') . '/' . $destino;
+            if (!is_dir($destino)) {
+                mkdir($destino, 0777, true);
+            }
+            $rutaFichero = $destino . '/' . $this->imageFile->baseName . '.' . $this->imageFile->extension;
+            return $this->imageFile->saveAs($rutaFichero);
+
+            /*$this->imageFile->saveAs('imagenes/' . $this->imageFile->baseName . '.' . $this->imageFile->extension);
+            echo "Funciona";
+            return true;*/
+        } else {
+            return false;
+        }
+    }
+
     /**
      * Gets query for [[Categorias]].
      *

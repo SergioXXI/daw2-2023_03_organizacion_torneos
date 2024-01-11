@@ -18,11 +18,19 @@ class Insertar_imagenes extends Model
         ];
     }
     
-    public function upload()
+    public function upload($destino)
     {
         if ($this->validate()) {
-            $this->imageFile->saveAs('uploads/' . $this->imageFile->baseName . '.' . $this->imageFile->extension);
-            return true;
+            $destino = \Yii::getAlias('@webroot') . '/' . $destino;
+            if (!is_dir($destino)) {
+                mkdir($destino, 0777, true);
+            }
+            $rutaFichero = $destino . '/' . $this->imageFile->baseName . '.' . $this->imageFile->extension;
+            return $this->imageFile->saveAs($rutaFichero);
+
+            /*$this->imageFile->saveAs('imagenes/' . $this->imageFile->baseName . '.' . $this->imageFile->extension);
+            echo "Funciona";
+            return true;*/
         } else {
             return false;
         }
