@@ -36,7 +36,7 @@ $this->title = Yii::t('app', 'Logs');
         'id' => 'deleteSeleccionados-boton',
         ]);?>
     
-    <?= Html::a(Yii::t('app', 'Eliminar todos'), ['deleteAll'], [
+    <?= Html::a(Yii::t('app', 'Eliminar todos'), ['delete-all'], [
         'class' => 'btn btn-danger',
         'data' => [ 'confirm' => '¿Estás seguro de que deseas eliminar todos los elementos?'],
         ]);?>
@@ -51,7 +51,10 @@ $this->title = Yii::t('app', 'Logs');
         'emptyText' => 'No hay resultados',
         'pager' => [ 'class' => yii\bootstrap5\LinkPager::class ],
         'columns' => [
-            [ 'class' => 'yii\grid\CheckboxColumn' ], //Para añadir un checkbox a cada linea
+            [ 'class' => 'yii\grid\CheckboxColumn', 
+            'checkboxOptions' => function ($model, $key, $index, $column) {
+                return ['class' => 'your-checkbox-class'];
+            }, ], //Para añadir un checkbox a cada linea
 
             'id',
             'level',

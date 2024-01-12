@@ -4,6 +4,7 @@ namespace app\controllers;
 
 use app\models\Log;
 use app\models\LogSearch;
+use app\widgets\Alert;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -128,9 +129,29 @@ class LogController extends Controller
     }
 
 
-    public function actionDeleteSeleccionados($id)
+    public function actionDeleteSeleccionados()
     {
-        $this->findModel($id)->delete();
+        //Como se van a borrar varias entradas una por una se va a realizar en formato transacción
+        //de esta forma se asegura que solo se actualiza la db si todas las entradas se han borrado correctamente
+        $transaction = \Yii::$app->db->beginTransaction();
+
+        
+        if ($this->request->isPost) {
+            if (empty($this->request->post('selection'))) \Yii::$app->session->setFlash('error', 'No se ha seleccionado ningun elemento para el borrado.');
+            else
+                foreach($this->request->post('selection') as $id)
+                    $this->findModel($id)->delete();
+        }
+
+        $transaction->commit();
+
+        return $this->redirect(['index']);
+    }
+
+
+    public function actionDeleteAll()
+    {
+        Log::deleteAll();
 
         return $this->redirect(['index']);
     }
