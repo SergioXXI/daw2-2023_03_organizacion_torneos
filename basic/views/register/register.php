@@ -30,12 +30,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'organizador' => 'Organizador',
             'usuario' => 'Usuario',
         ], ['prompt' => 'Selecciona un rol']);
-    }
-    ?>
-
-    <?php
-    // Mostrar el campo 'rol' solo si el usuario tiene el rol 'sysadmin'
-    if (Yii::$app->user->can('admin')) {
+    }elseif (Yii::$app->user->can('admin')) {
         echo $form->field($model, 'rol')->dropDownList([
             'gestor' => 'Gestor',
             'organizador' => 'Organizador',
