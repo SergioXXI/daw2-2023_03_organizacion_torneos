@@ -20,7 +20,7 @@ use yii\widgets\ActiveForm;
                     <h3 class="h5 mb-3">Pista</h3>
                     <?= $form->field($model, 'nombre')->textInput(['maxlength' => true]) ?>
                     <?= $form->field($model, 'descripcion')->textInput(['maxlength' => true]) ?>
-                    <?= $form->field($model, 'disciplina_id')->dropDownList(Disciplina::getListadoDisciplinas(), ['prompt' => 'Seleccione una disciplina' ])->label('Disciplina'); ?>
+                    <?= $form->field($model, 'disciplina_id')->dropDownList(Disciplina::getListadoDisciplinasPorId(), ['prompt' => 'Seleccione una disciplina' ])->label('Disciplina'); ?>
                 </div>
             </div>
             <div class="card mb-4">

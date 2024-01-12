@@ -1,6 +1,7 @@
 <?php
 
 use app\models\Direccion;
+use app\models\Disciplina;
 use app\models\Pista;
 use yii\helpers\Html;
 use yii\helpers\Url;
@@ -64,7 +65,13 @@ $this->title = Yii::t('app', 'Pistas');
 
             ],
 
-            'disciplinaNombre',
+            [
+                'attribute' => 'disciplinaNombre', 'value' => function ($model) {
+                    return $model->disciplinaNombre;
+                },
+                'filter' => Disciplina::getListadoDisciplinasPorNombre(),
+                'filterInputOptions' => ['class' => 'form-select']
+            ],
             
 
             /*[

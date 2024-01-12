@@ -79,8 +79,14 @@ class Disciplina extends \yii\db\ActiveRecord
         return new DisciplinaQuery(get_called_class());
     }
 
-    public static function getListadoDisciplinas()
+    public static function getListadoDisciplinasPorId()
     {
         return ArrayHelper::map(Disciplina::find()->all(), 'id', 'nombre');
     }
+
+    public static function getListadoDisciplinasPorNombre()
+    {
+        return ArrayHelper::map(Disciplina::find()->all(), 'nombre', 'nombre');
+    }
+
 }
