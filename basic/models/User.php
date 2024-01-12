@@ -18,7 +18,7 @@ class User extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
     public function rules()
     {
         return [
-            [['nombre', 'apellido1', 'apellido2', 'email', 'password'], 'required'],
+            [['nombre', 'apellido1', 'apellido2', 'email'], 'required'],
             ['email', 'email'],
             ['email', 'unique', 'message' => 'Este email ya está en uso.'],
             ['password', 'string'],
