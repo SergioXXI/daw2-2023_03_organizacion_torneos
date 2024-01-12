@@ -28,6 +28,7 @@ $this->title = Yii::t('app', 'Direcciones');
         'filterModel' => $searchModel,
         'summary' => 'Mostrando ' . Html::tag('b', '{begin}-{end}') . ' de ' .  Html::tag('b', '{totalCount}') . ' elementos', //Para cambiar el idioma del texto del summary
         'emptyText' => 'No hay resultados',
+        'pager' => [ 'class' => yii\bootstrap5\LinkPager::class ],
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
 
@@ -42,8 +43,9 @@ $this->title = Yii::t('app', 'Direcciones');
                 'class' => ActionColumn::className(),
                 'urlCreator' => function ($action, Direccion $model, $key, $index, $column) {
                     return Url::toRoute([$action, 'id' => $model->id]);
-                 }
+                 },
             ],
+            
         ],
     ]); ?>
 

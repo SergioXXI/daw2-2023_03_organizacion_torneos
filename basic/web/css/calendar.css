@@ -2,6 +2,14 @@
     background-color: white !important;
 }
 
+#calendar-pista .fc-daygrid-day{
+    cursor: pointer;
+}
+
+#calendar-pista .fc-daygrid-day:hover{
+    background-color: lightgray;
+}
+
 #calendar-pista a, #calendar-calendario a{
     text-decoration: none;
     color: black;

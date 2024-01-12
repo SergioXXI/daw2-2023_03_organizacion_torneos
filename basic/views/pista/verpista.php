@@ -46,12 +46,19 @@ $eventos = json_encode($eventos);
 				today: 'Actual',
 			},
 
+			dateClick: function(info) {
+				var selectedDate = info.date.toString; // Convert the clicked date to a string
+	    		window.location.href = window.location.href + '&' + selectedDate;
+  			},
+
 		});
+
+		
 
 		calendar.render();
 	});
 
-	document.getElementById("my-today-button").innerHTML="Actual";
+
 	document.getElementById('my-today-button').addEventListener('click', function () {
 		calendar.today();
 	});
