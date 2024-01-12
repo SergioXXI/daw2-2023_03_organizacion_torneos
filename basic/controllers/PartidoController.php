@@ -2,10 +2,9 @@
 
 namespace app\controllers;
 
-use app\models\Equipo;
 use app\models\Partido;
-use app\models\PartidoEquipo;
 use app\models\PartidoSearch;
+use app\models\PartidoEquipo;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -73,7 +72,20 @@ class PartidoController extends Controller
 
         if ($this->request->isPost) {
             if ($model->load($this->request->post()) && $model->save()) {
-                return $this->redirect(['equipos_partidos', 'id_partido' => $model->id,'id_torneo' => $model->torneo_id]);
+                if(isset($_POST['reserva_button'])) {
+                    // El botón 'Hacer una reserva' ha sido pulsado
+                    // Realiza las acciones correspondientes
+                    Yii::$app->session->set('partido_id', $model->id);
+
+                    return $this->redirect(['pista/pistas']);
+
+                } elseif(isset($_POST['save_button'])) {
+                    // El botón 'Save' ha sido pulsado
+                    // Realiza las acciones correspondientes
+                    echo "Se pulsó el botón 'Save'.";
+                    return $this->redirect(['equipos_partidos', 'id_partido' => $model->id,'id_torneo' => $model->torneo_id]);
+                }
+                
             }
         } else {
             $model->loadDefaultValues();

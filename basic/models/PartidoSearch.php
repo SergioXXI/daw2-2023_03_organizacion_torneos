@@ -17,7 +17,7 @@ class PartidoSearch extends Partido
     public function rules()
     {
         return [
-            [['id', 'jornada', 'torneo_id', 'direccion_id'], 'integer'],
+            [['id', 'jornada', 'torneo_id', 'reserva_id'], 'integer'],
             [['fecha'], 'safe'],
         ];
     }
@@ -62,7 +62,7 @@ class PartidoSearch extends Partido
             'jornada' => $this->jornada,
             'fecha' => $this->fecha,
             'torneo_id' => $this->torneo_id,
-            'direccion_id' => $this->direccion_id,
+            'reserva_id' => $this->reserva_id,
         ]);
 
         return $dataProvider;

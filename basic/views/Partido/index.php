@@ -33,7 +33,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'jornada',
             'fecha',
             'torneo_id',
-            'direccion_id',
+            'reserva_id',
             [
                 'class' => ActionColumn::className(),
                 'urlCreator' => function ($action, Partido $model, $key, $index, $column) {

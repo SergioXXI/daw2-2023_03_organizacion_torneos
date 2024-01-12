@@ -11,9 +11,8 @@ use Yii;
  * @property int $jornada
  * @property string $fecha
  * @property int $torneo_id
- * @property int $direccion_id
+ * @property int|null $reserva_id
  *
- * @property Direccion $direccion
  * @property Equipo[] $equipos
  * @property PartidoEquipo[] $partidoEquipos
  * @property Torneo $torneo
@@ -34,11 +33,10 @@ class Partido extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['jornada', 'torneo_id', 'direccion_id'], 'required'],
-            [['jornada', 'torneo_id', 'direccion_id'], 'integer'],
+            [['jornada', 'torneo_id'], 'required'],
+            [['jornada', 'torneo_id', 'reserva_id'], 'integer'],
             [['fecha'], 'safe'],
             [['torneo_id'], 'exist', 'skipOnError' => true, 'targetClass' => Torneo::class, 'targetAttribute' => ['torneo_id' => 'id']],
-            [['direccion_id'], 'exist', 'skipOnError' => true, 'targetClass' => Direccion::class, 'targetAttribute' => ['direccion_id' => 'id']],
         ];
     }
 
@@ -52,18 +50,8 @@ class Partido extends \yii\db\ActiveRecord
             'jornada' => Yii::t('app', 'Jornada'),
             'fecha' => Yii::t('app', 'Fecha'),
             'torneo_id' => Yii::t('app', 'Torneo ID'),
-            'direccion_id' => Yii::t('app', 'Direccion ID'),
+            'reserva_id' => Yii::t('app', 'Reserva ID'),
         ];
-    }
-
-    /**
-     * Gets query for [[Direccion]].
-     *
-     * @return \yii\db\ActiveQuery|DireccionQuery
-     */
-    public function getDireccion()
-    {
-        return $this->hasOne(Direccion::class, ['id' => 'direccion_id']);
     }
 
     /**

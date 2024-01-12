@@ -4,8 +4,6 @@ use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 use app\models\torneo;
 
-
-
 /** @var yii\web\View $this */
 /** @var app\models\Partido $model */
 /** @var yii\widgets\ActiveForm $form */
@@ -25,11 +23,11 @@ use app\models\torneo;
         \yii\helpers\ArrayHelper::map(torneo::find()->all(), 'id', 'nombre'),
         ['prompt' => 'Selecciona un torneo']
     ) ?>
-    <?= $form->field($model, 'direccion_id')->textInput() ?>
-    
-    
+
+    <?= Html::submitButton(Yii::t('app', 'Hacer una reserva'), ['class' => 'btn btn-success','name' => 'reserva_button']) ?>
+
     <div class="form-group">
-        <?= Html::submitButton(Yii::t('app', 'Save'), ['class' => 'btn btn-success']) ?>
+        <?= Html::submitButton(Yii::t('app', 'Save'), ['class' => 'btn btn-success','name' => 'save_button']) ?>
     </div>
 
     <?php ActiveForm::end(); ?>
