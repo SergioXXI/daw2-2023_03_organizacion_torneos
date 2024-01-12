@@ -307,5 +307,8 @@ ALTER TABLE `reserva_material` ADD FOREIGN KEY (`material_id`) REFERENCES `mater
 ALTER TABLE `reserva_pista` ADD FOREIGN KEY (`reserva_id`) REFERENCES `reserva` (`id`);
 
 ALTER TABLE `reserva_pista` ADD FOREIGN KEY (`pista_id`) REFERENCES `pista` (`id`);
+
+ALTER TABLE `direccion` ADD UNIQUE(`calle`, `numero`, `cod_postal`, `ciudad`, `provincia`, `pais`);
+
 -- Confirmar la transacción
 COMMIT;

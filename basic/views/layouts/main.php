@@ -46,6 +46,9 @@ $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/x-icon', 'href' => Yii
             !Yii::$app->user->isGuest && (Yii::$app->user->can('admin') || Yii::$app->user->can('sysadmin'))
                 ? ['label' => 'Usuarios', 'url' => ['/user']]
                 : '',
+            Yii::$app->user->can('sysadmin')
+                ? ['label' => 'Roles', 'url' => ['/auth-item']]
+                : '',
             Yii::$app->user->isGuest
                 ? ['label' => 'Login', 'url' => ['/site/login']]
                 : ['label' => 'Mi Cuenta', 'url' => ['/user/view-profile/']],
@@ -58,7 +61,7 @@ $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/x-icon', 'href' => Yii
                         ['class' => 'nav-link btn btn-link logout']
                     )
                     . Html::endForm()
-                    . '</li>'
+                    . '</li>',
         ]
     ]);
     NavBar::end();
