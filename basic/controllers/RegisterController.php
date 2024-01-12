@@ -18,7 +18,7 @@ class RegisterController extends Controller
                     [
                         'allow' => true,
                         'actions' => ['register'],
-                        'roles' => ['?', 'sysadmin', 'admin'], // Solo acceden admin, sysadmin y invitados
+                        'roles' => ['?', 'sysadmin', 'admin', 'gestor'], // Solo acceden admin, sysadmin, gestor y invitados
                     ],
                 ],
             ],
