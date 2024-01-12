@@ -16,6 +16,7 @@ class ParticipanteSearch extends Participante
     public $nombreUsuario;
     public $apellido1Usuario;
     public $apellido2Usuario;
+    public $nombreTipoParticipante;
 
     /**
      * {@inheritdoc}
@@ -23,8 +24,8 @@ class ParticipanteSearch extends Participante
     public function rules()
     {
         return [
-            [['id', 'tipo_participante_id', 'imagen_id', 'usuario_id'], 'integer'],
-            [['fecha_nacimiento', 'licencia','nombreUsuario', 'apellido1Usuario', 'apellido2Usuario'], 'safe'],
+            [['id', 'imagen_id', 'usuario_id'], 'integer'],
+            [['fecha_nacimiento', 'licencia','nombreUsuario', 'apellido1Usuario', 'apellido2Usuario', 'nombreTipoParticipante'], 'safe'],
         ];
     }
 
@@ -46,7 +47,7 @@ class ParticipanteSearch extends Participante
      */
     public function search($params)
     {
-        $query = Participante::find()->joinWith('usuario');
+        $query = Participante::find()->joinWith(['usuario', 'tipoParticipante']);
 
         // add conditions that should always apply here
 
@@ -62,11 +63,33 @@ class ParticipanteSearch extends Participante
             return $dataProvider;
         }
 
+
+        $dataProvider->sort->attributes['nombreUsuario'] = [
+            'asc' => ['usuario.nombre' => SORT_ASC],
+            'desc' => ['usuario.nombre' => SORT_DESC],
+        ];
+
+
+        $dataProvider->sort->attributes['apellido1Usuario'] = [
+            'asc' => ['usuario.apellido1' => SORT_ASC],
+            'desc' => ['usuario.apellido1' => SORT_DESC],
+        ];
+
+        $dataProvider->sort->attributes['apellido2Usuario'] = [
+            'asc' => ['usuario.apellido2' => SORT_ASC],
+            'desc' => ['usuario.apellido2' => SORT_DESC],
+        ];
+
+        $dataProvider->sort->attributes['nombreTipoParticipante'] = [
+            'asc' => ['tipo_participante.nombre' => SORT_ASC],
+            'desc' => ['tipo_participante.nombre' => SORT_DESC],
+        ];
+
+
         // grid filtering conditions
         $query->andFilterWhere([
             'participante.id' => $this->id,
             'participante.fecha_nacimiento' => $this->fecha_nacimiento,
-            'participante.tipo_participante_id' => $this->tipo_participante_id,
             'participante.imagen_id' => $this->imagen_id,
             'participante.usuario_id' => $this->usuario_id,
 
@@ -74,6 +97,9 @@ class ParticipanteSearch extends Participante
         $query->andFilterWhere(['like', 'usuario.nombre', $this->nombreUsuario])
               ->andFilterWhere(['like', 'usuario.apellido1', $this->apellido1Usuario])
               ->andFilterWhere(['like', 'usuario.apellido2', $this->apellido2Usuario]);
+
+
+        $query->andFilterWhere(['like', 'tipo_participante.nombre', $this->nombreTipoParticipante]);
 
         $query->andFilterWhere(['like', 'licencia', $this->licencia]);
 

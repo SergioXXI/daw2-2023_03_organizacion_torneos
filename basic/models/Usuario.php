@@ -13,7 +13,6 @@ use Yii;
  * @property string $apellido2
  * @property string $email
  * @property string $password
- * @property int|null $rol_id
  *
  * @property Participante $participante
  * @property Reserva[] $reservas
@@ -36,10 +35,8 @@ class Usuario extends \yii\db\ActiveRecord
     {
         return [
             [['nombre', 'apellido1', 'apellido2', 'email', 'password'], 'required'],
-            [['rol_id'], 'integer'],
             [['nombre', 'apellido1', 'apellido2', 'email', 'password'], 'string', 'max' => 100],
             [['email'], 'unique'],
-            [['rol_id'], 'exist', 'skipOnError' => true, 'targetClass' => Rol::class, 'targetAttribute' => ['rol_id' => 'id']],
         ];
     }
 
@@ -55,7 +52,6 @@ class Usuario extends \yii\db\ActiveRecord
             'apellido2' => Yii::t('app', 'Apellido2'),
             'email' => Yii::t('app', 'Email'),
             'password' => Yii::t('app', 'Password'),
-            'rol_id' => Yii::t('app', 'Rol ID'),
         ];
     }
 
@@ -77,16 +73,6 @@ class Usuario extends \yii\db\ActiveRecord
     public function getReservas()
     {
         return $this->hasMany(Reserva::class, ['usuario_id' => 'id']);
-    }
-
-    /**
-     * Gets query for [[Rol]].
-     *
-     * @return \yii\db\ActiveQuery|RolQuery
-     */
-    public function getRol()
-    {
-        return $this->hasOne(Rol::class, ['id' => 'rol_id']);
     }
 
     /**

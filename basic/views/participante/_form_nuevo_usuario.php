@@ -13,7 +13,13 @@ use yii\jui\DatePicker;
 
 <div class="participante-form">
 
-    <?php $form = ActiveForm::begin(); ?>
+    <?php 
+    $form = ActiveForm::begin(); 
+    ?>
+
+    <?= $form->field($usuarioModel, 'nombre')->textInput(['maxlength' => true]);?>
+    <?= $form->field($usuarioModel, 'apellido1')->textInput(['maxlength' => true]);?>
+    <?= $form->field($usuarioModel, 'apellido2')->textInput(['maxlength' => true]);?>
 
     <?= $form->field($model, 'fecha_nacimiento')->widget(DatePicker::classname(), [
         'dateFormat' => 'yyyy-MM-dd',
@@ -28,8 +34,6 @@ use yii\jui\DatePicker;
     ) ?>
 
     <?= $form->field($model, 'imagen_id')->textInput() ?>
-
-    <?= $form->field($model, 'usuario_id')->textInput() ?>
 
     <div class="form-group">
         <?= Html::submitButton(Yii::t('app', 'Save'), ['class' => 'btn btn-success']) ?>

@@ -18,7 +18,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <h1><?= Html::encode($this->title) ?></h1>
 
     <p>
-        <?= Html::a(Yii::t('app', 'Create Participante'), ['create'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a(Yii::t('app', 'Crear Participante'), ['create'], ['class' => 'btn btn-success']) ?>
     </p>
 
     <?php Pjax::begin(); ?>
@@ -32,20 +32,23 @@ $this->params['breadcrumbs'][] = $this->title;
 
             'id',
             [
-                'attribute' => 'usuario.nombre',
-                'label' => 'Nombre del Usuario',
+                'attribute' => 'nombreUsuario',
+                'value' => 'usuario.nombre',
             ],
             [
-                'attribute' => 'usuario.apellido1',
-                'label' => 'Primer Apellido',
+                'attribute' => 'apellido1Usuario',
+                'value' => 'usuario.apellido1',
             ],
             [
-                'attribute' => 'usuario.apellido2',
-                'label' => 'Segundo Apellido',
+                'attribute' => 'apellido2Usuario',
+                'value' => 'usuario.apellido2',
             ],
             'fecha_nacimiento',
             'licencia',
-            'tipo_participante_id',
+            [
+                'attribute' => 'nombreTipoParticipante',
+                'value' => 'tipoParticipante.nombre',
+            ],
             'imagen_id',
             //'usuario_id',
             [

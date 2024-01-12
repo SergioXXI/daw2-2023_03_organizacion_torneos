@@ -4,9 +4,12 @@ namespace app\controllers;
 
 use app\models\Participante;
 use app\models\ParticipanteSearch;
+use app\models\TipoParticipante;
+use app\models\Usuario;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\helpers\ArrayHelper;
 
 /**
  * ParticipanteController implements the CRUD actions for Participante model.
@@ -38,6 +41,7 @@ class ParticipanteController extends Controller
      */
     public function actionIndex()
     {
+
         $searchModel = new ParticipanteSearch();
         $dataProvider = $searchModel->search($this->request->queryParams);
 
@@ -68,17 +72,51 @@ class ParticipanteController extends Controller
     public function actionCreate()
     {
         $model = new Participante();
+        $usuarioModel = new Usuario();
+
+        // Obtener todos los tipos de participantes
+        $tiposParticipantes = TipoParticipante::find()->all();
+        $listaTiposParticipantes = ArrayHelper::map($tiposParticipantes, 'id', 'nombre');
+
+          // Obtener usuarios que no están vinculados a un participante
+        $usuarios = Usuario::find()->leftJoin('participante', 'usuario.id = participante.usuario_id')
+            ->where(['participante.usuario_id' => null])
+            ->all();
+        $listaUsuarios = ArrayHelper::map($usuarios, 'id', 'nombre'); // Ajusta 'nombre' según tu modelo Usuario
+
+        // Convertir a un array para el desplegable
+        $listaTiposParticipantes = ArrayHelper::map($tiposParticipantes, 'id', 'nombre');    
 
         if ($this->request->isPost) {
-            if ($model->load($this->request->post()) && $model->save()) {
-                return $this->redirect(['view', 'id' => $model->id]);
+             // Cargar datos en el modelo Participante
+            $model->load($this->request->post());
+            // Verificar si se seleccionó un usuario existente
+            if (!empty($this->request->post('Participante')['usuario_id'])) {
+                // Participante vinculado a un usuario existente
+                
+                if ($model->save()) {
+                    return $this->redirect(['view', 'id' => $model->id]);
+                }
+            } else {
+                if (!$usuarioModel->save()) {
+                    var_dump($usuarioModel->getErrors()); // Imprimirá los errores de validación
+                    exit();
+                }
+                // Creación de un nuevo usuario y participante
+                if ($usuarioModel->save()) {
+                    $model->usuario_id = $usuarioModel->id;
+                    if ($model->load($this->request->post()) && $model->save()) {
+                        return $this->redirect(['view', 'id' => $model->id]);
+                    }
+                }
             }
-        } else {
-            $model->loadDefaultValues();
         }
 
         return $this->render('create', [
             'model' => $model,
+            'listaTiposParticipantes' => $listaTiposParticipantes,
+            'listaUsuarios' => $listaUsuarios,
+            'usuarioModel' => $usuarioModel,
         ]);
     }
 

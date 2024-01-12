@@ -43,7 +43,6 @@ class Participante extends \yii\db\ActiveRecord
             [['tipo_participante_id', 'imagen_id', 'usuario_id'], 'integer'],
             [['licencia'], 'string', 'max' => 250],
             [['licencia'], 'unique'],
-            [['usuario_id'], 'unique'],
             [['tipo_participante_id'], 'exist', 'skipOnError' => true, 'targetClass' => TipoParticipante::class, 'targetAttribute' => ['tipo_participante_id' => 'id']],
             [['imagen_id'], 'exist', 'skipOnError' => true, 'targetClass' => Imagen::class, 'targetAttribute' => ['imagen_id' => 'id']],
             [['usuario_id'], 'exist', 'skipOnError' => true, 'targetClass' => Usuario::class, 'targetAttribute' => ['usuario_id' => 'id']],
@@ -59,9 +58,13 @@ class Participante extends \yii\db\ActiveRecord
             'id' => Yii::t('app', 'ID'),
             'fecha_nacimiento' => Yii::t('app', 'Fecha Nacimiento'),
             'licencia' => Yii::t('app', 'Licencia'),
-            'tipo_participante_id' => Yii::t('app', 'Tipo Participante ID'),
+            'tipo_participante_id' => Yii::t('app', 'Tipo Participante'),
             'imagen_id' => Yii::t('app', 'Imagen ID'),
             'usuario_id' => Yii::t('app', 'Usuario ID'),
+            'nombreTipoParticipante' => Yii::t('app', 'Tipo Participante'),
+            'nombreUsuario' => Yii::t('app', 'Nombre'),
+            'apellido1Usuario' => Yii::t('app', 'Apellido 1'),
+            'apellido2Usuario' => Yii::t('app', 'Apellido 2'),
         ];
     }
 

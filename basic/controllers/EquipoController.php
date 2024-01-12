@@ -118,7 +118,7 @@ class EquipoController extends Controller
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
-
+        /* añadir vista publica
         $inscritoEnTorneos = (new \yii\db\Query())
             ->from('torneo_equipo')
             ->where(['equipo_id' => $id])
@@ -131,19 +131,28 @@ class EquipoController extends Controller
             //$nuevoEquipo->nombre .= " (Clon)"; // Opcional: Modifica el nombre para indicar que es un clon
             $nuevoEquipo->save(false); // Guarda el nuevo equipo, asumiendo que la validación no es necesaria
 
+
+            // Obtener los ID de los participantes actuales del equipo
+            $participantesActuales = (new \yii\db\Query())
+                ->select('participante_id')
+                ->from('equipo_participante')
+                ->where(['equipo_id' => $id])
+                ->column();
+
             // Clonar las relaciones con los participantes
-            foreach ($model->participantes as $participante) {
-                $nuevaRelacion = new EquipoParticipante();
-                $nuevaRelacion->equipo_id = $nuevoEquipo->id;
-                $nuevaRelacion->participante_id = $participante->id;
-                $nuevaRelacion->save(false);
+            foreach ($participantesActuales as $participanteId) {
+                \Yii::$app->db->createCommand()
+                    ->insert('equipo_participante', [
+                        'equipo_id' => $nuevoEquipo->id,
+                        'participante_id' => $participanteId
+                    ])->execute();
             }
 
             // Redirige a la acción de actualizar para el nuevo equipo clonado
             return $this->redirect(['update', 'id' => $nuevoEquipo->id]);
         }
 
-       
+       */
 
         // Obtener todas las categorías
         $categorias = Categoria::find()
@@ -181,13 +190,17 @@ class EquipoController extends Controller
      */
     public function actionDelete($id)
     {
+        \Yii::$app->db->createCommand()->update('premio', ['equipo_id' => null], ['equipo_id' => $id])->execute();
+
         $equipo = $this->findModel($id);
+
         // Verificar la inscripción en torneos y su estado
         $puedeEliminar = true;
-        $fechaActual = time(); // Obtiene el timestamp actual
+        $fechaActual = new \DateTime();
+        $fechaActualString = $fechaActual->format('Y-m-d H:i:s'); // Convierte a formato 'YYYY-MM-DD HH:MM:SS'        print($fechaActual);
         foreach ($equipo->torneos as $torneo) {
             // Comprobar si fecha_fin es nula o si el timestamp actual es menor que fecha_fin
-            if ($torneo->fecha_fin === null || $fechaActual < $torneo->fecha_fin) {
+            if ($torneo->fecha_fin === null || $fechaActualString < $torneo->fecha_fin) {
                 $puedeEliminar = false;
                 break;
             }
@@ -197,6 +210,15 @@ class EquipoController extends Controller
             \Yii::$app->session->setFlash('error', 'El equipo está inscrito en un torneo que aún no ha finalizado.');
             return $this->redirect(['index']);
         }
+
+        // Eliminar registros en partido_equipo
+        \Yii::$app->db->createCommand()->delete('partido_equipo', ['equipo_id' => $id])->execute();
+
+        // Eliminar el equipo de torneo_equipo
+        \Yii::$app->db->createCommand()->delete('torneo_equipo', ['equipo_id' => $id])->execute();
+
+        // Eliminar los jugadores asociados al equipo en equipo_participante
+        \Yii::$app->db->createCommand()->delete('equipo_participante', ['equipo_id' => $id])->execute();
 
         // Eliminar el equipo
         $equipo->delete();

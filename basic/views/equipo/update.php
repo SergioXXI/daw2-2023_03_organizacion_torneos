@@ -42,18 +42,18 @@ $this->params['breadcrumbs'][] = Yii::t('app', 'Update');
             'template' => '{update}', 
             'urlCreator' => function ($action, $model, $key, $index, $column) {
                 return Url::toRoute(["participante/{$action}", 'id' => $model->id]);
-            },
-            'buttons' => [
-                'expulsar' => function ($url, $model, $key) {
-                    return Html::a('<span class="glyphicon glyphicon-trash"></span>', $url, [
-                        'title' => Yii::t('app', 'Expulsar'),
-                        'data-confirm' => Yii::t('app', '¿Estás seguro de que quieres expulsar a este participante?'),
-                        'data-method' => 'post',
-                    ]);
-                },
-            ],
+            }
+            ////////////////////////////////////////////
+            //////////  BOTON DE EXPULSAR //////////////
+            ////////////////////////////////////////////
         ]
         // Otros atributos que desees mostrar
     ],
-]) ?>
+]) 
+
+            ////////////////////////////////////////////
+            //////////   BOTON DE AÑADIR  //////////////
+            ////////////////////////////////////////////
+
+?>
 </div>
