@@ -24,7 +24,6 @@ use app\models\torneo;
         ['prompt' => 'Selecciona un torneo']
     ) ?>
 
-    <?= Html::submitButton(Yii::t('app', 'Hacer una reserva'), ['class' => 'btn btn-success','name' => 'reserva_button']) ?>
 
     <div class="form-group">
         <?= Html::submitButton(Yii::t('app', 'Save'), ['class' => 'btn btn-success','name' => 'save_button']) ?>

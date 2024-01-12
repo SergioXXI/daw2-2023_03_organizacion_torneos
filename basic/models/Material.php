@@ -45,10 +45,10 @@ class Material extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'id' => 'ID',
-            'nombre' => 'Nombre',
-            'color' => 'Color',
-            'descripcion' => 'Descripcion',
+            'id' => Yii::t('app', 'ID'),
+            'nombre' => Yii::t('app', 'Nombre'),
+            'color' => Yii::t('app', 'Color'),
+            'descripcion' => Yii::t('app', 'Descripcion'),
         ];
     }
 
