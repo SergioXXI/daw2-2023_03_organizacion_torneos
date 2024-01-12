@@ -22,7 +22,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <?= $form->field($model, 'password')->passwordInput() ?>
 
     <?php
-    // Mostrar el campo 'rol' solo si el usuario tiene el rol 'sysadmin'
+    // Mostrar el campo 'admin' solo si el usuario tiene el rol 'sysadmin'
     if (Yii::$app->user->can('sysadmin')) {
         echo $form->field($model, 'rol')->dropDownList([
             'admin' => 'Administrador',
