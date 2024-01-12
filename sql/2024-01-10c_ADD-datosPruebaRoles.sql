@@ -14,3 +14,13 @@ INSERT INTO `auth_assignment` (`item_name`, `user_id`) VALUES
 ('usuario', 6),
 ('usuario', 7),
 ('usuario', 8);
+
+INSERT INTO auth_item_child(parent,child) 
+VALUES
+    ('sysadmin','admin'),
+    ('sysadmin','organizador'),
+    ('sysadmin', 'gestor'),
+    ('sysadmin', 'usuario'),
+    ('admin', 'organizador'),
+    ('admin', 'gestor'),
+    ('admin', 'usuario');
