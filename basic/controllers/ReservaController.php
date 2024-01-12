@@ -7,6 +7,9 @@ use app\models\ReservaSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use app\models\ReservaMaterial;
+use app\models\MaterialSearch;
+use app\controllers\MaterialController;
 
 /**
  * ReservaController implements the CRUD actions for Reserva model.
@@ -131,4 +134,7 @@ class ReservaController extends Controller
 
         throw new NotFoundHttpException('The requested page does not exist.');
     }
+
+
+    
 }

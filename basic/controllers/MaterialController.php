@@ -4,6 +4,7 @@ namespace app\controllers;
 
 use app\models\Material;
 use app\models\MaterialSearch;
+use app\models\ReservaMaterial;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -46,6 +47,9 @@ class MaterialController extends Controller
             'dataProvider' => $dataProvider,
         ]);
     }
+
+
+    
 
     /**
      * Displays a single Material model.
@@ -129,6 +133,31 @@ class MaterialController extends Controller
             return $model;
         }
 
-        throw new NotFoundHttpException(Yii::t('app', 'The requested page does not exist.'));
+        throw new NotFoundHttpException(\Yii::t('app', 'The requested page does not exist.'));
+    }
+
+    public function actionMateriales_reservas($id_reserva)
+    {
+
+        $model = new Material();
+        $r_m =new ReservaMaterial();
+        $searchModel = new MaterialSearch();
+        //$materialController = new MaterialController();
+        $dataProvider = $searchModel->search($this->request->queryParams);
+        
+
+        if ($model->load($this->request->post())) {
+            
+            $r_m->reserva_id=$id_reserva;
+            $r_m->material_id=$model->id;
+            $r_m->save();
+
+            return $this->redirect(['index']); 
+        } 
+        return $this->render('materiales_reservas', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+            'model' => $model,
+        ]);
     }
 }
