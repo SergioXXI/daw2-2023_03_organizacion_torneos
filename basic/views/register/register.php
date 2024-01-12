@@ -28,7 +28,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'admin' => 'Administrador',
             'gestor' => 'Gestor',
             'organizador' => 'Organizador',
-            'participante' => 'Participante',
+            'usuario' => 'Usuario',
         ], ['prompt' => 'Selecciona un rol']);
     }
     ?>
@@ -39,7 +39,7 @@ $this->params['breadcrumbs'][] = $this->title;
         echo $form->field($model, 'rol')->dropDownList([
             'gestor' => 'Gestor',
             'organizador' => 'Organizador',
-            'participante' => 'Participante',
+            'usuario' => 'Usuario',
         ], ['prompt' => 'Selecciona un rol']);
     }
     ?>

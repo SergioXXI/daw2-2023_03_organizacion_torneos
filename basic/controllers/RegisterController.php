@@ -52,7 +52,7 @@ class RegisterController extends Controller
                         return $this->goHome();
                     } else {
                         // Si $rol no está definido o no es válido, asigna el rol 'participante'
-                        $participanteRole = $auth->getRole('participante');
+                        $participanteRole = $auth->getRole('usuario');
 
                         if ($participanteRole) {
                             $auth->assign($participanteRole, $userId);
