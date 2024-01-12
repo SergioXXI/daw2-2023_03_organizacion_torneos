@@ -32,7 +32,7 @@ class RegisterController extends Controller
         
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
             if ($model->save()) {
-                // Registro exitoso, redirige a la página de inicio o realiza alguna acción adicional.
+                // Registro exitoso
                 $userId = $model->id;
                 $auth = Yii::$app->authManager;
 
@@ -51,7 +51,7 @@ class RegisterController extends Controller
                         // Si $rol está definido, redirige a la página de inicio
                         return $this->goHome();
                     } else {
-                        // Si $rol no está definido o no es válido, asigna el rol 'participante'
+                        // Si $rol no está definido asigna el rol 'usuario'
                         $participanteRole = $auth->getRole('usuario');
 
                         if ($participanteRole) {

@@ -14,7 +14,7 @@ class SitioController extends Controller
 
         if ($model->load(Yii::$app->request->post()) && $model->login()) {
             // Usuario autenticado correctamente
-            return $this->redirect();
+            return $this->redirect(['site/index']);
         } 
 
         return $this->render('login', ['model' => $model]);
