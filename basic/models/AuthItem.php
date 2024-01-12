@@ -130,4 +130,55 @@ class AuthItem extends \yii\db\ActiveRecord
     {
         return new AuthItemQuery(get_called_class());
     }
+
+    public function saveRol() 
+{
+    $auth = Yii::$app->authManager;
+
+    // Verificar si la regla existe
+    $rule = $auth->getRule($this->rule_name);
+    if ($rule != null) {
+        // Si no existe, crear la regla
+        $newRule = $auth->createRule($this->rule_name);
+        // Configurar las propiedades de la regla según tus necesidades
+        $auth->add($newRule);
+    }
+
+    // Crear el rol
+    $rol = $auth->createRole($this->name);
+    $rol->description = $this->description;
+    $rol->ruleName = $rule != null ? $rule->name : null;
+    $rol->data = $this->data;
+    $rol->createdAt = time();
+
+
+    return $auth->add($rol);
+}
+
+
+    // metodo para modificar el rol
+    public function updateRol($name) 
+    {
+        $auth = Yii::$app->authManager;
+
+        // Verificar si la regla existe
+        $rule = $auth->getRule($this->rule_name);
+        if ($rule != null) {
+            // Si no existe, crear la regla
+            $newRule = $auth->createRule($this->rule_name);
+            // Configurar las propiedades de la regla según tus necesidades
+            $auth->add($newRule);
+        }
+
+        // Crear el rol
+        $rol = $auth->createRole($name);
+        $rol->description = $this->description;
+        $rol->ruleName = $rule != null ? $rule->name : null;
+        $rol->data = $this->data;
+        $rol->createdAt = $this->created_at;
+        $rol->updatedAt = time();
+
+        return $auth->update($name, $rol);
+    }
+    
 }

@@ -12,9 +12,14 @@ $roles = null;
 if (Yii::$app->user->can('sysadmin')) {
     // Obtenemos los roles hijos del rol asignado al usuario
     $roles = Yii::$app->authManager->getChildRoles('sysadmin');
+    unset($roles['sysadmin']);
     array_push($roles, '');
 } else if (Yii::$app->user->can('admin')) {
     $roles = Yii::$app->authManager->getChildRoles('admin');
+    unset($roles['admin']);
+    array_push($roles, '');
+} else if (Yii::$app->user->can('gestor')) {
+    $roles[] = Yii::$app->authManager->getRole('usuario');
     array_push($roles, '');
 }
 ?>

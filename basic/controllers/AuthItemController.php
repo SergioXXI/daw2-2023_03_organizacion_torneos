@@ -91,12 +91,15 @@ class AuthItemController extends Controller
         $model = new AuthItem();
 
         if ($this->request->isPost) {
-            if ($model->load($this->request->post()) && $model->save()) {
+            if ($this->request->post() && $model->load($this->request->post()) && $model->validate()) {
+                $model->saveRol();
                 return $this->redirect(['view', 'name' => $model->name]);
             }
+
         } else {
             $model->loadDefaultValues();
         }
+
 
         return $this->render('create', [
             'model' => $model,
@@ -114,7 +117,7 @@ class AuthItemController extends Controller
     {
         $model = $this->findModel($name);
 
-        if ($this->request->isPost && $model->load($this->request->post()) && $model->save()) {
+        if ($this->request->isPost && $model->load($this->request->post()) && $model->updateRol($model->name)) {
             return $this->redirect(['view', 'name' => $model->name]);
         }
 

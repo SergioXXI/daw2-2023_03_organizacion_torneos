@@ -34,8 +34,14 @@ $this->params['breadcrumbs'][] = $this->title;
             'description:ntext',
             'rule_name',
             'data',
-            'created_at',
-            'updated_at',
+            [
+                'attribute' => 'created_at',
+                'format' => ['date', 'php:Y-m-d H:i:s'],
+            ],
+            [
+                'attribute' => 'updated_at',
+                'format' => ['date', 'php:Y-m-d H:i:s'],
+            ],
         ],
     ]) ?>
 

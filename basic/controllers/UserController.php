@@ -105,10 +105,13 @@ class UserController extends Controller
         $model = new User();
 
         if ($this->request->isPost) {
-            $p = $this->request->post();
-            if ($model->load($this->request->post()) 
+            $request = $this->request->post();
+            $rolName = $request['User']['rol'];
+            unset($request['User']['rol']);
+
+            if ($model->load($request) 
                 && $model->save() 
-                && $this->updateRol($model->id, $this->request->post('User')['rol'])) {
+                && $this->updateRol($model->id, $rolName)) {
                 return $this->redirect(['view', 'id' => $model->id]);
             }
         } else {
