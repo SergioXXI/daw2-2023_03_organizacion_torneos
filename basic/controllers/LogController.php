@@ -30,6 +30,18 @@ class LogController extends Controller
                         'delete' => ['POST'],
                     ],
                 ],
+
+                //Regular acciones permitidas del controlador para los diversos usuarios
+                'access' => [
+                    'class' => \yii\filters\AccessControl::class,
+                    'rules' => [
+                        [
+                            //Al no especificar acciones se aplican para todas las existentes
+                            'allow' => true,
+                            'roles' => ['admin', 'sysadmin'],
+                        ],
+                    ],
+                ],
             ]
         );
     }
