@@ -1,12 +1,16 @@
 START TRANSACTION;
-INSERT INTO rol (nombre, descripcion) VALUES
-    ('sysadmin', 'Tiene acceso a absolutamente todo'),
-    ('admin', 'Administrador del sistema'),
-    ('organizador', 'Usuario registrado que organiza torneos'),
-    ('gestor', 'Usuario registrado que gestiona equipos'),
-    ('participante', 'Usuario registrado que participa en torneos');
-    -- ('guest', 'Usuario no registrado');
 
+-- Insertar datos de prueba para la tabla 'usuario'
+INSERT INTO usuario (nombre, apellido1, apellido2, email, password) VALUES
+    ('Juan', 'Pérez', 'Gómez', 'juan@example.com', '123'),
+    ('María', 'García', 'López', 'maria@example.com', '1234'),
+    ('Pedro', 'Martínez', 'Sánchez', 'pedrito@example.com', '12345'),
+    ('Ana', 'Rodríguez', 'Fernández', 'anita@example.com', '123456'),
+    ('Luis', 'González', 'García', 'surluisito29@example.com', '1234567'),
+    ('Sara', 'Sánchez', 'Gómez', 'sara@example.com', '12345678'),
+    ('Carlos', 'Romero', 'García', 'carlos@example.com', '12345678'),
+    ('Laura', 'Sanz', 'Gómez', 'laurina@example.com', '12345678'),
+    ('Javier', 'Torres', 'García', 'javi@example.com', '12345678');
 
 -- Insertar datos de prueba para la tabla 'disciplina'
 INSERT INTO disciplina (nombre, descripcion) VALUES
@@ -79,11 +83,17 @@ INSERT INTO direccion (calle, numero, cod_postal, ciudad, provincia, pais) VALUE
     ('Calle Principal', 123, 12345, 'Ciudad A', 'Provincia X', 'País Y'),
     ('Avenida Secundaria', 456, 54321, 'Ciudad B', 'Provincia Z', 'País W');
 
+-- Insertar datos de prueba para la tabla 'reserva'
+INSERT INTO reserva (fecha, usuario_id) VALUES
+    ('2024-01-15', 1),
+    ('2024-02-20', 2),
+    ('2024-03-25', 1);
+
 -- Insertar datos de prueba para la tabla 'partido'
-INSERT INTO partido (jornada, fecha, torneo_id, direccion_id) VALUES
+INSERT INTO partido (jornada, fecha, torneo_id, reserva_id) VALUES
     (1, '2024-01-01', 1, 1),
     (2, '2024-02-01', 2, 2),
-    (3, '2024-03-01', 3, 1);
+    (3, '2024-03-01', 3, NULL);
 
 -- Insertar datos de prueba para la tabla 'partido_equipo'
 INSERT INTO partido_equipo (partido_id, equipo_id, puntos) VALUES
@@ -104,10 +114,10 @@ INSERT INTO tipo_participante (nombre, descripcion) VALUES
     ('Entrenador', 'Persona a cargo del entrenamiento del equipo');
 
 -- Insertar datos de prueba para la tabla 'participante'
-INSERT INTO participante (fecha_nacimiento, licencia, tipo_participante_id) VALUES
-    ('1990-05-15', 'ABC123', 1),
-    ('1985-12-10', 'XYZ789', 2),
-    ('1995-08-22', 'DEF456', 3);
+INSERT INTO participante (fecha_nacimiento, licencia, tipo_participante_id, usuario_id) VALUES
+    ('1990-05-15', 'ABC123', 1, 6),
+    ('1985-12-10', 'XYZ789', 2, 7),
+    ('1995-08-22', 'DEF456', 3, 8);
 
 -- Insertar datos de prueba para la tabla 'equipo_participante'
 INSERT INTO equipo_participante (equipo_id, participante_id) VALUES
@@ -115,26 +125,11 @@ INSERT INTO equipo_participante (equipo_id, participante_id) VALUES
     (2, 2),
     (3, 3);
 
--- Insertar datos de prueba para la tabla 'usuario'
-INSERT INTO usuario (nombre, apellido1, apellido2, email, rol_id, password) VALUES
-    ('Juan', 'Pérez', 'Gómez', 'juan@example.com', 1, '123'),
-    ('María', 'García', 'López', 'maria@example.com', 2, '1234'),
-    ('Pedro', 'Martínez', 'Sánchez', 'pedrito@example.com', 3, '12345'),
-    ('Ana', 'Rodríguez', 'Fernández', 'anita@example.com', 4, '123456'),
-    ('Luis', 'González', 'García', 'surluisito29@example.com', 5, '1234567');
-
-
 -- Insertar datos de prueba para la tabla 'participante_documento'
 INSERT INTO participante_documento (participante_id, documento_id) VALUES
     (1, 1),
     (2, 2),
     (3, 3);
-
--- Insertar datos de prueba para la tabla 'reserva'
-INSERT INTO reserva (fecha, usuario_id) VALUES
-    ('2024-01-15', 1),
-    ('2024-02-20', 2),
-    ('2024-03-25', 1);
 
 -- Insertar datos de prueba para la tabla 'material'
 INSERT INTO material (nombre, color, descripcion) VALUES
