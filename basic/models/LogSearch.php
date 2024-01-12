@@ -25,9 +25,9 @@ class LogSearch extends Log
         return [
             [['id'], 'integer'],
 
-            [['fecha_ini', 'fecha_fin'], 'required', 'when' => function ($model) {
+ /*            [['fecha_ini', 'fecha_fin'], 'required', 'when' => function ($model) {
                 return ((empty($model->fecha_ini) && !empty($model->fecha_fin)) || (!empty($model->fecha_ini) && empty($model->fecha_fin)));
-            }, 'message' => 'No se puede rellenar solo uno de los dos campos'],
+            }, 'message' => 'No se puede rellenar solo uno de los dos campos'], */
 
             [['level', 'category', 'log_time', 'prefix', 'message', 'fecha_ini', 'fecha_fin', 'fecha_posterior', 'fecha_anterior'], 'safe'],
         ];

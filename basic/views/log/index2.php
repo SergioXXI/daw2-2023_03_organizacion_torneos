@@ -6,7 +6,7 @@ use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\grid\ActionColumn;
 use yii\grid\GridView;
-use yii\widgets\ActiveForm;
+use yii\bootstrap5\ActiveForm;
 use yii\widgets\Pjax;
 /** @var yii\web\View $this */
 /** @var app\models\LogSearch $searchModel */
@@ -21,42 +21,41 @@ $this->title = Yii::t('app', 'Logs');
 
     <h1 class='mb-4'><?= Html::encode($this->title) ?></h1>
 
+    <?php $form = ActiveForm::begin([
+        'action' => ['gestionar-boton'],
+        'method' => 'post',
+    ]); ?>
+
     <?php /* PRIMERA SECCIÓN, ESTO CORRESPONDE AL FORMULARIO INICIAL CON LOS FILTROS DE FECHA */ ?>
 
-    <?php echo $this->render('_search', ['model' => $searchModel]); ?>
+    <?php echo $this->render('_search', ['model' => $searchModel, 'form' => $form]); ?>
 
-    
+    <?php /* SEGUNDA SECCIÓN, ESTO CORRESPONDE AL BOTÓN PARA DESACTIVAR PAGINACIÓN */ ?>
+    <?= Html::a('Desactivar paginación',LogController::DesactivarPag($paginar ? false : true), ['class' => 'btn btn-success']) ?>
 
     <?php /* TERCERA SECCIÓN, ESTO CORRESPONDE AL BOTÓN PARA ELIMINAR TODO CON FILTROS */ ?>
 
-    <?=Html::beginForm(['boton-gestor'],'post');?>
 
-    <?php /* SEGUNDA SECCIÓN, ESTO CORRESPONDE AL BOTÓN PARA DESACTIVAR PAGINACIÓN */ ?>
+    <?= Html::submitButton('Eliminar seleccionados', [
+        'class' => 'btn btn-danger',
+        'name' => 'BtnEliminarSeleccionados',
+        'value' => 1,
+        'data' => [ 'confirm' => '¿Estás seguro de que deseas eliminar los elementos seleccionados?'],
+        ]);?>  
 
-    <div class="mb-2">
-        <?= Html::a('Desactivar paginación',LogController::DesactivarPag($paginar ? false : true), ['class' => 'btn btn-success']) ?>
+    <?= Html::submitButton('Eliminar todos los filtrados', [
+        'class' => 'btn btn-danger',
+        'name' => 'BtnEliminarFiltrados',
+        'value' => 1,
+        'data' => [ 'confirm' => '¿Estás seguro de que deseas eliminar todos los elementos filtrados?'],
+        ]);?>
 
-        <?= Html::submitButton('Eliminar seleccionados', [
-            'name' => 'accion',
-            'value' => 'BtnEliminarSeleccionados',
-            'class' => 'btn btn-danger',
-            'onclick' => 'return confirm("¿Estás seguro de que deseas eliminar los elementos seleccionados?");',
-            ]);?>  
-
-        <?= Html::submitButton('Eliminar todos los filtrados', [
-            'class' => 'btn btn-danger',
-            'name' => 'accion',
-            'value' => 'BtnEliminarFiltrados',
-            'onclick' => 'return confirm("¿Estás seguro de que deseas eliminar todos los elementos filtrados?");',
-            ]);?>
-
-        <?= Html::submitButton('Eliminar todos', [
-            'class' => 'btn btn-danger',
-            'name' => 'accion',
-            'value' => 'BtnEliminarTodos',
-            'onclick' => 'return confirm("¿Estás seguro de que deseas eliminar TODOS los elementos?");',
-            ]);?>
-    </div>
+<?= Html::submitButton('Eliminar todos', [
+        'class' => 'btn btn-danger',
+        'name' => 'BtnEliminarTodos',
+        'value' => 1,
+        'data' => [ 'confirm' => '¿Estás seguro de que deseas eliminar TODOS los elementos?'],
+        ]);?>
 
 
     <?= GridView::widget([
@@ -84,7 +83,6 @@ $this->title = Yii::t('app', 'Logs');
             'category',
             'log_time',
             'prefix:ntext',
-
             //'message:ntext',
             [
                 'class' => ActionColumn::className(),
@@ -97,14 +95,8 @@ $this->title = Yii::t('app', 'Logs');
         ],
     ]); ?>
 
-    <?= Html::hiddenInput('LogSearch[fecha_ini]', $searchModel->fecha_ini); ?>
-    <?= Html::hiddenInput('LogSearch[fecha_fin]', $searchModel->fecha_fin); ?>
-    <?= Html::hiddenInput('LogSearch[fecha_posterior]', $searchModel->fecha_posterior); ?>
-    <?= Html::hiddenInput('LogSearch[fecha_anterior]', $searchModel->fecha_anterior); ?>
+<?php ActiveForm::end(); ?>
 
-    <?= Html::endForm();?> 
 
     
 </div>
-
-

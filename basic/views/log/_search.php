@@ -18,8 +18,7 @@ $this->registerJsFile('https://kit.fontawesome.com/6a8d4512ef.js', ['position' =
         'action' => ['index'],
         'method' => 'get',
         'options' => [
-            'data-pjax' => 1,
-            'id' => 'Filtros',
+            'data-pjax' => 1
         ],
     ]); ?>
 
@@ -33,35 +32,35 @@ $this->registerJsFile('https://kit.fontawesome.com/6a8d4512ef.js', ['position' =
     <div class="input-group">
         <?= $form->field($model,'fecha_ini', $icono)->widget(DatePicker::className(), [
             'dateFormat' => 'yyyy-MM-dd',
-            'options' => ['class' => 'form-control'],
+            'options' => ['class' => 'form-control', 'autocomplete' => 'off'],
         ]) ?>
 
         <?= $form->field($model,'fecha_fin', $icono)->widget(DatePicker::className(), [
             'dateFormat' => 'yyyy-MM-dd',
-            'options' => ['class' => 'form-control'],
+            'options' => ['class' => 'form-control', 'autocomplete' => 'off'],
         ]) ?>
 
     </div>
 
-
-
     <?= $form->field($model,'fecha_posterior', $icono)->widget(DatePicker::className(), [
         'dateFormat' => 'yyyy-MM-dd',
-        'options' => ['class' => 'form-control'],
+        'options' => ['class' => 'form-control', 'autocomplete' => 'off'],
     ]) ?>
 
     <?= $form->field($model,'fecha_anterior', $icono)->widget(DatePicker::className(), [
         'dateFormat' => 'yyyy-MM-dd',
-        'options' => ['class' => 'form-control'],
+        'options' => ['class' => 'form-control', 'autocomplete' => 'off'],
     ]) ?>
 
     <?php // echo $form->field($model, 'message') ?>
 
     <div class="form-group">
-        <?= Html::submitButton(Yii::t('app', 'Aplicar filtros'), ['class' => 'btn btn-primary']) ?>
+        <?= Html::submitButton(Yii::t('app', 'Aplicar Filtros'), ['class' => 'btn btn-primary']) ?>
         <?= Html::a('Eliminar filtros', ['index'], ['class' => 'btn btn-secondary',]) ?>
     </div>
 
     <?php ActiveForm::end(); ?>
+
+    
 
 </div>

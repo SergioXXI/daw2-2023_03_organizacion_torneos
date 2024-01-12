@@ -2,6 +2,8 @@
 
 namespace app\models;
 
+
+use yii\log\Logger;
 use Yii;
 
 /**
@@ -63,5 +65,16 @@ class Log extends \yii\db\ActiveRecord
     public static function find()
     {
         return new LogQuery(get_called_class());
+    }
+
+    public static function getListadoNiveles()
+    {
+        //En este caso solo se van a utilizar los niveles predeterminados de yii
+        return [
+            'error' => 'error',
+            'warning' => 'warning',
+            'info' => 'info',
+            'trace' => 'trace',
+        ];
     }
 }

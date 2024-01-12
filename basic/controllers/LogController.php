@@ -42,6 +42,8 @@ class LogController extends Controller
     {
         $searchModel = new LogSearch();
         $dataProvider = $searchModel->search($this->request->queryParams);
+
+
         //Determinar si se quiere o no la paginación
         if($this->request->get('pagination') == '0') {
             $paginar = false;
@@ -114,6 +116,29 @@ class LogController extends Controller
         ]);
     } */
 
+
+    //Función que determina la acción que se ha pulsado en el formulario de la vista index
+    public function actionBotonGestor()
+    {
+        $accion = \Yii::$app->request->post('accion');
+
+        switch ($accion) {
+            case 'BtnEliminarSeleccionados':
+                $this->eliminarSeleccionados();
+                break;
+            case 'BtnEliminarFiltrados':
+                $this->eliminarFiltrados();
+                break;
+            case 'BtnEliminarTodos':
+                $this->eliminarTodos();
+                break;
+            default:
+                return $this->redirect(['index']);
+        }
+
+        return $this->redirect(['index']);
+    }
+
     /**
      * Deletes an existing Log model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
@@ -129,7 +154,7 @@ class LogController extends Controller
     }
 
 
-    public function actionDeleteSeleccionados()
+    public function eliminarSeleccionados()
     {
         //Como se van a borrar varias entradas una por una se va a realizar en formato transacción
         //de esta forma se asegura que solo se actualiza la db si todas las entradas se han borrado correctamente
@@ -149,7 +174,29 @@ class LogController extends Controller
     }
 
 
-    public function actionDeleteAll()
+    public function eliminarFiltrados()
+    {
+        //Como se van a borrar varias entradas una por una se va a realizar en formato transacción
+        //de esta forma se asegura que solo se actualiza la db si todas las entradas se han borrado correctamente
+        $transaction = \Yii::$app->db->beginTransaction();
+
+        $searchModel = new LogSearch();
+        $dataProvider = $searchModel->search($this->request->post()); //Los filtros llegan por post
+
+        /* echo '<pre>';
+        print_r($searchModel->search($this->request->queryParams));
+        print_r($dataProvider->getModels()); */
+
+        foreach($dataProvider->getModels() as $model)
+            $model->delete();
+
+        $transaction->commit();
+
+        return $this->redirect(['index']);
+    }
+
+
+    public function eliminarTodos()
     {
         Log::deleteAll();
 
