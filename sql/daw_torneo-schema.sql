@@ -101,7 +101,7 @@ CREATE TABLE `partido` (
   `jornada` int NOT NULL,
   `fecha` timestamp NOT NULL,
   `torneo_id` bigint NOT NULL,
-  `direccion_id` bigint NOT NULL
+  `reserva_id` bigint
 );
 
 DROP TABLE IF EXISTS `partido_equipo`;
@@ -268,7 +268,7 @@ ALTER TABLE `torneo_categoria` ADD FOREIGN KEY (`categoria_id`) REFERENCES `cate
 
 ALTER TABLE `partido` ADD FOREIGN KEY (`torneo_id`) REFERENCES `torneo` (`id`);
 
-ALTER TABLE `partido` ADD FOREIGN KEY (`direccion_id`) REFERENCES `direccion` (`id`);
+ALTER TABLE `partido` ADD FOREIGN KEY (`reserva_id`) REFERENCES `reserva` (`id`);
 
 ALTER TABLE `partido_equipo` ADD FOREIGN KEY (`partido_id`) REFERENCES `partido` (`id`);
 
@@ -307,5 +307,8 @@ ALTER TABLE `reserva_material` ADD FOREIGN KEY (`material_id`) REFERENCES `mater
 ALTER TABLE `reserva_pista` ADD FOREIGN KEY (`reserva_id`) REFERENCES `reserva` (`id`);
 
 ALTER TABLE `reserva_pista` ADD FOREIGN KEY (`pista_id`) REFERENCES `pista` (`id`);
+
+ALTER TABLE `direccion` ADD UNIQUE(`calle`, `numero`, `cod_postal`, `ciudad`, `provincia`, `pais`);
+
 -- Confirmar la transacción
 COMMIT;
