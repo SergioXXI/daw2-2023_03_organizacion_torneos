@@ -42,15 +42,23 @@ $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/x-icon', 'href' => Yii
             ['label' => 'Home', 'url' => ['/site/index']],
             ['label' => 'About', 'url' => ['/site/about']],
             ['label' => 'Contact', 'url' => ['/site/contact']],
-            ['label' => 'User', 'url' => ['/user']],
             ['label' => 'Test', 'url' => ['/test/index']],
             [
                 'label' => 'Registro',
                 'url' => ['/register/register'],
                 'visible' => Yii::$app->user->isGuest || (Yii::$app->user->can('gestor') && !Yii::$app->user->can('admin') && !Yii::$app->user->can('sysadmin')),
             ],            
+            !Yii::$app->user->isGuest && (Yii::$app->user->can('admin') || Yii::$app->user->can('sysadmin'))
+                ? ['label' => 'Usuarios', 'url' => ['/user']]
+                : '',
+            Yii::$app->user->can('sysadmin')
+                ? ['label' => 'Roles', 'url' => ['/auth-item']]
+                : '',
             Yii::$app->user->isGuest
                 ? ['label' => 'Login', 'url' => ['/site/login']]
+                : ['label' => 'Mi Cuenta', 'url' => ['/user/view-profile/']],
+            Yii::$app->user->isGuest
+                ? ''
                 : '<li class="nav-item">'
                     . Html::beginForm(['/site/logout'])
                     . Html::submitButton(
@@ -58,7 +66,7 @@ $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/x-icon', 'href' => Yii
                         ['class' => 'nav-link btn btn-link logout']
                     )
                     . Html::endForm()
-                    . '</li>'
+                    . '</li>',
         ]
     ]);
     NavBar::end();

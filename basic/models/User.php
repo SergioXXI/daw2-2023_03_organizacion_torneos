@@ -19,10 +19,11 @@ class User extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
     {
         return [
             [['nombre', 'apellido1', 'apellido2', 'email'], 'required'],
-            ['email', 'email'],
-            ['email', 'unique', 'message' => 'Este email ya está en uso.'],
-            ['password', 'string'],
-            ['rol', 'safe'],
+            [['id'], 'integer', 'max' => PHP_INT_MAX],
+            [['nombre', 'apellido1', 'apellido2', 'password'], 'string', 'max' => 100],
+            [['email'], 'string', 'max' => 100],
+            [['email'], 'unique'],
+            [['rol'],'safe'],
         ];
     }
 
