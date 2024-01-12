@@ -29,24 +29,25 @@ $this->params['breadcrumbs'][] = $this->title;
             'gestor' => 'Gestor',
             'organizador' => 'Organizador',
             'usuario' => 'Usuario',
-            '' => 'Jugador sin Registrar',
-        ], ['prompt' => 'Selecciona un rol']);
+            'inv' => 'Jugador sin Registrar',
+        ]);
     }elseif (Yii::$app->user->can('admin')) {
         echo $form->field($model, 'rol')->dropDownList([
             'gestor' => 'Gestor',
             'organizador' => 'Organizador',
             'usuario' => 'Usuario',
-            '' => 'Jugador sin Registrar',
-        ], ['prompt' => 'Selecciona un rol']);
+            'inv' => 'Jugador sin Registrar',
+        ]);
     }elseif (Yii::$app->user->can('gestor')) {
         echo $form->field($model, 'rol')->dropDownList([
-            '' => 'Jugador sin Registrar',
-        ], ['prompt' => 'Selecciona un rol']);
+            'usuario' => 'Usuario',
+            'inv' => 'Jugador sin Registrar',
+        ]);
     }
     ?>
 
     <div class="form-group">
-        <?= Html::submitButton('Registrarse', ['class' => 'btn btn-primary', 'name' => 'register-button']) ?>
+        <?= Html::submitButton('Registrarse', ['class' => 'btn btn-success', 'name' => 'register-button']) ?>
     </div>
 
     <?php ActiveForm::end(); ?>

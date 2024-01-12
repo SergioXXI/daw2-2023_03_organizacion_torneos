@@ -30,7 +30,7 @@ $this->title = 'Iniciar Sesión';
     <?php endif; ?>
 
     <div class="form-group">
-        <?= Html::submitButton('Iniciar Sesión', ['class' => 'btn btn-primary', 'name' => 'login-button']) ?>
+        <?= Html::submitButton('Iniciar Sesión', ['class' => 'btn btn-success', 'name' => 'login-button']) ?>
     </div>
 
     <?php ActiveForm::end(); ?>
