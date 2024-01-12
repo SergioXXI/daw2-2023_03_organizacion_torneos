@@ -18,7 +18,9 @@ $rolUsuario = !empty($rolesUsuario) ? reset($rolesUsuario) : null;
 
     <?php $form = ActiveForm::begin(); ?>
 
-    <?= $form->field($model, 'id')->textInput() ?>
+    <?= Yii::$app->user->isGuest && (Yii::$app->user->can('admin') || Yii::$app->user->can('sysadmin')) 
+        ? $form->field($model, 'id')->textInput()
+        : null ?>
 
     <?= $form->field($model, 'nombre')->textInput(['maxlength' => true]) ?>
 
@@ -30,15 +32,16 @@ $rolUsuario = !empty($rolesUsuario) ? reset($rolesUsuario) : null;
 
     <?= $form->field($model, 'password')->passwordInput(['maxlength' => true]) ?>
 
-    <?= $form->field($model, 'rol')->dropDownList(
-        ArrayHelper::map($roles, 'name', 'name'),
-        // Ponemos el rol del usuario como seleccionado
-        ['options' => [$rolUsuario ? $rolUsuario->name : null => ['selected' => true]]]
-    ) ?>
+    <?= Yii::$app->user->can('admin') || Yii::$app->user->can('sysadmin') 
+            ? $form->field($model, 'rol')->dropDownList(
+                ArrayHelper::map($roles, 'name', 'name'),
+                // Ponemos el rol del usuario como seleccionado
+                ['options' => [$rolUsuario ? $rolUsuario->name : null => ['selected' => true]]]) 
+            : '' ?>
 
 
 
-    <div class="form-group">
+    <br><div class="form-group">
         <?= Html::submitButton(Yii::t('app', 'Save'), ['class' => 'btn btn-success']) ?>
     </div>
 

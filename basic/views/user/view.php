@@ -2,6 +2,8 @@
 
 use yii\helpers\Html;
 use yii\widgets\DetailView;
+use yii\grid\GridView;
+use yii\helpers\Url;
 
 /** @var yii\web\View $this */
 /** @var app\models\User $model */
@@ -16,7 +18,6 @@ $attributes = [
     'apellido1',
     'apellido2',
     'email:email',
-    // 'password',
 ];
 
 // si es admin le metemos los atributos que queramos
@@ -38,14 +39,16 @@ if (Yii::$app->user->can('admin') || Yii::$app->user->can('sysadmin')) {
     <h1><?= Html::encode($model->nombre . ' ' . $model->apellido1) ?></h1>
 
     <p>
-        <?= Html::a(Yii::t('app', 'Actualizar'), ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
-        <?= Html::a(Yii::t('app', 'Borrar'), ['delete', 'id' => $model->id], [
-            'class' => 'btn btn-danger',
-            'data' => [
-                'confirm' => Yii::t('app', '¿Seguro que quieres borrar este usuario?'),
-                'method' => 'post',
-            ],
-        ]) ?>
+        <?= Html::a(Yii::t('app', 'Actualizar'), ['self-update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
+        <?= Yii::$app->user->can('admin') || Yii::$app->user->can('sysadmin')
+            ? Html::a(Yii::t('app', 'Borrar'), ['delete', 'id' => $model->id], [
+                'class' => 'btn btn-danger',
+                'data' => [
+                    'confirm' => Yii::t('app', '¿Seguro que quieres borrar este usuario?'),
+                    'method' => 'post',
+                ],
+            ]) 
+            : '' ?>
     </p>
 
     <?= DetailView::widget([

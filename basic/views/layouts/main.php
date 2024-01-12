@@ -43,11 +43,15 @@ $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/x-icon', 'href' => Yii
             ['label' => 'About', 'url' => ['/site/about']],
             ['label' => 'Contact', 'url' => ['/site/contact']],
             ['label' => 'Test', 'url' => ['/test/index']],
-            ['label' => 'Usuarios', 'url' => ['/user']],
+            !Yii::$app->user->isGuest && (Yii::$app->user->can('admin') || Yii::$app->user->can('sysadmin'))
+                ? ['label' => 'Usuarios', 'url' => ['/user']]
+                : '',
             Yii::$app->user->isGuest
                 ? ['label' => 'Login', 'url' => ['/site/login']]
-                : ['label' => 'Mi Cuenta', 'url' => ['/user/view/', 'id' => Yii::$app->user->identity->id]],
-                    '<li class="nav-item">'
+                : ['label' => 'Mi Cuenta', 'url' => ['/user/view-profile/']],
+            Yii::$app->user->isGuest
+                ? ''
+                : '<li class="nav-item">'
                     . Html::beginForm(['/site/logout'])
                     . Html::submitButton(
                         'Logout (' . Yii::$app->user->identity->email . ')',

@@ -14,7 +14,7 @@ class User extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
     {
         return [
             [['id', 'nombre', 'apellido1', 'apellido2', 'email', 'password'], 'required'],
-            [['id', 'rol_id'], 'integer', 'max' => PHP_INT_MAX],
+            [['id'], 'integer', 'max' => PHP_INT_MAX],
             [['nombre', 'apellido1', 'apellido2', 'password'], 'string', 'max' => 100],
             [['email'], 'string', 'max' => 100],
             [['email'], 'unique'],
