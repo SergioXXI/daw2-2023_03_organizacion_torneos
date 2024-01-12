@@ -34,6 +34,9 @@ $this->title = Yii::t('app', 'Logs');
     <?php /* SEGUNDA SECCIÓN, ESTO CORRESPONDE AL BOTÓN PARA DESACTIVAR PAGINACIÓN */ ?>
 
     <div class="mb-2">
+
+        <?= Html::a('Exportar',['exportar'], ['class' => 'btn btn-dark']) ?>
+
         <?= Html::a('Desactivar paginación',LogController::DesactivarPag($paginar ? false : true), ['class' => 'btn btn-success']) ?>
 
         <?= Html::submitButton('Eliminar seleccionados', [

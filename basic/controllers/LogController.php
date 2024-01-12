@@ -5,6 +5,7 @@ namespace app\controllers;
 use app\models\Log;
 use app\models\LogSearch;
 use app\widgets\Alert;
+use yii\data\ActiveDataProvider;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -72,6 +73,35 @@ class LogController extends Controller
         return $this->render('view', [
             'model' => $this->findModel($id),
         ]);
+    }
+
+
+    /* 
+     * Obtiene todos los registros de la tabla LOG de la base de datos y los guardar.
+     * en un fichero temporal el cual es enviado al usuario para su descarga.
+     * @return \yii\web\Response (File)
+     */
+    public function actionExportar()
+    {
+        $models = Log::find()->all();
+        //Se genera el fichero temporal y se guarda en el directorio temporal por defecto del sistema
+        $fichero = tempnam(sys_get_temp_dir(),'prefijo');
+        
+        //Se recorren todos los modelos y se escribe la cadena formateada en el fichero
+        foreach($models as $model) {
+            $linea = $model->log_time . ' (' . $model->id . ') ' . $model->prefix . '[' . $model->level . ']' .
+            '[' . $model->category . '] ' . $model->message . "\n";
+            file_put_contents($fichero,$linea,FILE_APPEND); //Flag file_append para realizar insertar al final del fichero
+        }
+
+        //La respuesta se encapsula en la siguiente secuencia para asegurarse de que trasdevolver el fichero
+        //este es desvinculado, haciendo que se elimine al ser temporal, de esta forma se tiene un borrado
+        //controlado gracias al segmento finally
+        try {
+            \Yii::$app->response->sendFile($fichero, 'logs.log')->send();
+        } finally {
+            unlink($fichero);
+        }
     }
 
     /**
@@ -182,6 +212,7 @@ class LogController extends Controller
 
         $searchModel = new LogSearch();
         $dataProvider = $searchModel->search($this->request->post()); //Los filtros llegan por post
+        $dataProvider->pagination = false; //Eliminar la paginación para hacer el borrado
 
         /* echo '<pre>';
         print_r($searchModel->search($this->request->queryParams));
