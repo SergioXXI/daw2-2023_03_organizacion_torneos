@@ -122,9 +122,9 @@ CREATE TABLE `torneo_equipo` (
 DROP TABLE IF EXISTS `equipo`;
 CREATE TABLE `equipo` (
   `id` bigint PRIMARY KEY NOT NULL AUTO_INCREMENT,
-  `nombre` varchar(100) UNIQUE NOT NULL,
+  `nombre` varchar(100) NOT NULL,
   `descripcion` varchar(10000),
-  `licencia` varchar(250) UNIQUE NOT NULL COMMENT 'Numero de licencia',
+  `licencia` varchar(250) NOT NULL COMMENT 'Numero de licencia',
   `categoria_id` bigint NOT NULL
 );
 
