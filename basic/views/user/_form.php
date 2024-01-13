@@ -32,7 +32,10 @@ $rolUsuario = !empty($rolesUsuario) ? reset($rolesUsuario) : null;
 
     <?= $form->field($model, 'password')->passwordInput(['maxlength' => true]) ?>
 
-    <?= Yii::$app->user->can('admin') || Yii::$app->user->can('sysadmin') || Yii::$app->user->can('gestor')
+    <?= Yii::$app->user->can('admin') || Yii::$app->user->can('sysadmin') || (Yii::$app->user->can('gestor')
+            // El gestor no puede cambiar su propio rol
+            && Yii::$app->user->id != Yii::$app->request->get('id'))
+
             ? $form->field($model, 'rol')->dropDownList(
                 ArrayHelper::map($roles, 'name', 'name'),
                 // Ponemos el rol del usuario como seleccionado
