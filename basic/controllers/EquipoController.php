@@ -5,6 +5,7 @@ namespace app\controllers;
 use app\models\Equipo;
 use app\models\Participante;
 use app\models\Categoria;
+use app\models\Torneo;
 use app\models\EquipoSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -63,17 +64,19 @@ class EquipoController extends Controller
         $model = $this->findModel($id);
 
         // Obtener participantes del equipo
-        $dataProvider = new \yii\data\ActiveDataProvider([
-            'query' => Participante::find()
-                ->joinWith(['usuario', 'tipoParticipante'])
-                ->innerJoin('equipo_participante', 'equipo_participante.participante_id = participante.id')
-                ->where(['equipo_participante.equipo_id' => $id]),
-        ]);
-
+        $query = Participante::find()
+            ->joinWith(['usuario', 'tipoParticipante'])
+            ->innerJoin('equipo_participante', 'equipo_participante.participante_id = participante.id')
+            ->where(['equipo_participante.equipo_id' => $id]);
+        
+        $dataProvider = new \yii\data\ActiveDataProvider(['query' => $query]);
+       
+        $tieneParticipantes = $query->count() > 0;
 
         return $this->render('view', [
             'model' => $model,
             'dataProvider' => $dataProvider,
+            'tieneParticipantes' => $tieneParticipantes,
         ]);
     }
 
@@ -118,6 +121,7 @@ class EquipoController extends Controller
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
+        $equipo = $this->findModel($id);
         /* añadir vista publica
         $inscritoEnTorneos = (new \yii\db\Query())
             ->from('torneo_equipo')
@@ -163,12 +167,15 @@ class EquipoController extends Controller
         $listaCategorias = ArrayHelper::map($categorias, 'id', 'nombre');
 
         // Obtener participantes del equipo
-        $dataProvider = new \yii\data\ActiveDataProvider([
-            'query' => Participante::find()
-                ->joinWith(['usuario', 'tipoParticipante'])
-                ->innerJoin('equipo_participante', 'equipo_participante.participante_id = participante.id')
-                ->where(['equipo_participante.equipo_id' => $id]),
-        ]);
+        
+        $query = Participante::find()
+            ->joinWith(['usuario', 'tipoParticipante'])
+            ->innerJoin('equipo_participante', 'equipo_participante.participante_id = participante.id')
+            ->where(['equipo_participante.equipo_id' => $id]);
+        
+
+        $dataProvider = new \yii\data\ActiveDataProvider(['query' => $query]);
+        $tieneParticipantes = $query->count() > 0;
 
         if ($this->request->isPost && $model->load($this->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
@@ -176,8 +183,107 @@ class EquipoController extends Controller
 
         return $this->render('update', [
             'model' => $model,
+            'equipo' => $equipo,
             'listaCategorias' => $listaCategorias,
             'dataProvider' => $dataProvider,
+            'tieneParticipantes' => $tieneParticipantes,
+        ]);
+    }
+
+    public function actionAddParticipante($id)
+    {
+        $equipo = $this->findModel($id);
+        $participanteModel = new Participante();
+
+        // Obtén los ID de los participantes ya en el equipo
+        $participantesEnEquipo = ArrayHelper::map($equipo->participantes, 'id', 'id');
+
+        // Filtra los participantes que no están en el equipo y obtén sus nombres y emails
+        $participantesDisponibles = Participante::find()
+            ->joinWith('usuario') // Asegúrate de que exista la relación 'usuario' en tu modelo Participante
+            ->where(['NOT IN', 'participante.id', $participantesEnEquipo])
+            ->all();
+            $listaParticipantes = ArrayHelper::map($participantesDisponibles, 'id', function ($participante) {
+                return $participante->usuario->nombre . ' (' . $participante->usuario->email . ')';
+            });
+
+        if (\Yii::$app->request->isPost) {
+            $participanteId = \Yii::$app->request->post('Participante')['id'];
+            if ($participanteId && !in_array($participanteId, $participantesEnEquipo)) {
+                // Lógica para añadir el participante al equipo
+                \Yii::$app->db->createCommand()->insert('equipo_participante', [
+                    'equipo_id' => $id,
+                    'participante_id' => $participanteId,
+                ])->execute();
+
+                return $this->redirect(['view', 'id' => $id]);
+            }
+        }
+
+        return $this->render('add-participante', [
+            'equipo' => $equipo,
+            'participanteModel' => $participanteModel,
+            'listaParticipantes' => $listaParticipantes,
+        ]);
+    }
+
+    public function actionExpulsarParticipante($equipoId, $participanteId)
+    {
+        // Aquí va la lógica para eliminar la relación entre el equipo y el participante
+        \Yii::$app->db->createCommand()->delete('equipo_participante', [
+            'equipo_id' => $equipoId,
+            'participante_id' => $participanteId,
+        ])->execute();
+
+        return $this->redirect(['update', 'id' => $equipoId]);
+    }
+
+    public function actionAddTorneo($id)
+    {
+        $model = $this->findModel($id);
+        // Encuentra todos los clones del equipo
+        $clonesIds = Equipo::find()
+            ->where(['nombre' => $model->nombre, 'descripcion' => $model->descripcion,'licencia' => $model->licencia,'categoria_id' => $model->categoria_id]) // Asegúrate de ajustar los criterios para identificar clones
+            ->select('id')
+            ->column();
+    
+
+        $fechaActual = new \DateTime();
+        $fechaActualString = $fechaActual->format('Y-m-d H:i:s');
+        // Encuentra los torneos disponibles falat mirar si el torneo esta lleno
+        $torneosDisponibles = (new \yii\db\Query())
+            ->select('torneo.*')
+            ->from('torneo')
+            ->leftJoin('torneo_equipo', 'torneo.id = torneo_equipo.torneo_id')
+            ->where(['>', 'torneo.fecha_limite', $fechaActualString])
+            ->andWhere(['NOT IN', 'torneo_equipo.torneo_id', 
+                (new \yii\db\Query())
+                    ->select('torneo_id')
+                    ->from('torneo_equipo')
+                    ->where(['IN', 'equipo_id', $clonesIds])
+            ])
+            ->all();
+    
+        $listaTorneos = ArrayHelper::map($torneosDisponibles, 'id', 'nombre');
+
+         // esta funcion esta mal
+        if (\Yii::$app->request->isPost) {
+            $torneoId = \Yii::$app->request->post('TorneoId'); // Asegúrate de que este es el nombre del campo en tu formulario
+            if ($torneoId) {
+                // Añade la relación equipo-torneo
+                \Yii::$app->db->createCommand()->insert('equipo_torneo', [
+                    'equipo_id' => $id,
+                    'torneo_id' => $torneoId,
+                ])->execute();
+    
+                // Redirige a la vista del equipo o a otra página según sea necesario
+                return $this->redirect(['view', 'id' => $id]);
+            }
+        }
+
+        return $this->render('add-torneo', [
+            'model' => $model,
+            'listaTorneos' => $listaTorneos,
         ]);
     }
 
@@ -227,6 +333,7 @@ class EquipoController extends Controller
         return $this->redirect(['index']);
     }
 
+   
 
     /**
      * Finds the Equipo model based on its primary key value.

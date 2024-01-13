@@ -5,6 +5,7 @@ namespace app\controllers;
 use app\models\Participante;
 use app\models\ParticipanteSearch;
 use app\models\TipoParticipante;
+use app\models\Equipo;
 use app\models\Usuario;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -59,10 +60,71 @@ class ParticipanteController extends Controller
      */
     public function actionView($id)
     {
+        $model = $this->findModel($id);
+        $participante = $this->findModel($id);
+
+        $query = $model->getEquipos();
+        $equiposDataProvider = new \yii\data\ActiveDataProvider(['query' => $query]);
+
+        $tieneEquipo = $query->count() > 0;
+
         return $this->render('view', [
-            'model' => $this->findModel($id),
+            'model' => $model,
+            'participante' => $participante,
+            'equiposDataProvider' => $equiposDataProvider,
+            'tieneEquipo' => $tieneEquipo,
         ]);
     }
+
+
+    public function actionAddEquipo($id)
+    {
+        $participante = $this->findModel($id);
+        $equipoModel = new Equipo();
+
+        // Obtén los ID de los de los equipos a los que pertenece
+        $equiposDelParticipante = ArrayHelper::map($participante->equipos, 'id', 'id');
+
+        // Filtra los equipos en los que no está y obtine nombre y licencia
+        $equiposDisponibles = Equipo::find()
+            ->where(['NOT IN', 'id', $equiposDelParticipante])
+            ->all();
+
+            $listaEquipos = ArrayHelper::map($equiposDisponibles, 'id', function ($equipo) {
+                return $equipo->nombre . ' (' . $equipo->licencia . ')';
+            });
+
+        if (\Yii::$app->request->isPost) {
+            $equipoId = \Yii::$app->request->post('Equipo')['id'];
+            if ($equipoId && !in_array($equipoId, $equiposDelParticipante)) {
+                // Lógica para añadir el participante al equipo
+                \Yii::$app->db->createCommand()->insert('equipo_participante', [
+                    'equipo_id' => $equipoId,
+                    'participante_id' => $id,
+                ])->execute();
+
+                return $this->redirect(['view', 'id' => $id]);
+            }
+        }
+
+        return $this->render('add-equipo', [
+            'participante' => $participante,
+            'equipoModel' => $equipoModel,
+            'listaEquipos' => $listaEquipos,
+        ]);
+    }
+
+    public function actionAbandonarEquipo($equipoId, $participanteId)
+    {
+        // Aquí va la lógica para eliminar la relación entre el equipo y el participante
+        \Yii::$app->db->createCommand()->delete('equipo_participante', [
+            'equipo_id' => $equipoId,
+            'participante_id' => $participanteId,
+        ])->execute();
+
+        return $this->redirect(['view', 'id' => $participanteId]);
+    }
+
 
     /**
      * Creates a new Participante model.

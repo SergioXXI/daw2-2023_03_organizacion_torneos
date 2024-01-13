@@ -40,27 +40,33 @@ $this->params['breadcrumbs'][] = $this->title;
     ]) ?>
 
     <h2>Participantes</h2>
-    <?= GridView::widget([
-    'dataProvider' => $dataProvider,
-    'columns' => [
-        'id',
-        [
-            'attribute' => 'usuario.nombre',
-            'label' => 'Nombre del Usuario',
+    <?php if ($tieneParticipantes): ?>
+        <?= GridView::widget([
+        'dataProvider' => $dataProvider,
+        'columns' => [
+            'id',
+            [
+                'attribute' => 'usuario.nombre',
+                'label' => 'Nombre del Usuario',
+            ],
+            [
+                'attribute' => 'tipoParticipante.nombre',
+                'label' => 'Tipo de Participante',
+            ],
+            [
+                'class' => ActionColumn::className(),
+                'template' => '{view}', // Solo incluye la acción 'view'
+                'urlCreator' => function ($action, $model, $key, $index, $column) {
+                    return Url::toRoute(["participante/{$action}", 'id' => $model->id]);
+                }
+            ]
         ],
-        [
-            'attribute' => 'tipoParticipante.nombre',
-            'label' => 'Tipo de Participante',
-        ],
-        [
-            'class' => ActionColumn::className(),
-            'template' => '{view}', // Solo incluye la acción 'view'
-            'urlCreator' => function ($action, $model, $key, $index, $column) {
-                return Url::toRoute(["participante/{$action}", 'id' => $model->id]);
-            }
-        ]
-        // Otros atributos que desees mostrar
-    ],
-]) ?>
+    ]) ?>
+    <?php else: ?>
+        <p>Este equipo no tiene participantes.</p>
+    <?php endif; ?>
 
+    <h2>Torneos Activos</h2>
+    <?= Html::a('Unirse a un equipo', ['add-torneo', 'id' => $model->id], ['class' => 'btn btn-success']) ?>
+   
 </div>
