@@ -31,34 +31,36 @@ foreach($campos as $campo) {
         <div class="col-auto mx-1 px-0"><?= Html::a('Eliminar filtros', ['pistas'], ['class' => 'btn btn-outline-secondary fw-bold shadow-sm',]) ?></div>
         <div class="col-auto mx-1 px-0"><?= Html::submitButton(Yii::t('app', 'Buscar'), ['class' => 'btn btn-success fw-bold shadow-sm']) ?></div>
     </div>
-    <div class="form-group mx-2 mt-2 mb-0">
-        <details <?= $abierto ? 'open' : '' ?>>
-        <summary class="text-center btn btn-success fw-bold shadow-sm">Filtros avanzados</summary>
-        <fieldset id="filtros">
-            <div class="busqueda-filtros">
-                <div class="row filtros-pistas mt-4">
-                    <?php
-                        foreach($campos as $campo) {
-                            //Imprimir el input correspondiente al valor de $campo['tipo']
-                            switch ($campo['tipo']) {
-                                case 'text':
-                                    echo $form->field($model, $campo['atributo'], ['template' => '{input}'])->textInput(['placeholder' => $campo['placeholder']]);
-                                    break;
-                                case 'dropdown':
-                                    echo $form->field($model, $campo['atributo'], ['template' => '{input}'])->dropDownList($campo['opciones'], [
-                                        'prompt' => $campo['placeholder'],
-                                        'class' => 'form-select',
-                                    ]);
-                                    break;
-                                default:
-                                    break;
+    <?php if ($filtros) { ?>
+        <div class="form-group mx-2 mt-2 mb-0">
+            <details <?= $abierto ? 'open' : '' ?>>
+            <summary class="text-center btn btn-success fw-bold shadow-sm">Filtros avanzados</summary>
+            <fieldset id="filtros">
+                <div class="busqueda-filtros">
+                    <div class="row filtros-pistas mt-4">
+                        <?php
+                            foreach($campos as $campo) {
+                                //Imprimir el input correspondiente al valor de $campo['tipo']
+                                switch ($campo['tipo']) {
+                                    case 'text':
+                                        echo $form->field($model, $campo['atributo'], ['template' => '{input}'])->textInput(['placeholder' => $campo['placeholder']]);
+                                        break;
+                                    case 'dropdown':
+                                        echo $form->field($model, $campo['atributo'], ['template' => '{input}'])->dropDownList($campo['opciones'], [
+                                            'prompt' => $campo['placeholder'],
+                                            'class' => 'form-select',
+                                        ]);
+                                        break;
+                                    default:
+                                        break;
+                                }
                             }
-                        }
-                     ?>
+                        ?>
+                    </div>
                 </div>
-            </div>
-        </fieldset>
-        </details>
-          
-    </div>
+            </fieldset>
+            </details>
+            
+        </div>
+    <?php }; ?>
 </div>
