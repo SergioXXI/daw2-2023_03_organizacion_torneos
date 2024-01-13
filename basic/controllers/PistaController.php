@@ -140,6 +140,7 @@ class PistaController extends Controller
         $model = $this->findModel($id);
         $reservas = $model->reservas;
 
+
         return $this->render('verpista', [
             'model' => $model,
             'reservas' => $reservas,

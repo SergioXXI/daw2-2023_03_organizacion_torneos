@@ -28,6 +28,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'method' => 'post',
             ],
         ]) ?>
+        
     </p>
 
     <?= DetailView::widget([

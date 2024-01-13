@@ -93,6 +93,16 @@ class Reserva extends \yii\db\ActiveRecord
     }
 
     /**
+     * Gets query for [[Partido]].
+     *
+     * @return \yii\db\ActiveQuery|PartidoQuery
+     */
+    public function getPartido()
+    {
+        return $this->hasOne(Partido::class, ['reserva_id' => 'id']);
+    }
+
+    /**
      * Gets query for [[Usuario]].
      *
      * @return \yii\db\ActiveQuery|UsuarioQuery

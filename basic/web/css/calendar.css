@@ -20,6 +20,7 @@
     color: white;
     font-size: medium;
     text-align: center;
+    white-space: normal !important;
 }
 
 #calendar-pista .fc-event{
