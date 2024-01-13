@@ -3,6 +3,8 @@ use yii\web\View;
 use yii\helpers\Html;
 use yii\helpers\Url;
 use app\widgets\EventoTarjetaWidget;
+use yii\bootstrap5\LinkPager;
+
 
 $this->registerJsFile('https://cdn.jsdelivr.net/npm/fullcalendar@6.1.10/index.global.min.js', ['position' => View::POS_HEAD]);
 $this->registerCssFile("/torneos/basic/web/css/calendar.css");
@@ -23,49 +25,24 @@ $this->registerCssFile("/torneos/basic/web/css/calendar.css");
 <h2 class="mt-5 mb-2 h2">Calendario de disponibilidad</h2>
 <hr>
 
-
-<div id="calendar-pista"></div>
-
-<h2 class="mt-5 mb-2 h2">Proximos eventos</h2>
-
-<hr>
-
-<?php 
+<?php
+//GESTIÓN DE EVENTOS PARA INTRODUCIRLOS EN EL CALENDARIO
 $eventos = [];
+
 
 foreach ($reservas as $reserva) {
 
 	$partido = $reserva->partido;
-	//Si la reserva está asociada a un partido
+
 	if(!empty($partido)) {
 		$torneo = $partido->torneo; //si existe un partido tiene que estar asociado a un torneo
 		$url = Url::toRoute(['pista/ver-pista', 'id' => $model->id, '#' => Html::encode($reserva->fecha)]);
 		$titulo = Html::encode($torneo->nombre . ' - J' . $partido->jornada);
-
-		//Generar una tarjeta de evento de tipo partido
-		echo EventoTarjetaWidget::widget([
-			'id' => $partido->id,
-			'titulo' => $torneo->nombre . ' - Jornada ' . $partido->jornada,
-			'fecha' => $reserva->fecha,
-			'resaltar' => false,
-		]);
-
-	}
-	else {
-		$url = Url::toRoute(['hola']);
+	} else {
+		$url = '';
 		$titulo = 'Reserva privada';
-
-		//Generar una tarjeta de evento de tipo reserva privada
-		echo EventoTarjetaWidget::widget([
-			'titulo' => 'Reserva para uso particular',
-			'fecha' => $reserva->fecha,
-			'resaltar' => false,
-			'botonInfo' => false,
-		]);
-
 	}
-
-	echo '<hr>';
+	
 	//Guardar los eventos en un array que será utilizado por el script de FullCalendar
 	$eventos[] = [
 		'title' => $titulo,
@@ -81,7 +58,62 @@ $eventos = json_encode($eventos);
 
 ?>
 
+<div id="calendar-pista"></div>
 
+<h2 class="mt-5 mb-2 h2">Proximos eventos</h2>
+
+<hr>
+
+<?php 
+
+//GESTIÓN DE EVENTOS PARA SER MOSTRADOS EN EL APARTADO DE PROXIMOS EVENTOS
+$num_reservas = $reservasProvider->getCount();
+$i = 0;
+
+foreach ($reservasProvider->getModels() as $reserva) {
+
+	$partido = $reserva->partido;
+	//Si la reserva está asociada a un partido
+	if(!empty($partido)) {
+		$torneo = $partido->torneo; //si existe un partido tiene que estar asociado a un torneo
+		$titulo = Html::encode($torneo->nombre . ' - J' . $partido->jornada);
+		//Generar una tarjeta de evento de tipo partido
+		echo EventoTarjetaWidget::widget([
+			'id' => $partido->id,
+			'titulo' => $torneo->nombre . ' - Jornada ' . $partido->jornada,
+			'fecha' => $reserva->fecha,
+			'resaltar' => false,
+		]);
+	}
+	else {
+		//Generar una tarjeta de evento de tipo reserva privada
+		echo EventoTarjetaWidget::widget([
+			'titulo' => 'Reserva para uso particular',
+			'fecha' => $reserva->fecha,
+			'resaltar' => false,
+			'botonInfo' => false,
+		]);
+
+	}
+
+	$i++;
+	//No imprimir el <hr> en el ultimo elemento
+	if($i !== $num_reservas)
+		echo '<hr>';
+}
+
+//PAGINADOR
+echo LinkPager::widget([
+    'pagination' => $reservasProvider->pagination,
+    'maxButtonCount' => \Yii::$app->params['maxBotonPag'],
+    'options' => [
+        'class' => yii\bootstrap5\LinkPager::class
+    ]
+]);
+
+?>
+
+<!-- script de js para poder visualizar el calendario de eventos -->
 <script>
 
 	document.addEventListener('DOMContentLoaded', function () {

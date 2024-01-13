@@ -5,6 +5,7 @@ return [
     'senderEmail' => 'noreply@example.com',
     'senderName' => 'Example.com mailer',
     'limitePistas' => 4,
+    'limiteEventos' => 3,
     'limiteLog' => 50,
     'maxBotonPag' => 5,
 ];

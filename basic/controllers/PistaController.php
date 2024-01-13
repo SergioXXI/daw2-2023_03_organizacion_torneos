@@ -4,6 +4,7 @@ namespace app\controllers;
 use app\models\Direccion;
 use app\models\Pista;
 use app\models\PistaSearch;
+use yii\data\ActiveDataProvider;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -138,11 +139,26 @@ class PistaController extends Controller
     public function actionVerPista($id)
     {
         $model = $this->findModel($id);
+        //Crear dos modelos distintos para poder gestionar tanto los eventos mostrados
+        //en el calendario como los mostrados abajo
+        //Si se usa el mismo DataProvider al tener que cambiar entre paginar y no paginar
+        //no serviria, ya que tras el primer getModels se queda configurada una de las dos opciones
         $reservas = $model->reservas;
-
+        $reservasProvider = new ActiveDataProvider([
+            'query' => $model->getReservas(),
+            'sort' => [
+                'defaultOrder' => [
+                    'fecha' => SORT_ASC,
+                ],
+            ],
+            'pagination' => [
+                'pageSize' => \Yii::$app->params['limiteEventos'],
+            ],
+        ]);
 
         return $this->render('verpista', [
             'model' => $model,
+            'reservasProvider' => $reservasProvider,
             'reservas' => $reservas,
         ]);
     }
