@@ -273,11 +273,12 @@ class UserController extends Controller
     private function fullUpdate($id, $propio = false)
     {
         $model = $this->findModel($id);
-        
+        $nombreRol = Yii::$app->authManager->getRolesByUser($id);
+        $nombreRol = reset($nombreRol);
 
         if ($this->request->isPost && $model->load($this->request->post()) 
             && $model->save()
-            && $this->updateRol($model->id, $this->request->post('User')['rol'])) {
+            && $this->updateRol($model->id, isset($this->request->post('User')['rol']) ? $this->request->post('User')['rol'] : $nombreRol->name)) {
             return $propio 
                 ? $this->redirect(['view-profile'])    
                 : $this->redirect(['view', 'id' => $model->id]);
