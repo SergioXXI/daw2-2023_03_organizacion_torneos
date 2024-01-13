@@ -77,7 +77,7 @@ class Reserva extends \yii\db\ActiveRecord
      *
      * @return \yii\db\ActiveQuery|ReservaMaterialQuery
      */
-    public function getReservaMaterials()
+    public function getReservaMateriales()
     {
         return $this->hasMany(ReservaMaterial::class, ['reserva_id' => 'id']);
     }

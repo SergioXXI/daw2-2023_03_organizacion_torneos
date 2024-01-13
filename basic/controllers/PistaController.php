@@ -275,18 +275,44 @@ class PistaController extends Controller
      * @param int $id ID
      * @return \yii\web\Response
      * @throws NotFoundHttpException if the model cannot be found
+     * 
+     * Explicación de los casos de borrado.
+     *  1- Supuesto 1: si se borra una pista sin ninguna reserva asociada.
+     *      1. Simplemente se realiza el borrado de la pista eliminando la entrada de la db
+     *  2- Supuesto 2: si se borra una pista con al menos una reserva asociada.
+     *      1. Si la entrada de la reserva unicamente está asociada con la pista se eliminan
+     *         tanto la entrada de la pista como la entrada de la reserva de la db, eliminando
+     *         primeramente la entrada que las une ubicada en la tabla reserva_pista.
+     *      2. Si la entrada de la reserva, a parte de estar asociada con la pista, también lo
+     *         está con materiales mediante una entrada en la tabla reserva_materiales
+     *         no es eliminada de la db, simplemente es eliminada la relación con la pista de la
+     *         tabla reserva_pista y la pista es eliminada.
      */
     public function actionDelete($id)
     {
-        //$model = $this->findModel($id);
-        //$reserva = $model->reservaPista()
-        try{
-            $this->findModel($id)->delete();
-        } catch (IntegrityException $e) {
-            throw new \yii\web\HttpException(500,"No se puede eliminar este registro ya que está siendo utilizado por otra tabla.", 405);
+        $model = $this->findModel($id);
+        $reservas_pista = $model->reservaPista;
+        //Antes de comenzar el borrado se inicia una transaccion para asegurarse
+        //de que el borrado se realiza completamente o no se realiza nada en caso de error
+        $transaction = \Yii::$app->db->beginTransaction();
+        if(empty($reservas_pista)) $model->delete(); //Supuesto 1
+        else { //Supuesto 2
+            foreach($reservas_pista as $reserva_pista) {
+                $reserva = $reserva_pista->reserva;
+                $reservas_material = $reserva->reservaMateriales;
+                if(empty($reservas_material)) { //Supuesto 2.1
+                    $reserva_pista->delete();
+                    $reserva->delete();
+                } else { //Supuesto 2.2
+                    $reserva_pista->delete();
+                }
+            }
+            $model->delete();
         }
 
+        $transaction->commit();
         return $this->redirect(['index']);
+        
     }
 
     /**
