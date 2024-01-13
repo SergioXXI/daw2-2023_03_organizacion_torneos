@@ -45,7 +45,7 @@ $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/x-icon', 'href' => Yii
             ['label' => 'Test', 'url' => ['/test/index']],
             [
                 'label' => 'Registro',
-                'url' => ['/register/register'],
+                'url' => ['/user/register'],
                 'visible' => Yii::$app->user->isGuest || (Yii::$app->user->can('gestor') && !Yii::$app->user->can('admin') && !Yii::$app->user->can('sysadmin')),
             ],            
             !Yii::$app->user->isGuest && (Yii::$app->user->can('admin') || Yii::$app->user->can('sysadmin'))

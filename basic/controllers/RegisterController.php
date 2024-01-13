@@ -24,7 +24,7 @@ class RegisterController extends Controller
             ],
         ];
     }
-    
+
     public function actionRegister()
     {
         

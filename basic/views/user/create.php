@@ -8,22 +8,9 @@ use yii\helpers\Html;
 $this->title = Yii::t('app', 'Crear usuario');
 $this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Users'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
-$roles = null;
-if (Yii::$app->user->can('sysadmin')) {
-    // Obtenemos los roles hijos del rol asignado al usuario
-    $roles = Yii::$app->authManager->getChildRoles('sysadmin');
-    unset($roles['sysadmin']);
-    array_push($roles, '');
-} else if (Yii::$app->user->can('admin')) {
-    $roles = Yii::$app->authManager->getChildRoles('admin');
-    unset($roles['admin']);
-    array_push($roles, '');
-} else if (Yii::$app->user->can('gestor')) {
-    $roles[] = Yii::$app->authManager->getRole('usuario');
-    array_push($roles, '');
-}
+$roles = app\views\user\HelperVistasUser::extraerRolesDesplegableConVacio(); // Extraemos los roles para el desplegable
 ?>
-<div class="user-create">
+<div class="site-register">
 
     <h1><?= Html::encode($this->title) ?></h1>
 

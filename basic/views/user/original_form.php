@@ -14,7 +14,7 @@ $rolUsuario = !empty($rolesUsuario) ? reset($rolesUsuario) : null;
 
 ?>
 
-<div class="site-register">
+<div class="user-form">
 
     <?php $form = ActiveForm::begin(); ?>
 
