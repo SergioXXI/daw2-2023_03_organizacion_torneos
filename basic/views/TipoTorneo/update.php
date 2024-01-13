@@ -5,10 +5,12 @@ use yii\helpers\Html;
 /** @var yii\web\View $this */
 /** @var app\models\TipoTorneo $model */
 
-$this->title = 'Update Tipo Torneo: ' . $model->id;
-$this->params['breadcrumbs'][] = ['label' => 'Tipo Torneos', 'url' => ['index']];
+$this->title = Yii::t('app', 'Update Tipo Torneo: {name}', [
+    'name' => $model->id,
+]);
+$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Tipo Torneos'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = ['label' => $model->id, 'url' => ['view', 'id' => $model->id]];
-$this->params['breadcrumbs'][] = 'Update';
+$this->params['breadcrumbs'][] = Yii::t('app', 'Update');
 ?>
 <div class="tipo-torneo-update">
 

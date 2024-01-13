@@ -32,7 +32,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     ->select('*')
                     ->from('reserva_material')
                     ->where('reserva_material.material_id = material.id')
-                    ->andWhere(['reserva_material.reserva_id' => 1])
+                    ->andWhere(['reserva_material.reserva_id' => $id_reserva])
             ]),
     ]);
 

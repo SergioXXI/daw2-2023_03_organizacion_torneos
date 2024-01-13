@@ -22,7 +22,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <?php  //echo $this->render('_search', ['model' => $searchModel]); ?>
 
     <?php
-        if (Yii::$app->user->can('admin')) 
+    if ((Yii::$app->user->can('admin'))||(Yii::$app->user->can('organizador'))||(Yii::$app->user->can('sysadmin'))) 
     {
         echo 
         '<p>'.

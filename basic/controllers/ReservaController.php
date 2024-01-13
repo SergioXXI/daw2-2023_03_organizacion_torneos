@@ -3,6 +3,7 @@
 namespace app\controllers;
 
 use app\models\Reserva;
+use app\models\Material;
 use app\models\ReservaSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -10,6 +11,8 @@ use yii\filters\VerbFilter;
 use app\models\ReservaMaterial;
 use app\models\MaterialSearch;
 use app\controllers\MaterialController;
+use yii\data\ArrayDataProvider;
+
 
 /**
  * ReservaController implements the CRUD actions for Reserva model.
@@ -28,6 +31,21 @@ class ReservaController extends Controller
                     'class' => VerbFilter::className(),
                     'actions' => [
                         'delete' => ['POST'],
+                    ],
+                ],
+                'access' => [
+                    'class' => \yii\filters\AccessControl::class,
+                    'rules' => [
+                        [
+                            'actions' => ['index', 'view'],
+                            'allow' => true,
+                            'roles' => ['sysadmin','admin', 'participante', 'organizador', 'gestor'],
+                        ],
+                        [
+                            'actions' => ['create', 'update', 'delete'],
+                            'allow' => true,
+                            'roles' => ['sysadmin','admin','organizador', 'gestor'],
+                        ],
                     ],
                 ],
             ]
@@ -58,8 +76,21 @@ class ReservaController extends Controller
      */
     public function actionView($id)
     {
+        $model = $this->findModel($id);
+
+        $materialProvider = new ArrayDataProvider([
+            'allModels' => $model->materials,
+            'sort' => [
+                'attributes' => ['id', 'nombre'],
+            ],
+            'pagination' => [
+                'pageSize' => 10,
+            ],
+        ]);
+
         return $this->render('view', [
-            'model' => $this->findModel($id),
+            'model' => $model,
+            'materialProvider' => $materialProvider,
         ]);
     }
 

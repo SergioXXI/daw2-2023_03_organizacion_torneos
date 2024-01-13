@@ -28,6 +28,21 @@ class MaterialController extends Controller
                         'delete' => ['POST'],
                     ],
                 ],
+                'access' => [
+                    'class' => \yii\filters\AccessControl::class,
+                    'rules' => [
+                        [
+                            'actions' => ['index', 'view','materiales_reservas', 'materiales_reservas2'],
+                            'allow' => true,
+                            'roles' => ['sysadmin','admin', 'participante', 'organizador', 'gestor'],
+                        ],
+                        [
+                            'actions' => ['create', 'update', 'delete', 'materiales_reservas', 'materiales_reservas2'],
+                            'allow' => true,
+                            'roles' => ['sysadmin','admin'],
+                        ],
+                    ],
+                ],
             ]
         );
     }

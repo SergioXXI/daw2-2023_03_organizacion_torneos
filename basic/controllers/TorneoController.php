@@ -11,6 +11,7 @@ use yii\web\UploadedFile;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\data\ArrayDataProvider;
 
 /**
  * TorneoController implements the CRUD actions for Torneo model.
@@ -39,12 +40,12 @@ class TorneoController extends Controller
                         [
                             'actions' => ['index', 'view'],
                             'allow' => true,
-                            'roles' => ['sysadmin','admin', 'participante'],
+                            'roles' => ['sysadmin','admin', 'participante', 'organizador', 'gestor'],
                         ],
                         [
                             'actions' => ['create', 'update', 'delete'],
                             'allow' => true,
-                            'roles' => ['sysadmin','admin'],
+                            'roles' => ['sysadmin','admin','organizador'],
                         ],
                     ],
                 ],
@@ -107,8 +108,21 @@ class TorneoController extends Controller
      */
     public function actionView($id)
     {
+        $model = $this->findModel($id);
+
+        $equipoProvider = new ArrayDataProvider([
+            'allModels' => $model->equipos,
+            'sort' => [
+                'attributes' => ['id', 'nombre'],
+            ],
+            'pagination' => [
+                'pageSize' => 10,
+            ],
+        ]);
+
         return $this->render('view', [
-            'model' => $this->findModel($id),
+            'model' => $model,
+            'equipoProvider' => $equipoProvider,
         ]);
     }
     public function actionView_admin($id)
@@ -141,8 +155,18 @@ class TorneoController extends Controller
                 $union->torneo_id = $model->id;
                 $union->imagen_id = $imagen->id;
                 $union->save();
+                $equipoProvider = new ArrayDataProvider([
+                    'allModels' => $model->equipos,
+                    'sort' => [
+                        'attributes' => ['id', 'nombre'],
+                    ],
+                    'pagination' => [
+                        'pageSize' => 10,
+                    ],
+                ]);
                 return $this->render('view', [
                     'model' => $model,
+                    'equipoProvider' => $equipoProvider,
                 ]);;
             }
         }
@@ -162,9 +186,35 @@ class TorneoController extends Controller
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
+        $imagen = new Imagen();
+        $union = new TorneoImagen();
 
-        if ($this->request->isPost && $model->load($this->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+        if ($model->load($this->request->post()) && $model->save())  {
+            $destino = '/imagenes';
+            $model->imageFile = UploadedFile::getInstance($model, 'imageFile');
+            $rutaFichero = $destino . '/' . $model->imageFile;
+            if ($model->subirImagen($destino)) {
+                // file is uploaded successfully
+                $imagen->ruta = $rutaFichero;
+                $imagen->save();
+
+                $union->torneo_id = $model->id;
+                $union->imagen_id = $imagen->id;
+                $union->save();
+                $equipoProvider = new ArrayDataProvider([
+                    'allModels' => $model->equipos,
+                    'sort' => [
+                        'attributes' => ['id', 'nombre'],
+                    ],
+                    'pagination' => [
+                        'pageSize' => 10,
+                    ],
+                ]);
+                return $this->render('view', [
+                    'model' => $model,
+                    'equipoProvider' => $equipoProvider,
+                ]);;
+            }
         }
 
         return $this->render('update', [
@@ -181,7 +231,33 @@ class TorneoController extends Controller
      */
     public function actionDelete($id)
     {
-        $this->findModel($id)->delete();
+        $model = $this->findModel($id);
+        $t_e = $model->getTorneoEquipos();
+        $t_i = $model->getTorneoImagens();
+        $t_n = $model->getTorneoNormativas();
+        $t_c = $model->getTorneoCategorias();
+
+        if ($t_e !== null) {
+            foreach ($t_e->all() as $entrada) {
+                $entrada->delete();
+            }
+        }
+        if ($t_i !== null) {
+            foreach ($t_i->all() as $entrada) {
+                $entrada->delete();
+            }
+        }
+        if ($t_n !== null) {
+            foreach ($t_n->all() as $entrada) {
+                $entrada->delete();
+            }
+        }
+        if ($t_c !== null) {
+            foreach ($t_c->all() as $entrada) {
+                $entrada->delete();
+            }
+        }
+        $model->delete();
 
         return $this->redirect(['index']);
     }
