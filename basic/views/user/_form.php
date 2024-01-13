@@ -32,7 +32,7 @@ $rolUsuario = !empty($rolesUsuario) ? reset($rolesUsuario) : null;
 
     <?= $form->field($model, 'password')->passwordInput(['maxlength' => true]) ?>
 
-    <?= Yii::$app->user->can('admin') || Yii::$app->user->can('sysadmin') 
+    <?= Yii::$app->user->can('admin') || Yii::$app->user->can('sysadmin') || Yii::$app->user->can('gestor')
             ? $form->field($model, 'rol')->dropDownList(
                 ArrayHelper::map($roles, 'name', 'name'),
                 // Ponemos el rol del usuario como seleccionado

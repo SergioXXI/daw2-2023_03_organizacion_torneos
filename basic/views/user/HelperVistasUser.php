@@ -4,11 +4,11 @@ use Yii;
 Class HelperVistasUser  
 {
     /**
-     * Extrae los roles para el desplegable
+     * Extrae los roles para el desplegable y añade uno pasado como parametro
      * 
      * @return array|null
      */
-    static protected function extraerRolesDesplegableGenerico() {
+    static public function extraerRolesDesplegable($rolAñadir = null) {
         $roles = null;
         if (Yii::$app->user->can('sysadmin')) {
             // Obtenemos los roles hijos del rol asignado al usuario
@@ -29,37 +29,10 @@ Class HelperVistasUser
         } else {
             return null;
         }
-        return $roles;
-    }
 
-    /**
-     * Extrae los roles para el desplegable con Jugador sin Registrar
-     * 
-     * @return array|null
-     */
-    static public function extraerRolesDesplegableConInvitado() {
-        $roles[] = HelperVistasUser::extraerRolesDesplegableGenerico();
-        if ($roles == null) {
-            return null;
+        if ($rolAñadir != null) {
+            array_push($roles, $rolAñadir);
         }
-        // no existe ese rol asi que es meramente visual
-        array_push($roles, 'Jugador sin Registrar');
         return $roles;
     }
-
-    /**
-     * Extrae los roles para el desplegable con un campo vacio
-     * 
-     * @return array|null
-     */
-    static public function extraerRolesDesplegableConVacio() {
-        
-        $roles = HelperVistasUser::extraerRolesDesplegableGenerico();
-        if ($roles == null) {
-            return null;
-        }
-        array_push($roles, '');
-        return $roles;
-    }
-
 }

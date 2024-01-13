@@ -8,7 +8,7 @@ use yii\bootstrap5\ActiveForm;
 $this->title = 'Registro';
 $this->params['breadcrumbs'][] = $this->title;
 
-$roles = app\views\user\HelperVistasUser::extraerRolesDesplegableConInvitado(); // Extraemos los roles para el desplegable
+$roles = app\views\user\HelperVistasUser::extraerRolesDesplegable('Jugador sin Registrar'); // Extraemos los roles para el desplegable
 ?>
 <div class="site-register">
 
