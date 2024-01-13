@@ -14,6 +14,9 @@ class PistaSearch extends Pista
 
     public $direccionCompleta;
     public $disciplinaNombre;
+    public $direccionProvincia;
+    public $direccionCiudad;
+    public $direccionPais;
     public $busquedaGlobal;
 
     /**
@@ -23,7 +26,7 @@ class PistaSearch extends Pista
     {
         return [
             [['id', 'direccion_id', 'disciplina_id'], 'integer'],
-            [['nombre', 'descripcion', 'direccionCompleta', 'disciplinaNombre', 'busquedaGlobal'], 'safe'],
+            [['nombre', 'descripcion', 'direccionCompleta', 'disciplinaNombre', 'busquedaGlobal', 'direccionProvincia', 'direccionCiudad', 'direccionPais'], 'safe'],
         ];
     }
 
@@ -75,7 +78,8 @@ class PistaSearch extends Pista
 
 
         //Realizar el join con la tabla Direccion en caso de ser necesario
-        if(isset($orden->attributeOrders['direccionCompleta']) || !empty($this->direccionCompleta) || !empty($this->busquedaGlobal))
+        if(isset($orden->attributeOrders['direccionCompleta']) || !empty($this->direccionCompleta) || !empty($this->busquedaGlobal || !empty($this->direccionCiudad)
+        || !empty($this->direccionProvincia) || !empty($this->direccionPais)))
             $query->joinWith(['direccion']);
         
         //Realizar el join con la tabla Disciplina en caso de ser necesario
@@ -99,6 +103,9 @@ class PistaSearch extends Pista
         //Obtener la expresión usada para poder llevar a cabo este filtro
         $expresionDireccionCompleta = $query->porDireccionCompleta($this->direccionCompleta);
         $query->andFilterWhere(['like', $expresionDireccionCompleta , $this->direccionCompleta]);
+        $query->andFilterWhere(['like','ciudad',$this->direccionCiudad]);
+        $query->andFilterWhere(['like','provincia',$this->direccionProvincia]);
+        $query->andFilterWhere(['like','pais',$this->direccionPais]);
 
         /* FILTROS DE BUSQUEDA POR DISCIPLINA NOMBRE  */
         
