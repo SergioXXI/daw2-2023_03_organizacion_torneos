@@ -11,6 +11,8 @@ use app\models\ReservaPista;
  */
 class ReservaPistaSearch extends ReservaPista
 {
+    public $reservaFecha;
+    public $pistaNombre;
     /**
      * {@inheritdoc}
      */
@@ -18,6 +20,7 @@ class ReservaPistaSearch extends ReservaPista
     {
         return [
             [['reserva_id', 'pista_id'], 'integer'],
+            [['reservaFecha', 'pistaNombre'], 'safe'],
         ];
     }
 
@@ -47,6 +50,18 @@ class ReservaPistaSearch extends ReservaPista
             'query' => $query,
         ]);
 
+        //Esto permite ordenar segun la reserva fecha y la pista nombre
+        $orden = $dataProvider->getSort();
+        $orden->attributes['reservaFecha'] = [
+            'asc' => ['fecha' => SORT_ASC],
+            'desc' => ['fecha' => SORT_DESC],
+        ];
+
+        $orden->attributes['pistaNombre'] = [
+            'asc' => ['nombre' => SORT_ASC],
+            'desc' => ['nombre' => SORT_DESC],
+        ];
+
         $this->load($params);
 
         if (!$this->validate()) {
@@ -55,11 +70,26 @@ class ReservaPistaSearch extends ReservaPista
             return $dataProvider;
         }
 
+        //Realizar el join con la tabla Reserva en caso de ser necesario
+        if(isset($orden->attributeOrders['reservaFecha']) || !empty($this->reservaFecha))
+            $query->joinWith(['reserva']);
+        
+        //Realizar el join con la tabla Pista en caso de ser necesario
+        if(isset($orden->attributeOrders['pistaNombre']) || !empty($this->pistaNombre))
+            $query->joinWith(['pista']);
+
+
         // grid filtering conditions
         $query->andFilterWhere([
             'reserva_id' => $this->reserva_id,
             'pista_id' => $this->pista_id,
         ]);
+
+        //Obtener la expresión usada para poder llevar a cabo este filtro
+        $query->andFilterWhere(['like','reserva.fecha',$this->reservaFecha]);
+
+        //Obtener la expresión usada para poder llevar a cabo este filtro
+        $query->andFilterWhere(['like','pista.nombre',$this->pistaNombre]);
 
         return $dataProvider;
     }

@@ -5,11 +5,7 @@ namespace app\models;
 use Yii;
 
 /**
-<<<<<<< HEAD
  * This is the model class for table "{{%reserva_pista}}".
-=======
- * This is the model class for table "reserva_pista".
->>>>>>> origin/G2-Torneos
  *
  * @property int $reserva_id
  * @property int $pista_id
@@ -49,6 +45,7 @@ class ReservaPista extends \yii\db\ActiveRecord
         return [
             'reserva_id' => Yii::t('app', 'Reserva ID'),
             'pista_id' => Yii::t('app', 'Pista ID'),
+            'pistaNombre' => Yii::t('app', 'Pista'),
         ];
     }
 
@@ -79,5 +76,25 @@ class ReservaPista extends \yii\db\ActiveRecord
     public static function find()
     {
         return new ReservaPistaQuery(get_called_class());
+    }
+
+    //Función que obtiene el objeto pista asociado a la reserva_pista llamando a la función getPista y posteriormente devuelve una string
+    //con el valor del campo nombre de la tabla pista
+    public function getPistaNombre()
+    {
+        $pista = $this->pista;
+        if($pista !== null)
+            return $pista->nombre; //Acceso al parametro nombre de pista
+        return null;
+    }
+
+    //Función que obtiene el objeto reserva asociado a la reserva_pista llamando a la función getReserva y posteriormente devuelve una string
+    //con el valor del campo fecha de la tabla reserva
+    public function getReservaFecha()
+    {
+        $reserva = $this->reserva;
+        if($reserva !== null)
+            return $reserva->fecha; //Acceso al parametro fecha de reserva
+        return null;
     }
 }

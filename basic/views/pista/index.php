@@ -21,8 +21,6 @@ $this->title = Yii::t('app', 'Pistas');
 
     <p>
         <?= Html::a(Yii::t('app', 'Crear Pista'), ['create'], ['class' => 'btn btn-success']) ?>
-
-        <?= Html::a(Yii::t('app', 'Crear Dirección'), Url::toRoute(['direccion/create']), ['class' => 'btn btn-success']) ?>
     </p>
 
     <?php Pjax::begin(); ?>
