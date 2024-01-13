@@ -6,6 +6,7 @@ use yii\helpers\Url;
 use yii\grid\ActionColumn;
 use yii\grid\GridView;
 use yii\widgets\Pjax;
+
 /** @var yii\web\View $this */
 /** @var app\models\ParticipanteSearch $searchModel */
 /** @var yii\data\ActiveDataProvider $dataProvider */
@@ -53,9 +54,16 @@ $this->params['breadcrumbs'][] = $this->title;
             //'usuario_id',
             [
                 'class' => ActionColumn::className(),
+                'template' => '{view} {update} {delete}', // Añadir 'delete' al template
                 'urlCreator' => function ($action, Participante $model, $key, $index, $column) {
-                    return Url::toRoute([$action, 'id' => $model->id]);
-                 }
+                    if ($action === 'delete') {
+                        // Ruta personalizada para el botón delete
+                        return Url::toRoute(['usuario/delete', 'id' => $model->usuario_id]);
+                    } else {
+                        // Rutas estándar para las acciones view y update
+                        return Url::toRoute([$action, 'id' => $model->id]);
+                    }
+                }
             ],
         ],
     ]); ?>

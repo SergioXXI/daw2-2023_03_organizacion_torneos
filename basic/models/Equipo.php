@@ -43,8 +43,6 @@ class Equipo extends \yii\db\ActiveRecord
             [['nombre'], 'string', 'max' => 100],
             [['descripcion'], 'string', 'max' => 10000],
             [['licencia'], 'string', 'max' => 250],
-            [['nombre']],
-            [['licencia']],
             [['categoria_id'], 'exist', 'skipOnError' => true, 'targetClass' => Categoria::class, 'targetAttribute' => ['categoria_id' => 'id']],
             [['numParticipantes'], 'integer'],
         ];

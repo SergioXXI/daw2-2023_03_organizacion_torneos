@@ -73,19 +73,20 @@ class ParticipanteController extends Controller
     {
         $model = new Participante();
         $usuarioModel = new Usuario();
+        $userType = \Yii::$app->request->post('userType', null);
 
         // Obtener todos los tipos de participantes
         $tiposParticipantes = TipoParticipante::find()->all();
         $listaTiposParticipantes = ArrayHelper::map($tiposParticipantes, 'id', 'nombre');
+
+        // Convertir a un array para el desplegable
+        $listaTiposParticipantes = ArrayHelper::map($tiposParticipantes, 'id', 'nombre');    
 
           // Obtener usuarios que no están vinculados a un participante
         $usuarios = Usuario::find()->leftJoin('participante', 'usuario.id = participante.usuario_id')
             ->where(['participante.usuario_id' => null])
             ->all();
         $listaUsuarios = ArrayHelper::map($usuarios, 'id', 'nombre'); // Ajusta 'nombre' según tu modelo Usuario
-
-        // Convertir a un array para el desplegable
-        $listaTiposParticipantes = ArrayHelper::map($tiposParticipantes, 'id', 'nombre');    
 
         if ($this->request->isPost) {
              // Cargar datos en el modelo Participante
@@ -98,14 +99,11 @@ class ParticipanteController extends Controller
                     return $this->redirect(['view', 'id' => $model->id]);
                 }
             } else {
-                if (!$usuarioModel->save()) {
-                    var_dump($usuarioModel->getErrors()); // Imprimirá los errores de validación
-                    exit();
-                }
+                $usuarioModel->load($this->request->post());
                 // Creación de un nuevo usuario y participante
                 if ($usuarioModel->save()) {
                     $model->usuario_id = $usuarioModel->id;
-                    if ($model->load($this->request->post()) && $model->save()) {
+                    if ($model->save()) {
                         return $this->redirect(['view', 'id' => $model->id]);
                     }
                 }
@@ -117,6 +115,7 @@ class ParticipanteController extends Controller
             'listaTiposParticipantes' => $listaTiposParticipantes,
             'listaUsuarios' => $listaUsuarios,
             'usuarioModel' => $usuarioModel,
+            'userType' => $userType,
         ]);
     }
 
@@ -130,13 +129,23 @@ class ParticipanteController extends Controller
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
+        $usuarioModel = Usuario::findOne($model->usuario_id);
 
-        if ($this->request->isPost && $model->load($this->request->post()) && $model->save()) {
+        // Obtener todos los tipos de participantes
+        $tiposParticipantes = TipoParticipante::find()->all();
+        $listaTiposParticipantes = ArrayHelper::map($tiposParticipantes, 'id', 'nombre');
+
+        // Convertir a un array para el desplegable
+        $listaTiposParticipantes = ArrayHelper::map($tiposParticipantes, 'id', 'nombre');    
+
+        if ($this->request->isPost && $model->load($this->request->post()) && $model->save() && $usuarioModel->load($this->request->post()) && $usuarioModel->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
         }
 
         return $this->render('update', [
             'model' => $model,
+            'listaTiposParticipantes' => $listaTiposParticipantes,
+            'usuarioModel' => $usuarioModel,
         ]);
     }
 

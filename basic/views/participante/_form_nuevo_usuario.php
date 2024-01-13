@@ -5,6 +5,7 @@ use yii\widgets\ActiveForm;
 use yii\jui\DatePicker;
 
 
+
 // ...
 /** @var yii\web\View $this */
 /** @var app\models\Participante $model */
@@ -20,6 +21,7 @@ use yii\jui\DatePicker;
     <?= $form->field($usuarioModel, 'nombre')->textInput(['maxlength' => true]);?>
     <?= $form->field($usuarioModel, 'apellido1')->textInput(['maxlength' => true]);?>
     <?= $form->field($usuarioModel, 'apellido2')->textInput(['maxlength' => true]);?>
+    <?= $form->field($usuarioModel, 'email')->textInput(['maxlength' => true]);?>
 
     <?= $form->field($model, 'fecha_nacimiento')->widget(DatePicker::classname(), [
         'dateFormat' => 'yyyy-MM-dd',

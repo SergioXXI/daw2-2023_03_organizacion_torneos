@@ -1,6 +1,7 @@
 <?php
 
 use yii\helpers\Html;
+use yii\widgets\ActiveForm;
 
 /** @var yii\web\View $this */
 /** @var app\models\Participante $model */
@@ -13,37 +14,22 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <h1><?= Html::encode($this->title) ?></h1>
 
-    <div id="user-selection">
-        <p>¿Es el participante un usuario existente en la web?</p>
-        <?= Html::button('Sí', ['class' => 'btn btn-primary', 'id' => 'existing-user']) ?>
-        <?= Html::button('No', ['class' => 'btn btn-secondary', 'id' => 'new-user']) ?>
-    </div>
-
-    <div id="existing-user-form" style="display:none;">
+    <?php $form = ActiveForm::begin(); ?>
+        <?= Html::submitButton('Usuario Existente', ['name' => 'userType', 'value' => 'existing', 'class' => 'btn btn-primary']) ?>
+        <?= Html::submitButton('Nuevo Usuario', ['name' => 'userType', 'value' => 'new', 'class' => 'btn btn-secondary']) ?>
+    <?php ActiveForm::end(); ?>
+    
+    <?php if ($userType === 'existing'): ?>
         <?= $this->render('_form_existe_usuario', [
             'model' => $model,
             'listaTiposParticipantes' => $listaTiposParticipantes,
             'listaUsuarios' => $listaUsuarios,
         ]) ?>
-    </div>
-
-    <div id="new-user-form" style="display:none;">
+    <?php elseif ($userType === 'new'): ?>
         <?= $this->render('_form_nuevo_usuario', [
             'model' => $model,
             'listaTiposParticipantes' => $listaTiposParticipantes,
             'usuarioModel' => $usuarioModel,
         ]) ?>
-    </div>
+    <?php endif; ?>
 </div>
-
-<script>
-    document.getElementById('existing-user').addEventListener('click', function() {
-        document.getElementById('existing-user-form').style.display = 'block';
-        document.getElementById('new-user-form').style.display = 'none';
-    });
-
-    document.getElementById('new-user').addEventListener('click', function() {
-        document.getElementById('new-user-form').style.display = 'block';
-        document.getElementById('existing-user-form').style.display = 'none';
-    });
-</script>
