@@ -10,6 +10,10 @@ use yii\grid\GridView;
 /** @var yii\web\View $this */
 /** @var app\models\MaterialSearch $searchModel */
 /** @var yii\data\ActiveDataProvider $dataProvider */
+/** @var app\models\Material $model */
+$id_reserva = $id_reserva ?? null;
+
+
 
 $this->title = 'Reservas';
 $this->params['breadcrumbs'][] = $this->title;
@@ -45,18 +49,26 @@ $this->params['breadcrumbs'][] = $this->title;
             'descripcion',
             [
                 
-                'attribute' => 'id',
-                'format' => 'raw',
-                'value' => function ($model) {
-                
-                $form = ActiveForm::begin(); 
-                echo Html::submitButton('', ['class' => 'btn btn-success']) ;
-                ActiveForm::end();
-                  
+                'class' => 'yii\grid\ActionColumn',
+                'template' => '{custom}', // Agregamos el nuevo botón 'custom'
+                'buttons' => [
+                'custom' => function ($url, $model, $key)use ($id_reserva) {
+                    return Html::a(
+                        'TuTextoDelBoton', // Texto del botón
+                        ['materiales_reservas2', 'id' => $model->id,'id_reserva'=>$id_reserva], // URL a la que apunta el botón
+                        [
+                            'class' => 'btn btn-primary', // Clase CSS del botón
+                            'data' => [
+                                'confirm' => '¿Estás seguro de que quieres realizar esta acción?', // Mensaje de confirmación
+                                'method' => 'post', // Método HTTP
+                            ],
+                        ]
+                    );
                 },
-
-                 
             ],
+            ],
+        
+            
         ],
     ]); ?>
     

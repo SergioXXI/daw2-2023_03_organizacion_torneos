@@ -140,24 +140,36 @@ class MaterialController extends Controller
     {
 
         $model = new Material();
+        $searchModel = new MaterialSearch();
+        //$materialController = new MaterialController();
+        $dataProvider = $searchModel->search($this->request->queryParams);
+        
+
+        
+        return $this->render('materiales_reservas', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+            'model' => $model,
+            'id_reserva' => $id_reserva,
+        ]);
+    }
+
+    public function actionMateriales_reservas2($id,$id_reserva)
+    {
+        $model = new Material();
         $r_m =new ReservaMaterial();
         $searchModel = new MaterialSearch();
         //$materialController = new MaterialController();
         $dataProvider = $searchModel->search($this->request->queryParams);
         
 
-        if ($model->load($this->request->post())) {
+        
             
             $r_m->reserva_id=$id_reserva;
-            $r_m->material_id=$model->id;
+            $r_m->material_id=$id;
             $r_m->save();
 
-            return $this->redirect(['index']); 
-        } 
-        return $this->render('materiales_reservas', [
-            'searchModel' => $searchModel,
-            'dataProvider' => $dataProvider,
-            'model' => $model,
-        ]);
+            return $this->redirect(['reserva/index']); 
+        
     }
 }
