@@ -8,7 +8,7 @@ use yii\helpers\Html;
 $this->title = Yii::t('app', 'Crear usuario');
 $this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Users'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
-$roles = app\views\user\HelperVistasUser::extraerRolesDesplegableConVacio(); // Extraemos los roles para el desplegable
+$roles = app\views\user\HelperVistasUser::extraerRolesDesplegable(); // Extraemos los roles para el desplegable
 ?>
 <div class="site-register">
 
