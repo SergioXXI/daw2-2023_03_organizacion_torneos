@@ -56,8 +56,14 @@ class ReservaPistaController extends Controller
      */
     public function actionView($reserva_id, $pista_id)
     {
+        $model = $this->findModel($reserva_id, $pista_id);
+        $pista = $model->pista;
+        $reserva = $model->reserva;
+
         return $this->render('view', [
-            'model' => $this->findModel($reserva_id, $pista_id),
+            'model' => $model,
+            'pista' => $pista,
+            'reserva' => $reserva,
         ]);
     }
 

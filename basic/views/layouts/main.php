@@ -46,6 +46,7 @@ $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/x-icon', 'href' => Yii
             ['label' => 'Pistas', 'url' => ['/pista/pistas']],
             ['label' => 'Modificar Pistas', 'url' => ['/pista/index']],
             ['label' => 'Modificar Direccion', 'url' => ['/direccion/index']],
+            ['label' => 'Modificar Reserva Pista', 'url' => ['/reserva-pista/index']],
             ['label' => 'Modificar Logs', 'url' => ['/log/index']],
             ['label' => 'Calendario', 'url' => ['/calendario/index']],
             Yii::$app->user->isGuest

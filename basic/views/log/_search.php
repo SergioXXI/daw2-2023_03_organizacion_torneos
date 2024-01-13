@@ -23,17 +23,17 @@ $this->registerJsFile('https://kit.fontawesome.com/6a8d4512ef.js', ['position' =
     ]); ?>
 
     <?php $icono = [
-        'options' => ['class' => 'form-group'],
-        'inputTemplate' => "<div  class=\"input-group\">{input}
-          <i class=\"input-group-text border-start-0 border-bottom-0 border ms-n5 fa fa-calendar\"></i>
-      </div>"
+        'options' => ['class' => 'form-group position-relative'],
+        'inputTemplate' => "<div class=\"position-relative\">{input}
+          <i class=\"form-icon fa fa-calendar\"></i></div>"
     ]; ?>
 
-    <div class="input-group">
+    <div class="input-group d-flex gap-4 col-5">
         <?= $form->field($model,'fecha_ini', $icono)->widget(DatePicker::className(), [
             'dateFormat' => 'yyyy-MM-dd',
             'options' => ['class' => 'form-control', 'autocomplete' => 'off'],
         ]) ?>
+
 
         <?= $form->field($model,'fecha_fin', $icono)->widget(DatePicker::className(), [
             'dateFormat' => 'yyyy-MM-dd',
@@ -41,6 +41,7 @@ $this->registerJsFile('https://kit.fontawesome.com/6a8d4512ef.js', ['position' =
         ]) ?>
 
     </div>
+
 
     <?= $form->field($model,'fecha_posterior', $icono)->widget(DatePicker::className(), [
         'dateFormat' => 'yyyy-MM-dd',

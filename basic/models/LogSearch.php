@@ -25,9 +25,8 @@ class LogSearch extends Log
         return [
             [['id'], 'integer'],
 
- /*            [['fecha_ini', 'fecha_fin'], 'required', 'when' => function ($model) {
-                return ((empty($model->fecha_ini) && !empty($model->fecha_fin)) || (!empty($model->fecha_ini) && empty($model->fecha_fin)));
-            }, 'message' => 'No se puede rellenar solo uno de los dos campos'], */
+             [['fecha_fin','fecha_ini'], 'validadorRango',
+             'message' => 'No se puede rellenar solo uno de los dos campos'],
 
             [['level', 'category', 'log_time', 'prefix', 'message', 'fecha_ini', 'fecha_fin', 'fecha_posterior', 'fecha_anterior'], 'safe'],
         ];
@@ -86,5 +85,13 @@ class LogSearch extends Log
         $query->andFilterWhere(['<', 'log_time' , $this->fecha_anterior]);
 
         return $dataProvider;
+    }
+
+
+    public function validadorRango($attribute, $params, $validator)
+    {
+        if(!empty($this->fecha_ini) && empty($this->fecha_fin)) $this->addError('fecha_fin', 'Este campo es obligatorio si se rellena el campo Desde.');
+
+        if(!empty($this->fecha_fin) && empty($this->fecha_ini)) $this->addError('fecha_ini', 'Este campo es obligatorio si se rellena el campo Hasta.');
     }
 }

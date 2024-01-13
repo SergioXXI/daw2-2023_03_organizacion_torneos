@@ -47,6 +47,7 @@ $this->params['breadcrumbs'][] = $this->title;
         'dataProvider' => $pistasProvider,
         'summary' => 'Mostrando ' . Html::tag('b', '{begin}-{end}') . ' de ' .  Html::tag('b', '{totalCount}') . ' elementos', //Para cambiar el idioma del texto del summary
         'emptyText' => 'No hay resultados',
+        'pager' => [ 'class' => yii\bootstrap5\LinkPager::class ],
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
             

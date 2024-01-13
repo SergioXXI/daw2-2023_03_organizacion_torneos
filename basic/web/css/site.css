@@ -58,6 +58,16 @@ a.desc:after {
     color: red;
 }
 
+.invalid-feedback{
+    display: block;
+}
+
+.form-icon{
+    position: absolute;
+    right: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+}
 
 .control-label{
     margin-bottom: 5px;
