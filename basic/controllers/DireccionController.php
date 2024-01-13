@@ -77,7 +77,7 @@ class DireccionController extends Controller
                 'attributes' => ['id', 'nombre'],
             ],
             'pagination' => [
-                'pageSize' => 10,
+                'pageSize' => \Yii::$app->params['limiteGridView-View'],
             ],
         ]);
 

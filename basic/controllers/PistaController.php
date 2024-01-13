@@ -125,7 +125,7 @@ class PistaController extends Controller
                 'attributes' => ['id', 'fecha'],
             ],
             'pagination' => [
-                'pageSize' => 10,
+                'pageSize' => \Yii::$app->params['limiteGridView-View'],
             ],
         ]);
 
