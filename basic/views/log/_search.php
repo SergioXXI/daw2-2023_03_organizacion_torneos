@@ -5,8 +5,6 @@ use yii\web\View;
 use yii\bootstrap5\ActiveForm;
 use yii\jui\DatePicker;
 
-$this->registerJsFile('https://kit.fontawesome.com/6a8d4512ef.js', ['position' => View::POS_HEAD]);
-
 /** @var yii\web\View $this */
 /** @var app\models\LogSearch $model */
 /** @var yii\widgets\ActiveForm $form */

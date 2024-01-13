@@ -261,6 +261,8 @@ class PistaController extends Controller
      */
     public function actionDelete($id)
     {
+        //$model = $this->findModel($id);
+        //$reserva = $model->reservaPista()
         try{
             $this->findModel($id)->delete();
         } catch (IntegrityException $e) {

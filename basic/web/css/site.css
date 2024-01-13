@@ -22,6 +22,22 @@ main > .container {
     font-style: italic;
 }
 
+.filtros-pistas .form-group{
+    width: calc(100%/4) !important;
+}
+
+#details {
+    display: none;
+    /* Additional styles for the hidden details */
+    padding: 10px;
+    border: 1px solid #ccc;
+}
+
+/* Show details when the checkbox is checked */
+#summary:checked + #details {
+    display: block;
+}
+
 /* add sorting icons to gridview sort links */
 a.asc:after, a.desc:after {
     content: '';
