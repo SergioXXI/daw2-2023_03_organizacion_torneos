@@ -36,7 +36,7 @@ class Reserva extends \yii\db\ActiveRecord
             [['fecha', 'usuario_id'], 'required'],
             [['fecha'], 'safe'],
             [['usuario_id'], 'integer'],
-            [['usuario_id'], 'exist', 'skipOnError' => true, 'targetClass' => Usuario::class, 'targetAttribute' => ['usuario_id' => 'id']],
+            [['usuario_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::class, 'targetAttribute' => ['usuario_id' => 'id']],
         ];
     }
 
@@ -109,7 +109,7 @@ class Reserva extends \yii\db\ActiveRecord
      */
     public function getUsuario()
     {
-        return $this->hasOne(Usuario::class, ['id' => 'usuario_id']);
+        return $this->hasOne(User::class, ['id' => 'usuario_id']);
     }
 
     /**
