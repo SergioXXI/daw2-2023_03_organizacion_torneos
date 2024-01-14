@@ -126,7 +126,14 @@ class ClaseController extends Controller
      */
     public function actionDelete($id)
     {
-        $this->findModel($id)->delete();
+        $model = $this->findModel($id);
+        $t_d = $model->getTorneos();
+        if ($t_d !== null) {
+            foreach ($t_d->all() as $entrada) {
+                $entrada->delete();
+            }
+        }
+        $model->delete();
 
         return $this->redirect(['index']);
     }

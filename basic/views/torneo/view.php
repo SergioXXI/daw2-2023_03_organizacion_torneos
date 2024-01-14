@@ -65,6 +65,26 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
         ],
     ]); ?>
+    <h2 class="mt-5 mb-4">Premio del torneo</h2>
+    <?= GridView::widget([
+        'dataProvider' => $premioProvider,
+        'summary' => '', //Para cambiar el idioma del texto del summary
+        'emptyText' => 'No hay resultados',
+        'columns' => [
+            ['class' => 'yii\grid\SerialColumn'],
+
+            //Genera un enlace para poder ver la pista asociada a esta id
+            [
+                'format' => 'raw',
+                'attribute' => 'Nombre',
+                'value' => function ($model) {
+                    $url = Url::toRoute(['premio/view', 'id' => $model->id]);
+                    return Html::a($model->nombre, $url);
+                },
+
+            ],
+        ],
+    ]); ?>
 
     <?php
         $imageRoute = $model->getImagens()->select('ruta')->scalar();
