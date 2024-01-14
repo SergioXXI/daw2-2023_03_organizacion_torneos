@@ -89,5 +89,34 @@ class User extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
     {
         return $this->password === $password;
     }
+
+     /**
+     * Gets query for [[Participante]].
+     *
+     * @return \yii\db\ActiveQuery|ParticipanteQuery
+     */
+    public function getParticipante()
+    {
+        return $this->hasOne(Participante::class, ['usuario_id' => 'id']);
+    }
+
+    /**
+     * Gets query for [[Reservas]].
+     *
+     * @return \yii\db\ActiveQuery|ReservaQuery
+     */
+    public function getReservas()
+    {
+        return $this->hasMany(Reserva::class, ['usuario_id' => 'id']);
+    }
+
+    /**
+     * {@inheritdoc}
+     * @return UsuarioQuery the active query used by this AR class.
+     */
+    public static function find()
+    {
+        return new UsuarioQuery(get_called_class());
+    }
 }
 
