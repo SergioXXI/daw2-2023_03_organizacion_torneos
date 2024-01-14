@@ -1,4 +1,5 @@
 <?php
+
 use yii\web\View;
 use yii\helpers\Html;
 use yii\helpers\Url;
@@ -7,7 +8,7 @@ use yii\bootstrap5\LinkPager;
 
 
 $this->registerJsFile('https://cdn.jsdelivr.net/npm/fullcalendar@6.1.10/index.global.min.js', ['position' => View::POS_HEAD]);
-$this->registerCssFile("/torneos/basic/web/css/calendar.css");
+$this->registerCssFile(Yii::getAlias('@web/css/calendar.css'));
 
 ?>
 
