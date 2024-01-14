@@ -31,9 +31,16 @@ class ParticipanteController extends Controller
                         'delete' => ['POST'],
                     ],
                 ],
+                'access' => [
+                    'class' => \yii\filters\AccessControl::class,
+                    'rules' => [
+                    
+                    ],
+                ],
             ]
         );
     }
+    
 
     /**
      * Lists all Participante models.
@@ -200,7 +207,11 @@ class ParticipanteController extends Controller
         // Convertir a un array para el desplegable
         $listaTiposParticipantes = ArrayHelper::map($tiposParticipantes, 'id', 'nombre');    
 
-        if ($this->request->isPost && $model->load($this->request->post()) && $model->save() && $usuarioModel->load($this->request->post()) && $usuarioModel->save()) {
+        if ($this->request->isPost 
+            && $model->load($this->request->post()) 
+            && $model->save() 
+            && $usuarioModel->load($this->request->post()) 
+            && $usuarioModel->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
         }
 

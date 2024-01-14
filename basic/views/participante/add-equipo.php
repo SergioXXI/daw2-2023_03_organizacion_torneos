@@ -22,5 +22,7 @@ $this->params['breadcrumbs'][] = $this->title;
         <?= Html::submitButton('Añadir', ['class' => 'btn btn-success']) ?>
     </div>
 
-    <?php ActiveForm::end(); ?>
+    <?php ActiveForm::end(); 
+    echo Html::a('Volver', Yii::$app->request->referrer ?: ['site/index'], ['class' => 'btn btn-primary']);
+    ?>
 </div>
