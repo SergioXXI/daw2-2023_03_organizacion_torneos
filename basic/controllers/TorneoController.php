@@ -40,7 +40,7 @@ class TorneoController extends Controller
                         [
                             'actions' => ['index', 'view'],
                             'allow' => true,
-                            'roles' => ['sysadmin','admin', 'participante', 'organizador', 'gestor'],
+                            'roles' => ['sysadmin','admin', 'usuario', 'organizador', 'gestor'],
                         ],
                         [
                             'actions' => ['create', 'update', 'delete'],
