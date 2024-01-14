@@ -6,4 +6,6 @@ return [
     'senderName' => 'Example.com mailer',
     'limitePistas' => 4,
     'maxBotonPag' => 5,
+    'minUserPerPage' => 5,
+    'maxUserPerPage' => 15,
 ];

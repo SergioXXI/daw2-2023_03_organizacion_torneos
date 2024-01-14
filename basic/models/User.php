@@ -10,20 +10,32 @@ class User extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
         return 'usuario';
     }
 
+    public static function primaryKey()
+    {
+        return ['id'];
+    }
+
     public function rules()
     {
         return [
-            [['id', 'nombre', 'apellido1', 'apellido2', 'email', 'password'], 'required'],
-            [['id', 'rol_id'], 'integer', 'max' => PHP_INT_MAX],
+            [['nombre', 'apellido1', 'apellido2', 'email'], 'required'],
+            [['id'], 'integer', 'max' => PHP_INT_MAX],
             [['nombre', 'apellido1', 'apellido2', 'password'], 'string', 'max' => 100],
             [['email'], 'string', 'max' => 100],
             [['email'], 'unique'],
+            // password requerida cuando es guest
+            [['password'], 'required', 'when' => function ($model) {
+                return Yii::$app->user->isGuest;
+            }, 'whenClient' => "function (attribute, value) {
+                return $('#user-id').val() == '';
+            }"],
+            [['rol'],'safe'],
         ];
     }
 
     public $authKey;
-    public $accessToken;
     public $username;
+    public $rol;
 
     public static function findIdentity($id)
     {
@@ -32,7 +44,7 @@ class User extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
 
     public static function findIdentityByAccessToken($token, $type = null)
     {
-        // Por el momento no usamos tokens
+        // Implementa la lógica para encontrar un usuario por su accessToken aquí
         return null;
     }
 
@@ -61,3 +73,4 @@ class User extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
         return $this->password === $password;
     }
 }
+
