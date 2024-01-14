@@ -16,51 +16,30 @@ $this->params['breadcrumbs'][] = $this->title;
 <div class="disciplina-index">
 
     <h1><?= Html::encode($this->title) ?></h1>
-    <?php
-    if ((Yii::$app->user->can('admin'))||(Yii::$app->user->can('organizador'))||(Yii::$app->user->can('sysadmin')||(Yii::$app->user->can('gestor')))) 
-    {
-        echo'<p>'.
-            Html::a('Create Disciplina', ['create'], ['class' => 'btn btn-success'])
-        .'</p>';
 
-        // echo $this->render('_search', ['model' => $searchModel]);
+    <p>
+        <?= Html::a('Create Disciplina', ['create'], ['class' => 'btn btn-success']) ?>
+    </p>
 
-        echo GridView::widget([
-            'dataProvider' => $dataProvider,
-            'filterModel' => $searchModel,
-            'columns' => [
-                ['class' => 'yii\grid\SerialColumn'],
+    <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
-                'id',
-                'nombre',
-                'descripcion',
-                [
-                    'class' => ActionColumn::className(),
-                    'urlCreator' => function ($action, Disciplina $model, $key, $index, $column) {
-                        return Url::toRoute([$action, 'id' => $model->id]);
-                    }
-                ],
+    <?= GridView::widget([
+        'dataProvider' => $dataProvider,
+        'filterModel' => $searchModel,
+        'columns' => [
+            ['class' => 'yii\grid\SerialColumn'],
+
+            'id',
+            'nombre',
+            'descripcion',
+            [
+                'class' => ActionColumn::className(),
+                'urlCreator' => function ($action, Disciplina $model, $key, $index, $column) {
+                    return Url::toRoute([$action, 'id' => $model->id]);
+                 }
             ],
-        ]);
-    }else{
-        echo GridView::widget([
-            'dataProvider' => $dataProvider,
-            'filterModel' => $searchModel,
-            'columns' => [
-                ['class' => 'yii\grid\SerialColumn'],
+        ],
+    ]); ?>
 
-                'id',
-                'nombre',
-                'descripcion',
-                [
-                    'class' => ActionColumn::className(),'template'=>'{view}',
-                    'urlCreator' => function ($action, Disciplina $model, $key, $index, $column) {
-                        return Url::toRoute([$action, 'id' => $model->id]);
-                    }
-                ],
-            ],
-        ]);
-    }
-    ?>
 
 </div>

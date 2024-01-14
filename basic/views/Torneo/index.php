@@ -22,13 +22,9 @@ $this->params['breadcrumbs'][] = $this->title;
     <?php  //echo $this->render('_search', ['model' => $searchModel]); ?>
 
     <?php
-    if ((Yii::$app->user->can('admin'))||(Yii::$app->user->can('organizador'))||(Yii::$app->user->can('sysadmin'))) 
+    if (Yii::$app->user->can('admin')) 
     {
-        echo 
-        '<p>'.
-         Html::a('Create Torneo', ['create'], ['class' => 'btn btn-success']) 
-        .'</p>';
-        echo GridView::widget([
+        GridView::widget([
             'dataProvider' => $dataProvider,
             'filterModel' => $searchModel,
             'columns' => [
@@ -44,7 +40,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 ],
                 [
                     'attribute' => 'tipo_torneo_id',
-                    'value' => 'tipoTorneo.nombre', 
+                    'value' => 'tipo_torneo.nombre', 
                 ],
                 [
                     'attribute' => 'clase_id',
@@ -95,12 +91,5 @@ $this->params['breadcrumbs'][] = $this->title;
         ]); 
     }
         ?>
-       
-<?php
-echo \yii\widgets\LinkPager::widget([
-    'pagination' => $dataProvider->pagination,
-]);
-
-?>
 
 </div>

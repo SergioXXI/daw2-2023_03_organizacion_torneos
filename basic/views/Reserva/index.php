@@ -14,58 +14,35 @@ $this->title = 'Reservas';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="reserva-index">
-    <?php
-        echo '<h1>'.Html::encode($this->title).'</h1>';
-        if ((Yii::$app->user->can('admin'))||(Yii::$app->user->can('organizador'))||(Yii::$app->user->can('sysadmin')||(Yii::$app->user->can('gestor')))) 
-        {
-            echo'<p>'.
-                Html::a('Create Reserva', ['create'], ['class' => 'btn btn-success'])
-            .'</p>';
 
-            // echo $this->render('_search', ['model' => $searchModel]);
+    <h1><?= Html::encode($this->title) ?></h1>
 
-            echo GridView::widget([
-                'dataProvider' => $dataProvider,
-                'filterModel' => $searchModel,
-                'columns' => [
-                    ['class' => 'yii\grid\SerialColumn'],
+    <p>
+        <?= Html::a('Create Reserva', ['create'], ['class' => 'btn btn-success']) ?>
+    </p>
 
-                    'id',
-                    'fecha',
-                    [
-                        'attribute' => 'usuario_id',
-                        'value' => 'usuario.nombre', 
-                    ],
-                    [
-                        'class' => ActionColumn::className(),
-                        'urlCreator' => function ($action, Reserva $model, $key, $index, $column) {
-                            return Url::toRoute([$action, 'id' => $model->id]);
-                        }
-                    ],
-                ],
-            ]);
-        }else{
-            echo GridView::widget([
-                'dataProvider' => $dataProvider,
-                'filterModel' => $searchModel,
-                'columns' => [
-                    ['class' => 'yii\grid\SerialColumn'],
+    <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
-                    'id',
-                    'fecha',
-                    [
-                        'attribute' => 'usuario_id',
-                        'value' => 'usuario.nombre', 
-                    ],
-                    [
-                        'class' => ActionColumn::className(),'template'=>'{view}',
-                        'urlCreator' => function ($action, Reserva $model, $key, $index, $column) {
-                            return Url::toRoute([$action, 'id' => $model->id]);
-                        }
-                    ],
-                ],
-            ]);
-        }
-    ?>
+    <?= GridView::widget([
+        'dataProvider' => $dataProvider,
+        'filterModel' => $searchModel,
+        'columns' => [
+            ['class' => 'yii\grid\SerialColumn'],
+
+            'id',
+            'fecha',
+            [
+                'attribute' => 'usuario_id',
+                'value' => 'usuario.nombre', 
+            ],
+            [
+                'class' => ActionColumn::className(),
+                'urlCreator' => function ($action, Reserva $model, $key, $index, $column) {
+                    return Url::toRoute([$action, 'id' => $model->id]);
+                 }
+            ],
+        ],
+    ]); ?>
+
 
 </div>
