@@ -7,7 +7,7 @@ use yii\web\UploadedFile;
 
 
 /**
- * This is the model class for table "{{%torneo}}".
+ * This is the model class for table "torneo".
  *
  * @property int $id
  * @property string $nombre
@@ -18,9 +18,8 @@ use yii\web\UploadedFile;
  * @property int $clase_id
  * @property int $fecha_inicio
  * @property int $fecha_limite
- * @property int|null $fecha_fin
  *
- * @property Categorium[] $categorias
+ * @property Categoria[] $categorias
  * @property Clase $clase
  * @property Disciplina $disciplina
  * @property Equipo[] $equipos
@@ -29,7 +28,7 @@ use yii\web\UploadedFile;
  * @property Partido[] $partidos
  * @property Premio[] $premios
  * @property TipoTorneo $tipoTorneo
- * @property TorneoCategorium[] $torneoCategoria
+ * @property TorneoCategoria[] $torneoCategorias
  * @property TorneoEquipo[] $torneoEquipos
  * @property TorneoImagen[] $torneoImagens
  * @property TorneoNormativa[] $torneoNormativas
@@ -42,7 +41,7 @@ class Torneo extends \yii\db\ActiveRecord
     public $imageFile;
     public static function tableName()
     {
-        return '{{%torneo}}';
+        return 'torneo';
     }
     /**
      * {@inheritdoc}
@@ -52,7 +51,7 @@ class Torneo extends \yii\db\ActiveRecord
         return [
             [['nombre', 'participantes_max', 'disciplina_id', 'tipo_torneo_id', 'clase_id'], 'required'],
             [['participantes_max', 'disciplina_id', 'tipo_torneo_id', 'clase_id'], 'integer'],
-            [['fecha_inicio', 'fecha_limite', 'fecha_fin'], 'safe'],
+            [['fecha_inicio', 'fecha_limite'], 'safe'],
             [['nombre'], 'string', 'max' => 100],
             [['descripcion'], 'string', 'max' => 1000],
             [['disciplina_id'], 'exist', 'skipOnError' => true, 'targetClass' => Disciplina::class, 'targetAttribute' => ['disciplina_id' => 'id']],
@@ -67,16 +66,15 @@ class Torneo extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'id' => Yii::t('app', 'ID'),
-            'nombre' => Yii::t('app', 'Nombre'),
-            'descripcion' => Yii::t('app', 'Descripcion'),
-            'participantes_max' => Yii::t('app', 'Participantes Max'),
-            'disciplina_id' => Yii::t('app', 'Disciplina ID'),
-            'tipo_torneo_id' => Yii::t('app', 'Tipo Torneo ID'),
-            'clase_id' => Yii::t('app', 'Clase ID'),
-            'fecha_inicio' => Yii::t('app', 'Fecha Inicio'),
-            'fecha_limite' => Yii::t('app', 'Fecha Limite'),
-            'fecha_fin' => Yii::t('app', 'Fecha Fin'),
+            'id' => 'ID',
+            'nombre' => 'Nombre',
+            'descripcion' => 'Descripcion',
+            'participantes_max' => 'Participantes Max',
+            'disciplina_id' => 'Disciplina ID',
+            'tipo_torneo_id' => 'Tipo Torneo ID',
+            'clase_id' => 'Clase ID',
+            'fecha_inicio' => 'Fecha Inicio',
+            'fecha_limite' => 'Fecha Limite',
         ];
     }
     
@@ -97,12 +95,12 @@ class Torneo extends \yii\db\ActiveRecord
     /**
      * Gets query for [[Categorias]].
      *
-     * @return \yii\db\ActiveQuery|CategoriumQuery
+     * @return \yii\db\ActiveQuery|CategoriaQuery
      */
-    /*public function getCategorias()
+    public function getCategorias()
     {
-        return $this->hasMany(Categorium::class, ['id' => 'categoria_id'])->viaTable('{{%torneo_categoria}}', ['torneo_id' => 'id']);
-    }*/
+        return $this->hasMany(Categoria::class, ['id' => 'categoria_id'])->viaTable('torneo_categoria', ['torneo_id' => 'id']);
+    }
 
     /**
      * Gets query for [[Clase]].
@@ -129,100 +127,100 @@ class Torneo extends \yii\db\ActiveRecord
      *
      * @return \yii\db\ActiveQuery|EquipoQuery
      */
-    /*public function getEquipos()
+    public function getEquipos()
     {
-        return $this->hasMany(Equipo::class, ['id' => 'equipo_id'])->viaTable('{{%torneo_equipo}}', ['torneo_id' => 'id']);
-    }*/
+        return $this->hasMany(Equipo::class, ['id' => 'equipo_id'])->viaTable('torneo_equipo', ['torneo_id' => 'id']);
+    }
 
     /**
      * Gets query for [[Imagens]].
      *
      * @return \yii\db\ActiveQuery|ImagenQuery
      */
-    /*public function getImagens()
+    public function getImagens()
     {
-        return $this->hasMany(Imagen::class, ['id' => 'imagen_id'])->viaTable('{{%torneo_imagen}}', ['torneo_id' => 'id']);
-    }*/
+        return $this->hasMany(Imagen::class, ['id' => 'imagen_id'])->viaTable('torneo_imagen', ['torneo_id' => 'id']);
+    }
 
     /**
      * Gets query for [[Normativas]].
      *
      * @return \yii\db\ActiveQuery|NormativaQuery
      */
-    /*public function getNormativas()
+    public function getNormativas()
     {
-        return $this->hasMany(Normativa::class, ['id' => 'normativa_id'])->viaTable('{{%torneo_normativa}}', ['torneo_id' => 'id']);
-    }*/
+        return $this->hasMany(Normativa::class, ['id' => 'normativa_id'])->viaTable('torneo_normativa', ['torneo_id' => 'id']);
+    }
 
     /**
      * Gets query for [[Partidos]].
      *
      * @return \yii\db\ActiveQuery|PartidoQuery
      */
-    /*public function getPartidos()
+    public function getPartidos()
     {
         return $this->hasMany(Partido::class, ['torneo_id' => 'id']);
-    }*/
+    }
 
     /**
      * Gets query for [[Premios]].
      *
      * @return \yii\db\ActiveQuery|PremioQuery
      */
-    /*public function getPremios()
+    public function getPremios()
     {
         return $this->hasMany(Premio::class, ['torneo_id' => 'id']);
-    }*/
+    }
 
     /**
      * Gets query for [[TipoTorneo]].
      *
      * @return \yii\db\ActiveQuery|TipoTorneoQuery
      */
-    /*public function getTipoTorneo()
+    public function getTipoTorneo()
     {
         return $this->hasOne(TipoTorneo::class, ['id' => 'tipo_torneo_id']);
-    }*/
+    }
 
     /**
-     * Gets query for [[TorneoCategoria]].
+     * Gets query for [[TorneoCategorias]].
      *
-     * @return \yii\db\ActiveQuery|TorneoCategoriumQuery
+     * @return \yii\db\ActiveQuery|TorneoCategoriaQuery
      */
-    /*public function getTorneoCategoria()
+    public function getTorneoCategorias()
     {
-        return $this->hasMany(TorneoCategorium::class, ['torneo_id' => 'id']);
-    }*/
+        return $this->hasMany(TorneoCategoria::class, ['torneo_id' => 'id']);
+    }
 
     /**
      * Gets query for [[TorneoEquipos]].
      *
      * @return \yii\db\ActiveQuery|TorneoEquipoQuery
      */
-    /*public function getTorneoEquipos()
+    public function getTorneoEquipos()
     {
         return $this->hasMany(TorneoEquipo::class, ['torneo_id' => 'id']);
-    }*/
+    }
 
     /**
      * Gets query for [[TorneoImagens]].
      *
      * @return \yii\db\ActiveQuery|TorneoImagenQuery
      */
-    /*public function getTorneoImagens()
+    public function getTorneoImagens()
     {
         return $this->hasMany(TorneoImagen::class, ['torneo_id' => 'id']);
-    }*/
+    }
 
     /**
      * Gets query for [[TorneoNormativas]].
      *
      * @return \yii\db\ActiveQuery|TorneoNormativaQuery
      */
-    /*public function getTorneoNormativas()
+    public function getTorneoNormativas()
     {
         return $this->hasMany(TorneoNormativa::class, ['torneo_id' => 'id']);
-    }*/
+    }
 
     /**
      * {@inheritdoc}
