@@ -20,7 +20,7 @@ use Yii;
  * @property Imagen $imagen
  * @property ParticipanteDocumento[] $participanteDocumentos
  * @property TipoParticipante $tipoParticipante
- * @property Usuario $usuario
+ * @property User $usuario
  */
 class Participante extends \yii\db\ActiveRecord
 {
@@ -45,7 +45,7 @@ class Participante extends \yii\db\ActiveRecord
             [['licencia'], 'unique'],
             [['tipo_participante_id'], 'exist', 'skipOnError' => true, 'targetClass' => TipoParticipante::class, 'targetAttribute' => ['tipo_participante_id' => 'id']],
             [['imagen_id'], 'exist', 'skipOnError' => true, 'targetClass' => Imagen::class, 'targetAttribute' => ['imagen_id' => 'id']],
-            [['usuario_id'], 'exist', 'skipOnError' => true, 'targetClass' => Usuario::class, 'targetAttribute' => ['usuario_id' => 'id']],
+            [['usuario_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::class, 'targetAttribute' => ['usuario_id' => 'id']],
         ];
     }
 
@@ -129,13 +129,13 @@ class Participante extends \yii\db\ActiveRecord
     }
 
     /**
-     * Gets query for [[Usuario]].
+     * Gets query for [[User]].
      *
-     * @return \yii\db\ActiveQuery|UsuarioQuery
+     * @return \yii\db\ActiveQuery|UserQuery
      */
-    public function getUsuario()
+    public function getUsuario ()
     {
-        return $this->hasOne(Usuario::class, ['id' => 'usuario_id']);
+        return $this->hasOne(User::class, ['id' => 'usuario_id']);
     }
 
     /**
