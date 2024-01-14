@@ -16,6 +16,11 @@ $config = [
             'class' => 'yii\rbac\DbManager',
         ],
 
+        'backup' => [
+            'class' => 'amoracr\backup\Component',
+            'backupDir' => '@app/backup', 
+        ],
+
         'request' => [
             // !!! insert a secret key in the following (if it is empty) - this is required by cookie validation
             'cookieValidationKey' => 'EPSZ_DAW2_2023-24',
