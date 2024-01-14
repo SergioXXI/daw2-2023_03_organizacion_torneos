@@ -5,7 +5,7 @@ namespace app\models;
 use Yii;
 
 /**
- * This is the model class for table "reserva".
+ * This is the model class for table "{{%reserva}}".
  *
  * @property int $id
  * @property string $fecha
@@ -14,7 +14,7 @@ use Yii;
  * @property Material[] $materials
  * @property Pista[] $pistas
  * @property ReservaMaterial[] $reservaMaterials
- * @property ReservaPista[] $reservaPistas
+ * @property ReservaPista[] $reservaPista
  * @property Usuario $usuario
  */
 class Reserva extends \yii\db\ActiveRecord
@@ -24,7 +24,7 @@ class Reserva extends \yii\db\ActiveRecord
      */
     public static function tableName()
     {
-        return 'reserva';
+        return '{{%reserva}}';
     }
 
     /**
@@ -46,9 +46,9 @@ class Reserva extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'id' => 'ID',
-            'fecha' => 'Fecha',
-            'usuario_id' => 'Usuario ID',
+            'id' => Yii::t('app', 'ID'),
+            'fecha' => Yii::t('app', 'Fecha'),
+            'usuario_id' => Yii::t('app', 'Usuario ID'),
         ];
     }
 
@@ -69,7 +69,7 @@ class Reserva extends \yii\db\ActiveRecord
      */
     public function getPistas()
     {
-        return $this->hasMany(Pista::class, ['id' => 'pista_id'])->viaTable('reserva_pista', ['reserva_id' => 'id']);
+        return $this->hasMany(Pista::class, ['id' => 'pista_id'])->viaTable('{{%reserva_pista}}', ['reserva_id' => 'id']);
     }
 
     /**
@@ -77,7 +77,7 @@ class Reserva extends \yii\db\ActiveRecord
      *
      * @return \yii\db\ActiveQuery|ReservaMaterialQuery
      */
-    public function getReservaMaterials()
+    public function getReservaMateriales()
     {
         return $this->hasMany(ReservaMaterial::class, ['reserva_id' => 'id']);
     }
@@ -90,6 +90,16 @@ class Reserva extends \yii\db\ActiveRecord
     public function getReservaPistas()
     {
         return $this->hasMany(ReservaPista::class, ['reserva_id' => 'id']);
+    }
+
+    /**
+     * Gets query for [[Partido]].
+     *
+     * @return \yii\db\ActiveQuery|PartidoQuery
+     */
+    public function getPartido()
+    {
+        return $this->hasOne(Partido::class, ['reserva_id' => 'id']);
     }
 
     /**

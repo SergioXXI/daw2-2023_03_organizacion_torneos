@@ -3,9 +3,10 @@
 namespace app\models;
 
 use Yii;
+use yii\helpers\ArrayHelper;
 
 /**
- * This is the model class for table "direccion".
+ * This is the model class for table "{{%direccion}}".
  *
  * @property int $id
  * @property string $calle
@@ -16,7 +17,7 @@ use Yii;
  * @property string $pais
  *
  * @property Partido[] $partidos
- * @property Pista[] $pistas
+ * @property Pista[] $pista
  */
 class Direccion extends \yii\db\ActiveRecord
 {
@@ -25,7 +26,7 @@ class Direccion extends \yii\db\ActiveRecord
      */
     public static function tableName()
     {
-        return 'direccion';
+        return '{{%direccion}}';
     }
 
     /**
@@ -61,17 +62,17 @@ class Direccion extends \yii\db\ActiveRecord
      *
      * @return \yii\db\ActiveQuery|PartidoQuery
      */
-    public function getPartidos()
+    /*public function getPartidos()
     {
         return $this->hasMany(Partido::class, ['direccion_id' => 'id']);
-    }
+    }*/
 
     /**
-     * Gets query for [[Pistas]].
+     * Gets query for [[Pista]].
      *
      * @return \yii\db\ActiveQuery|PistaQuery
      */
-    public function getPistas()
+    public function getPista()
     {
         return $this->hasMany(Pista::class, ['direccion_id' => 'id']);
     }
@@ -83,5 +84,15 @@ class Direccion extends \yii\db\ActiveRecord
     public static function find()
     {
         return new DireccionQuery(get_called_class());
+    }
+
+    public function getDireccionCompleta()
+    {
+        return $this->calle . ' ' . $this->numero . ', ' . $this->ciudad . ', ' . $this->provincia . ', ' . $this->pais . ', CP: ' . $this->cod_postal;
+    }
+
+    public static function getListadoDirecciones()
+    {
+        return ArrayHelper::map(Direccion::find()->all(), 'id', 'direccionCompleta');
     }
 }

@@ -9,6 +9,7 @@ use yii\bootstrap5\Breadcrumbs;
 use yii\bootstrap5\Html;
 use yii\bootstrap5\Nav;
 use yii\bootstrap5\NavBar;
+use yii\web\View;
 
 AppAsset::register($this);
 
@@ -18,6 +19,7 @@ $this->registerMetaTag(['name' => 'viewport', 'content' => 'width=device-width, 
 $this->registerMetaTag(['name' => 'description', 'content' => $this->params['meta_description'] ?? '']);
 $this->registerMetaTag(['name' => 'keywords', 'content' => $this->params['meta_keywords'] ?? '']);
 $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/x-icon', 'href' => Yii::getAlias('@web/favicon.ico')]);
+$this->registerJsFile('https://kit.fontawesome.com/6a8d4512ef.js', ['position' => View::POS_HEAD]);
 ?>
 <?php $this->beginPage() ?>
 <!DOCTYPE html>
@@ -60,6 +62,12 @@ $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/x-icon', 'href' => Yii
             Yii::$app->user->can('sysadmin')
                 ? ['label' => 'Roles', 'url' => ['/auth-item']]
                 : '',
+            ['label' => 'Pistas', 'url' => ['/pista/pistas']],
+            ['label' => 'Modificar Pistas', 'url' => ['/pista/index']],
+            ['label' => 'Modificar Direccion', 'url' => ['/direccion/index']],
+            ['label' => 'Modificar Reserva Pista', 'url' => ['/reserva-pista/index']],
+            ['label' => 'Modificar Logs', 'url' => ['/log/index']],
+            ['label' => 'Calendario', 'url' => ['/calendario/index']],
             Yii::$app->user->isGuest
                 ? ['label' => 'Login', 'url' => ['/site/login']]
                 : ['label' => 'Mi Cuenta', 'url' => ['/user/view-profile/']],
@@ -80,9 +88,12 @@ $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/x-icon', 'href' => Yii
 </header>
 
 <main id="main" class="flex-shrink-0" role="main">
-    <div class="container">
+    <div class="container mt-5">
         <?php if (!empty($this->params['breadcrumbs'])): ?>
-            <?= Breadcrumbs::widget(['links' => $this->params['breadcrumbs']]) ?>
+            <?= Breadcrumbs::widget([ 
+                    'links' => $this->params['breadcrumbs'],
+                    'homeLink' => false,
+                ]) ?>
         <?php endif ?>
         <?= Alert::widget() ?>
         <?= $content ?>

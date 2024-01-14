@@ -31,4 +31,13 @@ class PistaQuery extends \yii\db\ActiveQuery
     {
         return parent::one($db);
     }
+
+    //Devuelve la expresión a utilizar dentro de la query, hecho así para unificar frente a busquedas con distintos operadores
+    public function porDireccionCompleta($direccionCompleta)
+    {
+        $expresion = 'CONCAT(calle, " ", numero, ", ", ciudad, ", ", provincia, ", ", pais, ", CP: ", cod_postal)';
+        //$this->andFilterWhere(['like', $expresion , $direccionCompleta]);
+        return $expresion;
+    }
+
 }

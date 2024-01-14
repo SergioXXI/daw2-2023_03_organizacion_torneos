@@ -5,7 +5,7 @@ namespace app\models;
 use Yii;
 
 /**
- * This is the model class for table "partido".
+ * This is the model class for table "{{%partido}}".
  *
  * @property int $id
  * @property int $jornada
@@ -15,6 +15,7 @@ use Yii;
  *
  * @property Equipo[] $equipos
  * @property PartidoEquipo[] $partidoEquipos
+ * @property Reserva $reserva
  * @property Torneo $torneo
  */
 class Partido extends \yii\db\ActiveRecord
@@ -24,7 +25,7 @@ class Partido extends \yii\db\ActiveRecord
      */
     public static function tableName()
     {
-        return 'partido';
+        return '{{%partido}}';
     }
 
     /**
@@ -37,6 +38,7 @@ class Partido extends \yii\db\ActiveRecord
             [['jornada', 'torneo_id', 'reserva_id'], 'integer'],
             [['fecha'], 'safe'],
             [['torneo_id'], 'exist', 'skipOnError' => true, 'targetClass' => Torneo::class, 'targetAttribute' => ['torneo_id' => 'id']],
+            [['reserva_id'], 'exist', 'skipOnError' => true, 'targetClass' => Reserva::class, 'targetAttribute' => ['reserva_id' => 'id']],
         ];
     }
 
@@ -61,7 +63,7 @@ class Partido extends \yii\db\ActiveRecord
      */
     public function getEquipos()
     {
-        return $this->hasMany(Equipo::class, ['id' => 'equipo_id'])->viaTable('partido_equipo', ['partido_id' => 'id']);
+        return $this->hasMany(Equipo::class, ['id' => 'equipo_id'])->viaTable('{{%partido_equipo}}', ['partido_id' => 'id']);
     }
 
     /**
@@ -72,6 +74,16 @@ class Partido extends \yii\db\ActiveRecord
     public function getPartidoEquipos()
     {
         return $this->hasMany(PartidoEquipo::class, ['partido_id' => 'id']);
+    }
+
+    /**
+     * Gets query for [[Reserva]].
+     *
+     * @return \yii\db\ActiveQuery|ReservaQuery
+     */
+    public function getReserva()
+    {
+        return $this->hasOne(Reserva::class, ['id' => 'reserva_id']);
     }
 
     /**

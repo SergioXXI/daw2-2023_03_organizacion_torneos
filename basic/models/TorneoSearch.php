@@ -18,7 +18,7 @@ class TorneoSearch extends Torneo
     {
         return [
             [['id', 'participantes_max', 'disciplina_id', 'tipo_torneo_id', 'clase_id'], 'integer'],
-            [['nombre', 'descripcion', 'fecha_inicio', 'fecha_limite'], 'safe'],
+            [['nombre', 'descripcion', 'fecha_inicio', 'fecha_limite', 'fecha_fin'], 'safe'],
         ];
     }
 

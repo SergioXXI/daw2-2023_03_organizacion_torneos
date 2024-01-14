@@ -13,6 +13,7 @@ use app\models\MaterialSearch;
 use app\controllers\MaterialController;
 use yii\data\ArrayDataProvider;
 
+use yii\db\IntegrityException;
 
 /**
  * ReservaController implements the CRUD actions for Reserva model.
@@ -145,7 +146,11 @@ class ReservaController extends Controller
      */
     public function actionDelete($id)
     {
-        $this->findModel($id)->delete();
+        try{
+            $this->findModel($id)->delete();
+        } catch (IntegrityException $e) {
+            throw new \yii\web\HttpException(500,"No se puede eliminar este registro ya que está siendo utilizado por otra tabla.", 405);
+        }
 
         return $this->redirect(['index']);
     }
@@ -163,7 +168,7 @@ class ReservaController extends Controller
             return $model;
         }
 
-        throw new NotFoundHttpException('The requested page does not exist.');
+        throw new NotFoundHttpException(Yii::t('app', 'The requested page does not exist.'));
     }
 
 

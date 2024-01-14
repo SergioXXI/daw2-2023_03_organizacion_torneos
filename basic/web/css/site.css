@@ -1,3 +1,7 @@
+body{
+    background-color: #fff;
+}
+
 main > .container {
     padding: 70px 15px 20px;
 }
@@ -16,6 +20,22 @@ main > .container {
 .not-set {
     color: #c55;
     font-style: italic;
+}
+
+.filtros-pistas .form-group{
+    width: calc(100%/4) !important;
+}
+
+#details {
+    display: none;
+    /* Additional styles for the hidden details */
+    padding: 10px;
+    border: 1px solid #ccc;
+}
+
+/* Show details when the checkbox is checked */
+#summary:checked + #details {
+    display: block;
 }
 
 /* add sorting icons to gridview sort links */
@@ -50,12 +70,62 @@ a.desc:after {
     color: #999;
 }
 
+.help-block {
+    color: red;
+}
+
+.invalid-feedback{
+    display: block;
+}
+
+.form-icon{
+    position: absolute;
+    right: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.control-label{
+    margin-bottom: 5px;
+}
+
+.form-group{
+    margin-bottom: 10px;
+}
+
+.card {
+    box-shadow: 0 20px 27px 0 rgb(0 0 0 / 5%);
+}
+
+.card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    word-wrap: break-word;
+    background-color: #fff;
+    background-clip: border-box;
+    border: 0 solid rgba(0,0,0,.125);
+    border-radius: 1rem;
+}
+
+.card-body {
+    -webkit-box-flex: 1;
+    -ms-flex: 1 1 auto;
+    flex: 1 1 auto;
+    padding: 1.5rem 1.5rem;
+}
+
 .error-summary {
     color: #a94442;
     background: #fdf7f7;
     border-left: 3px solid #eed3d7;
     padding: 10px 20px;
     margin: 0 0 15px 0;
+}
+
+.pagination{
+    justify-content: center;
 }
 
 /* align the logout "link" (button in form) of the navbar */

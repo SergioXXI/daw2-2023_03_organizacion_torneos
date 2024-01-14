@@ -3,14 +3,16 @@
 namespace app\models;
 
 use Yii;
+use yii\helpers\ArrayHelper;
 
 /**
- * This is the model class for table "disciplina".
+ * This is the model class for table "{{%disciplina}}".
  *
  * @property int $id
  * @property string $nombre
  * @property string|null $descripcion
  *
+ * @property Pista[] $pista
  * @property Torneo[] $torneos
  */
 class Disciplina extends \yii\db\ActiveRecord
@@ -20,7 +22,7 @@ class Disciplina extends \yii\db\ActiveRecord
      */
     public static function tableName()
     {
-        return 'disciplina';
+        return '{{%disciplina}}';
     }
 
     /**
@@ -42,10 +44,20 @@ class Disciplina extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'id' => 'ID',
-            'nombre' => 'Nombre',
-            'descripcion' => 'Descripcion',
+            'id' => Yii::t('app', 'ID'),
+            'nombre' => Yii::t('app', 'Nombre'),
+            'descripcion' => Yii::t('app', 'Descripcion'),
         ];
+    }
+
+    /**
+     * Gets query for [[Pista]].
+     *
+     * @return \yii\db\ActiveQuery|PistaQuery
+     */
+    public function getPista()
+    {
+        return $this->hasMany(Pista::class, ['disciplina_id' => 'id']);
     }
 
     /**
@@ -66,4 +78,15 @@ class Disciplina extends \yii\db\ActiveRecord
     {
         return new DisciplinaQuery(get_called_class());
     }
+
+    public static function getListadoDisciplinasPorId()
+    {
+        return ArrayHelper::map(Disciplina::find()->all(), 'id', 'nombre');
+    }
+
+    public static function getListadoDisciplinasPorNombre()
+    {
+        return ArrayHelper::map(Disciplina::find()->all(), 'nombre', 'nombre');
+    }
+
 }
