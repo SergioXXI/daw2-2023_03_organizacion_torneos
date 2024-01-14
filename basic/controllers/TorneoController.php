@@ -177,9 +177,19 @@ class TorneoController extends Controller
                         'pageSize' => 10,
                     ],
                 ]);
+                $premioProvider = new ArrayDataProvider([
+                    'allModels' => $model->premios,
+                    'sort' => [
+                        'attributes' => ['id', 'nombre'],
+                    ],
+                    'pagination' => [
+                        'pageSize' => 10,
+                    ],
+                ]);
                 return $this->render('view', [
                     'model' => $model,
                     'equipoProvider' => $equipoProvider,
+                    'premioProvider' => $premioProvider,
                 ]);;
             }
         }
