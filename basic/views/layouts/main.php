@@ -43,7 +43,12 @@ $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/x-icon', 'href' => Yii
             ['label' => 'About', 'url' => ['/site/about']],
             ['label' => 'Contact', 'url' => ['/site/contact']],
             ['label' => 'Test', 'url' => ['/test/index']],
-            ['label' => 'FormTorneo', 'url' => ['/torneo/index']],
+            ['label' => 'Torneos', 'url' => ['/torneo/index']],
+            ['label' => 'Disciplinas', 'url' => ['/disciplina/index']],
+            ['label' => 'Clases de torneo', 'url' => ['/clase/index']],
+            ['label' => 'Reservas', 'url' => ['/reserva/index']],
+            ['label' => 'Materiales', 'url' => ['/material/index']],
+            ['label' => 'Partidos', 'url' => ['/partido/index']],
             Yii::$app->user->isGuest
                 ? ['label' => 'Login', 'url' => ['/site/login']]
                 : '<li class="nav-item">'
