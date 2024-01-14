@@ -33,23 +33,6 @@ class User extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
         ];
     }
 
-
-    /**
-     * {@inheritdoc}
-     */
-    public function attributeLabels()
-    {
-        return [
-            'id' => 'ID',
-            'nombre' => 'Nombre',
-            'apellido1' => 'Apellido1',
-            'apellido2' => 'Apellido2',
-            'email' => 'Email',
-            'password' => 'Password',
-        ];
-    }
-
-
     public $authKey;
     public $username;
     public $rol;
