@@ -54,7 +54,7 @@ $this->registerJsFile('https://kit.fontawesome.com/6a8d4512ef.js', ['position' =
             [
                 'label' => 'Registro',
                 'url' => ['/user/register'],
-                'visible' => Yii::$app->user->isGuest || (Yii::$app->user->can('gestor') && !Yii::$app->user->can('admin') && !Yii::$app->user->can('sysadmin')),
+                'visible' => Yii::$app->user->isGuest,
             ],            
             !Yii::$app->user->isGuest && (Yii::$app->user->can('admin') || Yii::$app->user->can('sysadmin'))
                 ? ['label' => 'Usuarios', 'url' => ['/user']]

@@ -24,8 +24,6 @@ Class HelperVistasUser
             if (Yii::$app->user->id != Yii::$app->request->get('id')) {
                 unset($roles['admin']);
             }
-        } else if (Yii::$app->user->can('gestor')) {
-            $roles[] = Yii::$app->authManager->getRole('usuario');
         } else {
             return null;
         }

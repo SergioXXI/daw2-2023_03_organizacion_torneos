@@ -22,7 +22,6 @@ class User extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
             [['id'], 'integer', 'max' => PHP_INT_MAX],
             [['nombre', 'apellido1', 'apellido2', 'password'], 'string', 'max' => 100],
             [['email'], 'string', 'max' => 100],
-            [['email'], 'unique'],
             // password requerida cuando es guest
             [['password'], 'required', 'when' => function ($model) {
                 return Yii::$app->user->isGuest;
@@ -71,6 +70,35 @@ class User extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
     public function validatePassword($password)
     {
         return $this->password === $password;
+    }
+
+     /**
+     * Gets query for [[Participante]].
+     *
+     * @return \yii\db\ActiveQuery|ParticipanteQuery
+     */
+    public function getParticipante()
+    {
+        return $this->hasOne(Participante::class, ['usuario_id' => 'id']);
+    }
+
+    /**
+     * Gets query for [[Reservas]].
+     *
+     * @return \yii\db\ActiveQuery|ReservaQuery
+     */
+    public function getReservas()
+    {
+        return $this->hasMany(Reserva::class, ['usuario_id' => 'id']);
+    }
+
+    /**
+     * {@inheritdoc}
+     * @return UserQuery the active query used by this AR class.
+     */
+    public static function find()
+    {
+        return new UserQuery(get_called_class());
     }
 }
 

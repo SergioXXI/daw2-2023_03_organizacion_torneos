@@ -3,6 +3,8 @@
 namespace app\controllers;
 
 use app\models\Disciplina;
+use app\models\Pista;
+use app\models\Reserva;
 use app\models\DisciplinaSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -126,8 +128,7 @@ class DisciplinaController extends Controller
      */
     public function actionDelete($id)
     {
-        $this->findModel($id)->delete();
-
+        $this->findModel($id)->delte();
         return $this->redirect(['index']);
     }
 

@@ -4,33 +4,28 @@ use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
 /** @var yii\web\View $this */
-/** @var app\models\UsuarioSearch $model */
+/** @var app\models\PremioSearch $model */
 /** @var yii\widgets\ActiveForm $form */
 ?>
 
-<div class="usuario-search">
+<div class="premio-search">
 
     <?php $form = ActiveForm::begin([
         'action' => ['index'],
         'method' => 'get',
-        'options' => [
-            'data-pjax' => 1
-        ],
     ]); ?>
 
     <?= $form->field($model, 'id') ?>
 
     <?= $form->field($model, 'nombre') ?>
 
-    <?= $form->field($model, 'apellido1') ?>
+    <?= $form->field($model, 'descripcion') ?>
 
-    <?= $form->field($model, 'apellido2') ?>
+    <?= $form->field($model, 'categoria_id') ?>
 
-    <?= $form->field($model, 'email') ?>
+    <?= $form->field($model, 'torneo_id') ?>
 
-    <?php // echo $form->field($model, 'password') ?>
-
-    <?php // echo $form->field($model, 'rol_id') ?>
+    <?php // echo $form->field($model, 'equipo_id') ?>
 
     <div class="form-group">
         <?= Html::submitButton(Yii::t('app', 'Search'), ['class' => 'btn btn-primary']) ?>

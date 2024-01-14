@@ -16,9 +16,20 @@ $this->params['breadcrumbs'][] = $this->title;
 <div class="torneo-view">
 
     <h1><?= Html::encode($this->title) ?></h1>
-
-    
-
+    <?php
+    if ((Yii::$app->user->can('admin'))||(Yii::$app->user->can('organizador'))||(Yii::$app->user->can('sysadmin'))) 
+    {
+         
+        echo Html::a('Update', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']); 
+        echo Html::a('Delete', ['delete', 'id' => $model->id], [
+            'class' => 'btn btn-danger',
+            'data' => [
+                'confirm' => 'Are you sure you want to delete this item?',
+                'method' => 'post', 
+            ],
+        ]);
+    }
+    ?>
     <?= DetailView::widget([
         'model' => $model,
         'attributes' => [
@@ -48,6 +59,26 @@ $this->params['breadcrumbs'][] = $this->title;
                 'attribute' => 'Nombre',
                 'value' => function ($model) {
                     $url = Url::toRoute(['equipo/view', 'id' => $model->id]);
+                    return Html::a($model->nombre, $url);
+                },
+
+            ],
+        ],
+    ]); ?>
+    <h2 class="mt-5 mb-4">Premio del torneo</h2>
+    <?= GridView::widget([
+        'dataProvider' => $premioProvider,
+        'summary' => '', //Para cambiar el idioma del texto del summary
+        'emptyText' => 'No hay resultados',
+        'columns' => [
+            ['class' => 'yii\grid\SerialColumn'],
+
+            //Genera un enlace para poder ver la pista asociada a esta id
+            [
+                'format' => 'raw',
+                'attribute' => 'Nombre',
+                'value' => function ($model) {
+                    $url = Url::toRoute(['premio/view', 'id' => $model->id]);
                     return Html::a($model->nombre, $url);
                 },
 

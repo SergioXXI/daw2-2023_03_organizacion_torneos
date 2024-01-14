@@ -4,12 +4,12 @@ namespace app\models;
 
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use app\models\Usuario;
+use app\models\Premio;
 
 /**
- * UsuarioSearch represents the model behind the search form of `app\models\Usuario`.
+ * PremioSearch represents the model behind the search form of `app\models\Premio`.
  */
-class UsuarioSearch extends Usuario
+class PremioSearch extends Premio
 {
     /**
      * {@inheritdoc}
@@ -17,8 +17,8 @@ class UsuarioSearch extends Usuario
     public function rules()
     {
         return [
-            [['id', 'rol_id'], 'integer'],
-            [['nombre', 'apellido1', 'apellido2', 'email', 'password'], 'safe'],
+            [['id', 'categoria_id', 'torneo_id', 'equipo_id'], 'integer'],
+            [['nombre', 'descripcion'], 'safe'],
         ];
     }
 
@@ -40,7 +40,7 @@ class UsuarioSearch extends Usuario
      */
     public function search($params)
     {
-        $query = Usuario::find();
+        $query = Premio::find();
 
         // add conditions that should always apply here
 
@@ -59,14 +59,13 @@ class UsuarioSearch extends Usuario
         // grid filtering conditions
         $query->andFilterWhere([
             'id' => $this->id,
-            'rol_id' => $this->rol_id,
+            'categoria_id' => $this->categoria_id,
+            'torneo_id' => $this->torneo_id,
+            'equipo_id' => $this->equipo_id,
         ]);
 
         $query->andFilterWhere(['like', 'nombre', $this->nombre])
-            ->andFilterWhere(['like', 'apellido1', $this->apellido1])
-            ->andFilterWhere(['like', 'apellido2', $this->apellido2])
-            ->andFilterWhere(['like', 'email', $this->email])
-            ->andFilterWhere(['like', 'password', $this->password]);
+            ->andFilterWhere(['like', 'descripcion', $this->descripcion]);
 
         return $dataProvider;
     }

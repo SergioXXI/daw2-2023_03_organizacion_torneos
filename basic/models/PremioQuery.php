@@ -3,11 +3,11 @@
 namespace app\models;
 
 /**
- * This is the ActiveQuery class for [[Usuario]].
+ * This is the ActiveQuery class for [[Premio]].
  *
- * @see Usuario
+ * @see Premio
  */
-class UsuarioQuery extends \yii\db\ActiveQuery
+class PremioQuery extends \yii\db\ActiveQuery
 {
     /*public function active()
     {
@@ -16,7 +16,7 @@ class UsuarioQuery extends \yii\db\ActiveQuery
 
     /**
      * {@inheritdoc}
-     * @return Usuario[]|array
+     * @return Premio[]|array
      */
     public function all($db = null)
     {
@@ -25,7 +25,7 @@ class UsuarioQuery extends \yii\db\ActiveQuery
 
     /**
      * {@inheritdoc}
-     * @return Usuario|array|null
+     * @return Premio|array|null
      */
     public function one($db = null)
     {

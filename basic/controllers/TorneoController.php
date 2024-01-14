@@ -5,6 +5,7 @@ namespace app\controllers;
 use app\models\TorneoImagen;
 use app\models\Imagen;
 use app\models\Torneo;
+use app\models\Premio;
 use app\models\TorneoSearch;
 use yii\data\ActiveDataProvider;
 use yii\web\UploadedFile;
@@ -41,6 +42,7 @@ class TorneoController extends Controller
                             'actions' => ['index', 'view'],
                             'allow' => true,
                             //'roles' => ['sysadmin','admin', 'usuario', 'organizador', 'gestor'],
+                            
                         ],
                         [
                             'actions' => ['create', 'update', 'delete'],
@@ -120,9 +122,20 @@ class TorneoController extends Controller
             ],
         ]);
 
+        $premioProvider = new ArrayDataProvider([
+            'allModels' => $model->premios,
+            'sort' => [
+                'attributes' => ['id', 'nombre'],
+            ],
+            'pagination' => [
+                'pageSize' => 10,
+            ],
+        ]);
+
         return $this->render('view', [
             'model' => $model,
             'equipoProvider' => $equipoProvider,
+            'premioProvider' => $premioProvider,
         ]);
     }
     public function actionView_admin($id)
@@ -164,9 +177,19 @@ class TorneoController extends Controller
                         'pageSize' => 10,
                     ],
                 ]);
+                $premioProvider = new ArrayDataProvider([
+                    'allModels' => $model->premios,
+                    'sort' => [
+                        'attributes' => ['id', 'nombre'],
+                    ],
+                    'pagination' => [
+                        'pageSize' => 10,
+                    ],
+                ]);
                 return $this->render('view', [
                     'model' => $model,
                     'equipoProvider' => $equipoProvider,
+                    'premioProvider' => $premioProvider,
                 ]);;
             }
         }
@@ -236,7 +259,8 @@ class TorneoController extends Controller
         $t_i = $model->getTorneoImagens();
         $t_n = $model->getTorneoNormativas();
         $t_c = $model->getTorneoCategorias();
-
+        $t_p = $model->getPartidos();
+        $t_pre = $model->getPremios();
         if ($t_e !== null) {
             foreach ($t_e->all() as $entrada) {
                 $entrada->delete();
@@ -254,6 +278,22 @@ class TorneoController extends Controller
         }
         if ($t_c !== null) {
             foreach ($t_c->all() as $entrada) {
+                $entrada->delete();
+            }
+        }
+        if ($t_p !== null) {
+            foreach ($t_p->all() as $entrada) {
+                $p_e=$entrada->getPartidoEquipos();
+                if ($p_e !== null) {
+                    foreach ($p_e->all() as $entry) {
+                        $entry->delete();
+                    }
+                }
+                $entrada->delete();
+            }
+        }
+        if ($t_pre !== null) {
+            foreach ($t_pre->all() as $entrada) {
                 $entrada->delete();
             }
         }
