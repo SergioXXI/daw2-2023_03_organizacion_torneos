@@ -66,7 +66,68 @@ $this->params['breadcrumbs'][] = $this->title;
         <p>Este equipo no tiene participantes.</p>
     <?php endif; ?>
 
-    <h2>Torneos Activos</h2>
-    <?= Html::a('Unirse a un equipo', ['add-torneo', 'id' => $model->id], ['class' => 'btn btn-success']) ?>
-   
+    <?= Html::a('Unirse a un torneo', ['add-torneo', 'id' => $model->id], ['class' => 'btn btn-success']) ?>
+    
+    <h2>Torneos del equipo</h2>
+
+    <h3>Torneos con incripción abierta</h3>
+    <?php if ($tieneEnInscripcion):?>
+    <?= GridView::widget([
+        'dataProvider' => new \yii\data\ArrayDataProvider(['allModels' => $torneosEnInscripcion]),
+        'columns' => [
+            'id',
+            'nombre', 
+            'descripcion',
+            [
+                'class' => ActionColumn::className(),
+                    'template' => '{salir}',
+                    'buttons' => [
+                        'salir' => function ($url, $model, $key) {
+                            return Html::a('X', $url, [
+                                'title' => Yii::t('app', 'Salir'),
+                                'data-confirm' => Yii::t('app', '¿Estás seguro de desinscribirte de este torneo?'),
+                                'data-method' => 'post',
+                                'class' => 'btn btn-primary',
+                            ]);
+                        },
+                    ],
+                    'urlCreator' => function ($action, $model, $key, $index, $column) use ($equipo) {
+                        return Url::toRoute(['salir-torneo', 'torneoId' => $model['id'],'equipoId' => $equipo->id]);
+                    },
+            ]
+        ],
+    ]) ?>
+    <?php else: ?>
+        <p>Este equipo no tiene torneos en curso.</p>
+    <?php endif; ?>
+
+
+    <h3>Torneos en Curso</h3>
+    <?php if ($tieneTorneosCurso):?>
+    <?= GridView::widget([
+        'dataProvider' => new \yii\data\ArrayDataProvider(['allModels' => $torneosEnCurso]),
+        'columns' => [
+            'id',
+            'nombre', 
+            'descripcion',
+        ],
+    ]) ?>
+    <?php else: ?>
+        <p>Este equipo no tiene torneos en curso.</p>
+    <?php endif; ?>
+
+    
+    <h3>Torneos Finalizados</h3>
+    <?php if ($tieneTorneosFin): ?>
+        <?= GridView::widget([
+            'dataProvider' => new \yii\data\ArrayDataProvider(['allModels' => $torneosFinalizados]),
+            'columns' => [
+                'nombre', 
+                'descripcion'
+            ],
+        ]) ?>
+    <?php else: ?>
+        <p>Este equipo no tiene torneos finalizados.</p>
+    <?php endif; ?>
+
 </div>

@@ -90,6 +90,6 @@ $this->params['breadcrumbs'][] = $this->title;
     <?php else: ?>
         <p>Este participante no tiene equipo.</p>
     <?php endif; ?>
-    <?php echo Html::a('Volver', Yii::$app->request->referrer ?: ['site/index'], ['class' => 'btn btn-primary']);
+    <?php //echo Html::a('Volver', Yii::$app->request->referrer ?: ['site/index'], ['class' => 'btn btn-primary']);
     ?>
 </div>

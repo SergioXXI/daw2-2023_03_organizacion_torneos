@@ -11,6 +11,7 @@ use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\helpers\ArrayHelper;
+use app\controllers\ArrayDataProvider;
 
 
 /**
@@ -62,6 +63,53 @@ class EquipoController extends Controller
     {
 
         $model = $this->findModel($id);
+        $equipo = $this->findModel($id);
+
+        $clonesIds = Equipo::find()
+        ->select('id')
+        ->where(['nombre' => $model->nombre, 'descripcion' => $model->descripcion,'licencia' => $model->licencia,'categoria_id' => $model->categoria_id]) // Ajusta los criterios según sea necesario
+        ->column();
+
+        $fechaActual = new \DateTime();
+        $fechaActualString = $fechaActual->format('Y-m-d H:i:s'); // Convierte a formato 'YYYY-MM-DD HH:MM:SS'
+
+        // Encuentra los torneos finalizados
+        $torneosFinalizados = (new \yii\db\Query())
+            ->select('torneo.*')
+            ->from('torneo')
+            ->leftJoin('torneo_equipo', 'torneo.id = torneo_equipo.torneo_id')
+            ->where(['<', 'fecha_fin', $fechaActualString])
+            ->andWhere(['IN', 'torneo_equipo.equipo_id', $clonesIds])
+            ->all();
+
+        $tieneTorneosFin = count($torneosFinalizados) > 0;
+
+        // Encuentra los torneos en curso
+        $torneosEnCurso = (new \yii\db\Query())
+            ->select('torneo.*')
+            ->from('torneo')
+            ->leftJoin('torneo_equipo', 'torneo.id = torneo_equipo.torneo_id')
+            ->where(['AND',
+                ['<', 'fecha_limite', $fechaActualString], // La fecha límite ya pasó
+                ['OR', 
+                    ['>', 'fecha_fin', $fechaActualString], // La fecha fin no ha llegado
+                    ['fecha_fin' => null] // O la fecha fin es nula
+                ]
+            ])
+            ->andWhere(['IN', 'torneo_equipo.equipo_id', $clonesIds])
+            ->all();
+            
+        $tieneTorneosCurso = count($torneosEnCurso) > 0;
+
+        $torneosEnInscripcion = (new \yii\db\Query())
+            ->select('torneo.*')
+            ->from('torneo')
+            ->leftJoin('torneo_equipo', 'torneo.id = torneo_equipo.torneo_id')
+            ->where(['>', 'fecha_limite', $fechaActualString])
+            ->andWhere(['IN', 'torneo_equipo.equipo_id', $clonesIds])
+            ->all();
+
+        $tieneEnInscripcion = count($torneosEnInscripcion) > 0;
 
         // Obtener participantes del equipo
         $query = Participante::find()
@@ -75,8 +123,15 @@ class EquipoController extends Controller
 
         return $this->render('view', [
             'model' => $model,
+            'equipo' => $equipo,
             'dataProvider' => $dataProvider,
             'tieneParticipantes' => $tieneParticipantes,
+            'torneosFinalizados' => $torneosFinalizados,
+            'torneosEnCurso' => $torneosEnCurso,
+            'torneosEnInscripcion' => $torneosEnInscripcion,
+            'tieneTorneosFin' => $tieneTorneosFin,
+            'tieneTorneosCurso' => $tieneTorneosCurso,
+            'tieneEnInscripcion' => $tieneEnInscripcion,
         ]);
     }
 
@@ -241,6 +296,8 @@ class EquipoController extends Controller
     public function actionAddTorneo($id)
     {
         $model = $this->findModel($id);
+        $equipo = $this->findModel($id);
+        $torneoModel = new Torneo();
         // Encuentra todos los clones del equipo
         $clonesIds = Equipo::find()
             ->where(['nombre' => $model->nombre, 'descripcion' => $model->descripcion,'licencia' => $model->licencia,'categoria_id' => $model->categoria_id]) // Asegúrate de ajustar los criterios para identificar clones
@@ -252,26 +309,34 @@ class EquipoController extends Controller
         $fechaActualString = $fechaActual->format('Y-m-d H:i:s');
         // Encuentra los torneos disponibles falat mirar si el torneo esta lleno
         $torneosDisponibles = (new \yii\db\Query())
-            ->select('torneo.*')
+            ->select([
+                'torneo.*',
+                'equipos_en_torneo' => '(SELECT COUNT(*) FROM torneo_equipo WHERE torneo_equipo.torneo_id = torneo.id)'
+            ])
             ->from('torneo')
-            ->leftJoin('torneo_equipo', 'torneo.id = torneo_equipo.torneo_id')
             ->where(['>', 'torneo.fecha_limite', $fechaActualString])
-            ->andWhere(['NOT IN', 'torneo_equipo.torneo_id', 
+            ->andWhere(['NOT IN', 'torneo.id', 
                 (new \yii\db\Query())
                     ->select('torneo_id')
                     ->from('torneo_equipo')
                     ->where(['IN', 'equipo_id', $clonesIds])
             ])
+            ->having(['<', 'equipos_en_torneo', new \yii\db\Expression('torneo.participantes_max')])
+            ->groupBy('torneo.id')
             ->all();
-    
-        $listaTorneos = ArrayHelper::map($torneosDisponibles, 'id', 'nombre');
-
-         // esta funcion esta mal
-        if (\Yii::$app->request->isPost) {
-            $torneoId = \Yii::$app->request->post('TorneoId'); // Asegúrate de que este es el nombre del campo en tu formulario
+        
+        $listaTorneos = new \yii\data\ArrayDataProvider([
+            'allModels' => $torneosDisponibles,
+            // Otras configuraciones como 'sort' y 'pagination' si son necesarias
+        ]);
+        
+        if (\Yii::$app->request->isGet) {
+            $torneoId = \Yii::$app->request->get('torneoId');
+            print( $torneoId);
+            
             if ($torneoId) {
                 // Añade la relación equipo-torneo
-                \Yii::$app->db->createCommand()->insert('equipo_torneo', [
+                \Yii::$app->db->createCommand()->insert('torneo_equipo', [
                     'equipo_id' => $id,
                     'torneo_id' => $torneoId,
                 ])->execute();
@@ -283,8 +348,23 @@ class EquipoController extends Controller
 
         return $this->render('add-torneo', [
             'model' => $model,
+            'equipo' => $equipo,
+            'torneosDisponibles' => $torneosDisponibles,
+            'clonesIds' => $clonesIds,
             'listaTorneos' => $listaTorneos,
+            'torneoModel' => $torneoModel,
         ]);
+    }
+
+    public function actionSalirTorneo($torneoId, $equipoId)
+    {
+        // Aquí va la lógica para eliminar la relación entre el equipo y el participante
+        \Yii::$app->db->createCommand()->delete('torneo_equipo', [
+            'torneo_id' => $torneoId,
+            'equipo_id' => $equipoId,
+        ])->execute();
+
+        return $this->redirect(['view', 'id' => $equipoId]);
     }
 
     /**
@@ -303,7 +383,7 @@ class EquipoController extends Controller
         // Verificar la inscripción en torneos y su estado
         $puedeEliminar = true;
         $fechaActual = new \DateTime();
-        $fechaActualString = $fechaActual->format('Y-m-d H:i:s'); // Convierte a formato 'YYYY-MM-DD HH:MM:SS'        print($fechaActual);
+        $fechaActualString = $fechaActual->format('Y-m-d H:i:s'); // Convierte a formato 'YYYY-MM-DD HH:MM:SS'     
         foreach ($equipo->torneos as $torneo) {
             // Comprobar si fecha_fin es nula o si el timestamp actual es menor que fecha_fin
             if ($torneo->fecha_fin === null || $fechaActualString < $torneo->fecha_fin) {
