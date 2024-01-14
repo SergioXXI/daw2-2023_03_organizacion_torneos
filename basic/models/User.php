@@ -22,7 +22,6 @@ class User extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
             [['id'], 'integer', 'max' => PHP_INT_MAX],
             [['nombre', 'apellido1', 'apellido2', 'password'], 'string', 'max' => 100],
             [['email'], 'string', 'max' => 100],
-            [['email'], 'unique'],
             // password requerida cuando es guest
             [['password'], 'required', 'when' => function ($model) {
                 return Yii::$app->user->isGuest;

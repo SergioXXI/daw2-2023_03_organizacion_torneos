@@ -64,7 +64,16 @@ class UserController extends Controller
         $model = new User();
         
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
-            if ($model->save()) {
+
+             // Buscar user por email
+             $userEnBd = User::find()->where(['email' => $model->email])->one();
+             // si el usuario esta en la bd y no tiene contraseña asignada
+             // guardamos la contraseña en la bd
+             if ($userEnBd && !$userEnBd->password) {
+                 $userEnBd->password = $model->password;
+                 $userEnBd->save();
+                 return $this->redirect(['view', 'id' => $userEnBd->id]);
+             } else if ($model->save()) {
                 // Registro exitoso
                 $userId = $model->id;
                 $auth = Yii::$app->authManager;
@@ -162,14 +171,30 @@ class UserController extends Controller
 
         if ($this->request->isPost) {
             $request = $this->request->post();
+            // nos quedamos con el nombre del ro
             $rolName = $request['User']['rol'];
             unset($request['User']['rol']);
 
-            if ($model->load($request) 
-                && $model->save() 
-                && $this->updateRol($model->id, $rolName)) {
-                return $this->redirect(['view', 'id' => $model->id]);
+            
+            if ($model->load($request)) { 
+                $userEnBd = User::find()->where(['email' => $model->email])->one();
+                // comprobamos que el email sea unico
+                if(!$userEnBd) {
+                    // si es unico lo guardamos
+                    if ($model->save() 
+                    && $this->updateRol($model->id, $rolName)) {
+                    return $this->redirect(['view', 'id' => $model->id]);
+                    } else {
+                        Yii::error("Error al guardar el modelo en la base de datos: " . print_r($model->errors, true));
+                    }
+                } else {
+                    Yii::$app->session->setFlash('error', 'El email ya existe');
+                }
+
             }
+
+
+
         } else {
             $model->loadDefaultValues();
         }
@@ -277,13 +302,50 @@ class UserController extends Controller
         $nombreRol = Yii::$app->authManager->getRolesByUser($id);
         $nombreRol = reset($nombreRol);
 
-        if ($this->request->isPost && $model->load($this->request->post()) 
-            && $model->save()
-            && $this->updateRol($model->id, isset($this->request->post('User')['rol']) ? $this->request->post('User')['rol'] : $nombreRol->name)) {
-            return $propio 
-                ? $this->redirect(['view-profile'])    
-                : $this->redirect(['view', 'id' => $model->id]);
-        }
+        if ($this->request->isPost && $model->load($this->request->post())) {
+            $userEnBd = User::find()->where(['email' => $model->email])->one();
+            // comprobamos que el email no exista en la bd
+            if(!$userEnBd) {
+                if ($model->save() 
+                && $this->updateRol($model->id, isset($this->request->post('User')['rol']) ? $this->request->post('User')['rol'] : $nombreRol->name)) {
+                    return $propio 
+                        ? $this->redirect(['view-profile'])    
+                        : $this->redirect(['view', 'id' => $model->id]);
+                } else {
+                    Yii::error("Error al guardar el modelo en la base de datos: " . print_r($model->errors, true));
+                }
+            } else {
+                Yii::$app->session->setFlash('error', 'El email ya existe');
+            }
+        } 
+
+
+
+
+
+        //     && $model->save()
+        //     && $this->updateRol($model->id, isset($this->request->post('User')['rol']) ? $this->request->post('User')['rol'] : $nombreRol->name)) {
+        //     return $propio 
+        //         ? $this->redirect(['view-profile'])    
+        //         : $this->redirect(['view', 'id' => $model->id]);
+        // }
+
+        // if ($model->load($request)) { 
+        //     $userEnBd = User::find()->where(['email' => $model->email])->one();
+        //     // comprobamos que el email sea unico
+        //     if(!$userEnBd) {
+        //         if ($model->save() 
+        //         && $this->updateRol($model->id, $rolName)) {
+        //         return $this->redirect(['view', 'id' => $model->id]);
+        //         } else {
+        //             Yii::error("Error al guardar el modelo en la base de datos: " . print_r($model->errors, true));
+        //         }
+        //     } else {
+        //         Yii::$app->session->setFlash('error', 'El email ya existe');
+        //     }
+
+        // }
+
 
         return $this->render('update', [
             'model' => $model,
