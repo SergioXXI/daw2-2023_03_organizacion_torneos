@@ -1,68 +1,68 @@
 <?php
-use app\models\Torneo;
-use yii\web\View;
+use app\controllers\CalendarioController;
 use yii\helpers\Html;
-use yii\helpers\Url;
+use yii\widgets\ActiveForm;
 use app\widgets\EventoTarjetaWidget;
 use yii\bootstrap5\LinkPager;
 
 
-$this->registerJsFile('https://cdn.jsdelivr.net/npm/fullcalendar@6.1.10/index.global.min.js', ['position' => View::POS_HEAD]);
-$this->registerCssFile("/torneos/basic/web/css/calendar.css");
+/* $form = ActiveForm::begin([
+    'action' => ['index'],
+    'method' => 'get',
+]);
 
+echo Html::input('text', 'busquedaGlobal', Yii::$app->request->get('busquedaGlobal'), ['class' => 'form-control', 'placeholder' => 'Search Torneo events']);
 
+if (isset($torneoSearch->errors['busquedaGlobal'])) {
+    // Display validation errors
+    echo '<div class="alert alert-danger">' . implode('<br>', $torneoSearch->errors['busquedaGlobal']) . '</div>';
+}
 
-$num_eventos = $eventosProvider->getCount();
-$num_total_eventos = $eventosProvider->getTotalCount();
+echo Html::submitButton('Search', ['class' => 'btn btn-primary']);
+ActiveForm::end();
 
+// ... your existing logic for displaying events
+
+ */
 ?>
 
+<?= $this->render('_searchbar',  ['torneoSearch' => $torneoSearch]); ?>
+
+
 <div class="d-flex justify-content-between">
-	<h2 class="my-0 h2">Proximos eventos</h2>
-	<?= Html::a('Calendario', ['calendario'], ['class' => 'btn btn-success fw-bold shadow-sm me-2',]) ?>
+    <h2 class="mb-0 h2">Proximos eventos</h2>
+    <?= Html::a('Ver Calendario', ['calendario'], ['class' => 'text-center btn btn-success fw-bold shadow-sm me-4']) ?>
 </div>
 
-<hr>
-
-<?= $this->render('_searchbar',  ['model' => $searchModel]); ?>
-<div class="">
-	<div class="summary">Mostrando <b> <?= Html::encode($num_eventos) ?> </b> de <b> <?= Html::encode($num_total_eventos) ?> </b> elementos.</div>	
-	
-</div>
-
+<div class="summary mt-2 ms-3">Mostrando <b> <?= Html::encode($eventosProvider->getCount()) ?> </b> de <b> <?= Html::encode($eventosProvider->getTotalCount()) ?> </b> elementos.</div>
+<hr class="mt-1">
 
 <?php 
 
-//GESTIÓN DE EVENTOS PARA SER MOSTRADOS EN EL APARTADO DE PROXIMOS EVENTOS
-$i = 0;
+$i=0;
+$num_eventos = $eventosProvider->getCount();
 
-foreach ($eventosProvider->getModels() as $evento) {
+foreach($eventosProvider->models as $evento) {
+    echo EventoTarjetaWidget::widget([
+        'datos' => [
+            'titulo' => $evento['nombre'], 
+            'fecha' => date('Y-m-d', strtotime($evento['fecha'])),
+            'disciplina' => $evento['disciplina'],
+            'clase' => $evento['clase'],
+            'tipo' => $evento['tipo'],
+            'id' => $evento['id'],
+            'jornada' => isset($evento['jornada']) ? $evento['jornada'] : '',
+        ],
+        'resaltar' => false,
+        'tarjetaEvento' => 'ampliada',
+    ]);
 
-
-		//Generar una tarjeta de evento de tipo reserva privada
-	if($evento instanceof Torneo) {
-		echo EventoTarjetaWidget::widget([
-			'titulo' => $evento->nombre,
-			'fecha' => date('Y-m-d',strtotime($evento->fecha_inicio)),
-			'resaltar' => false,
-		]);
-	} else {
-		$torneo = $evento->torneo;
-		echo EventoTarjetaWidget::widget([
-			'titulo' => $torneo->nombre . ' - Jornada ' . $evento->jornada,
-			'fecha' => date('Y-m-d',strtotime($evento->fecha)),
-			'resaltar' => false,
-		]);
-	}
-
-	$i++;
+    $i++;
 	//No imprimir el <hr> en el ultimo elemento
 	if($i !== $num_eventos)
 		echo '<hr>';
+}
 
-	}
-
-	
 
 //PAGINADOR
 echo LinkPager::widget([
@@ -72,3 +72,6 @@ echo LinkPager::widget([
         'class' => yii\bootstrap5\LinkPager::class
     ]
 ]);
+
+?>
+

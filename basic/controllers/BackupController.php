@@ -70,7 +70,9 @@ class BackupController extends Controller
             $dbname=explode("=",$database['1'])[1];
             $mysql = \Yii::$app->params['rutaMysqldump'];
 
-            $command = "\"{$mysql}\" -u{$db->username} -B {$dbname} > \"{$rutaFicheroBackup}\"";
+            $pass = empty($db->password) ? '' : '-p{$db->password}';
+
+            $command = "\"{$mysql}\" -u{$db->username} {$pass} --add-drop-database --databases {$dbname} > \"{$rutaFicheroBackup}\"";
 
             exec($command, $output, $returnVar);
 

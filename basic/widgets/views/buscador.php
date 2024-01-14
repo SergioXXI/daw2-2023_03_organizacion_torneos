@@ -51,6 +51,9 @@ foreach($campos as $campo) {
                                             'class' => 'form-select',
                                         ]);
                                         break;
+                                    case 'number':
+                                        echo $form->field($model, $campo['atributo'], ['template' => '{input}'])->textInput(['placeholder' => $campo['placeholder'], 'type' => 'number']);
+                                        break;
                                     default:
                                         break;
                                 }

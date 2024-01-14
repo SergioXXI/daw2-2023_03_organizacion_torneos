@@ -11,6 +11,7 @@ use app\models\Torneo;
  */
 class TorneoSearch extends Torneo
 {
+    public $jornada;
     /**
      * {@inheritdoc}
      */
@@ -18,7 +19,7 @@ class TorneoSearch extends Torneo
     {
         return [
             [['id', 'participantes_max', 'disciplina_id', 'tipo_torneo_id', 'clase_id'], 'integer'],
-            [['nombre', 'descripcion', 'fecha_inicio', 'fecha_limite', 'fecha_fin'], 'safe'],
+            [['nombre', 'descripcion', 'fecha_inicio', 'fecha_limite', 'fecha_fin', 'jornada'], 'safe'],
         ];
     }
 
@@ -71,6 +72,38 @@ class TorneoSearch extends Torneo
         $query->andFilterWhere(['like', 'nombre', $this->nombre])
             ->andFilterWhere(['like', 'descripcion', $this->descripcion]);
 
+        return $dataProvider;
+    }
+
+    public function searchEventos($params)
+    {
+        $query = Torneo::find();
+
+        $dataProvider = new ActiveDataProvider([
+            'query' => $query,
+        ]);
+
+        $this->load($params);
+
+        if (!$this->validate()) {
+            return $dataProvider;
+        }
+
+        $query->joinWith(['partidos']);
+        
+        $query->andFilterWhere(['like','nombre',$this->nombre]);
+        $query->andFilterWhere(['like','clase_id',$this->clase_id]);
+        $query->andFilterWhere(['like','disciplina_id',$this->disciplina_id]);
+        $query->andFilterWhere(['like','partido.jornada',$this->jornada]);
+        
+        $query->andWhere([
+            'or',
+            ['>=', 'fecha_inicio', date('Y-m-d H:i:s')],
+            ['>=', 'fecha_fin', date('Y-m-d H:i:s')],
+            ['>=', 'fecha_limite', date('Y-m-d H:i:s')],
+            ['>=', 'partido.fecha', date('Y-m-d')],
+        ]);
+        
         return $dataProvider;
     }
 }

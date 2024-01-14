@@ -81,16 +81,20 @@ foreach ($reservasProvider->getModels() as $reserva) {
 		//Generar una tarjeta de evento de tipo partido
 		echo EventoTarjetaWidget::widget([
 			'id' => $partido->id,
-			'titulo' => $torneo->nombre . ' - Jornada ' . $partido->jornada,
-			'fecha' => $reserva->fecha,
+			'datos' => [
+				'titulo' => $torneo->nombre . ' - Jornada ' . $partido->jornada,
+				'fecha' => $reserva->fecha,
+			],
 			'resaltar' => false,
 		]);
 	}
 	else {
 		//Generar una tarjeta de evento de tipo reserva privada
 		echo EventoTarjetaWidget::widget([
-			'titulo' => 'Reserva para uso particular',
-			'fecha' => $reserva->fecha,
+			'datos' => [
+				'titulo' => 'Reserva para uso particular',
+				'fecha' => $reserva->fecha,
+			],
 			'resaltar' => false,
 			'botonInfo' => false,
 		]);

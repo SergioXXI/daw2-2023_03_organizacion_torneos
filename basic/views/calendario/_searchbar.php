@@ -2,6 +2,7 @@
 
 use yii\widgets\ActiveForm;
 use app\models\Disciplina;
+use app\models\Clase;
 use app\widgets\BuscadorWidget;
 
 ?>
@@ -15,15 +16,17 @@ $form = ActiveForm::begin([
 ?>
 
 
-
 <?= BuscadorWidget::widget([
     'form' => $form,
-    'model' => $model,
+    'model' => $torneoSearch,
     'atributoPredeterminado' => 'nombre',
     'campos' => [
-        ['atributo' => 'participantes_max', 'tipo' => 'text', 'placeholder' => 'Introduzca el número máximo de participantes'],
+        ['atributo' => 'disciplina_id', 'tipo' => 'dropdown', 'opciones' => Disciplina::getListadoDisciplinasPorId() , 'placeholder' => 'Seleccione una disciplina'],
+        ['atributo' => 'clase_id', 'tipo' => 'dropdown', 'opciones' => Clase::getListadoClasePorId() , 'placeholder' => 'Seleccione una clase'],
+        ['atributo' => 'jornada', 'tipo' => 'number', 'placeholder' => 'Introduzca el número de jornada'],
     ],
 ]); ?>
+
 
 
 

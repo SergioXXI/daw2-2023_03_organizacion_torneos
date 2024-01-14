@@ -3,6 +3,7 @@
 namespace app\models;
 
 use Yii;
+use yii\helpers\ArrayHelper;
 
 /**
  * This is the model class for table "clase".
@@ -79,5 +80,10 @@ class Clase extends \yii\db\ActiveRecord
     public static function find()
     {
         return new ClaseQuery(get_called_class());
+    }
+
+    public static function getListadoClasePorId()
+    {
+        return ArrayHelper::map(Clase::find()->all(), 'id', 'titulo');
     }
 }

@@ -6,17 +6,17 @@ use yii\base\Widget;
 class EventoTarjetaWidget extends Widget
 {
     public $id = null;
-    public $titulo;
-    public $fecha;
+    public $datos = [];
     public $botonInfo = true;
     public $resaltar = false;
+    public $tarjetaEvento = 'normal';
 
     public function run()
     {
-        return $this->render('tarjeta-evento', [
+        $vista = ($this->tarjetaEvento === 'normal') ? 'tarjeta-evento' : 'tarjeta-evento_ampliada';
+        return $this->render($vista, [
             'id' => $this->id,
-            'titulo' => $this->titulo,
-            'fecha' => $this->fecha,
+            'datos' => $this->datos,
             'botonInfo' => $this->botonInfo,
             'resaltar' => $this->resaltar,
         ]);
