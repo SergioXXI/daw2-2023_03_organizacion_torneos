@@ -34,7 +34,21 @@ class ParticipanteController extends Controller
                 'access' => [
                     'class' => \yii\filters\AccessControl::class,
                     'rules' => [
-                    
+                        [
+                            'actions' => ['index'],
+                            'allow' => true,
+                            'roles' => ['sysadmin','admin', 'gestor'],
+                        ],
+                        [
+                            'actions' => ['update','view'],
+                            'allow' => true,
+                            'roles' => ['sysadmin','admin', 'gestor', 'usuario'],
+                        ],
+                        [
+                            'actions' => ['create', 'update', 'delete'],
+                            'allow' => true,
+                            'roles' => ['sysadmin','admin','gestor'],
+                        ],
                     ],
                 ],
             ]

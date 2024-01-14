@@ -35,7 +35,7 @@ class Usuario extends \yii\db\ActiveRecord
     {
         return [
             [['nombre', 'apellido1', 'apellido2', 'email', 'password'], 'required'],
-            [['nombre', 'apellido1', 'apellido2', 'email', 'rol', 'password'], 'string', 'max' => 100],
+            [['nombre', 'apellido1', 'apellido2', 'email', 'password'], 'string', 'max' => 100],
             [['email'], 'unique'],
         ];
     }
@@ -51,7 +51,6 @@ class Usuario extends \yii\db\ActiveRecord
             'apellido1' => 'Apellido1',
             'apellido2' => 'Apellido2',
             'email' => 'Email',
-            'rol' => 'Rol',
             'password' => 'Password',
         ];
     }
