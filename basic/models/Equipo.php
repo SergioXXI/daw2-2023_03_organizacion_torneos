@@ -5,7 +5,7 @@ namespace app\models;
 use Yii;
 
 /**
- * This is the model class for table "equipo".
+ * This is the model class for table "{{%equipo}}".
  *
  * @property int $id
  * @property string $nombre
@@ -29,7 +29,7 @@ class Equipo extends \yii\db\ActiveRecord
      */
     public static function tableName()
     {
-        return 'equipo';
+        return '{{%equipo}}';
     }
 
     /**
@@ -43,9 +43,8 @@ class Equipo extends \yii\db\ActiveRecord
             [['nombre'], 'string', 'max' => 100],
             [['descripcion'], 'string', 'max' => 10000],
             [['licencia'], 'string', 'max' => 250],
-            [['nombre'], 'unique'],
-            [['licencia'], 'unique'],
             [['categoria_id'], 'exist', 'skipOnError' => true, 'targetClass' => Categoria::class, 'targetAttribute' => ['categoria_id' => 'id']],
+            [['numParticipantes'], 'integer'],
         ];
     }
 
@@ -59,7 +58,8 @@ class Equipo extends \yii\db\ActiveRecord
             'nombre' => Yii::t('app', 'Nombre'),
             'descripcion' => Yii::t('app', 'Descripcion'),
             'licencia' => Yii::t('app', 'Licencia'),
-            'categoria_id' => Yii::t('app', 'Categoria ID'),
+            'categoria_id' => Yii::t('app', 'Categoria'),
+            'numParticipantes' => Yii::t('app', 'Numero Participantes'),
         ];
     }
 
@@ -90,7 +90,13 @@ class Equipo extends \yii\db\ActiveRecord
      */
     public function getParticipantes()
     {
-        return $this->hasMany(Participante::class, ['id' => 'participante_id'])->viaTable('equipo_participante', ['equipo_id' => 'id']);
+        return $this->hasMany(Participante::class, ['id' => 'participante_id'])->viaTable('{{%equipo_participante}}', ['equipo_id' => 'id']);
+    }
+
+    //Función para contar cuantos participantes tiene el equipo
+    public function getNumParticipantes()
+    {
+        return $this->getParticipantes()->count();
     }
 
     /**
@@ -110,7 +116,7 @@ class Equipo extends \yii\db\ActiveRecord
      */
     public function getPartidos()
     {
-        return $this->hasMany(Partido::class, ['id' => 'partido_id'])->viaTable('partido_equipo', ['equipo_id' => 'id']);
+        return $this->hasMany(Partido::class, ['id' => 'partido_id'])->viaTable('{{%partido_equipo}}', ['equipo_id' => 'id']);
     }
 
     /**
@@ -140,7 +146,7 @@ class Equipo extends \yii\db\ActiveRecord
      */
     public function getTorneos()
     {
-        return $this->hasMany(Torneo::class, ['id' => 'torneo_id'])->viaTable('torneo_equipo', ['equipo_id' => 'id']);
+        return $this->hasMany(Torneo::class, ['id' => 'torneo_id'])->viaTable('{{%torneo_equipo}}', ['equipo_id' => 'id']);
     }
 
     /**
