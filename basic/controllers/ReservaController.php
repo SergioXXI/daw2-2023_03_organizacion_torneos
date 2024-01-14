@@ -2,7 +2,9 @@
 
 namespace app\controllers;
 
+use Yii;
 use app\models\Reserva;
+use app\models\ReservaPista;
 use app\models\Material;
 use app\models\ReservaSearch;
 use yii\web\Controller;
@@ -103,6 +105,25 @@ class ReservaController extends Controller
     public function actionCreate()
     {
         $model = new Reserva();
+        $reserva_pista = new ReservaPista();
+
+        $sessionId = Yii::$app->user->id;
+        
+        $pista_id=$this->request->get('pista_id');
+        $fecha=$this->request->get('fecha');
+        
+        if($sessionId!=null && $pista_id!=null && $fecha!=null)
+        {
+            $model->fecha=$fecha;
+            $model->usuario_id=$sessionId;
+            $model->save();
+
+            $reserva_pista->reserva_id=$model->id;
+            $reserva_pista->pista_id=$pista_id;
+            $reserva_pista->save();
+            return $this->redirect(['view', 'id' => $model->id]);
+            
+        }
 
         if ($this->request->isPost) {
             if ($model->load($this->request->post()) && $model->save()) {
@@ -112,9 +133,7 @@ class ReservaController extends Controller
             $model->loadDefaultValues();
         }
 
-        return $this->render('create', [
-            'model' => $model,
-        ]);
+        return $this->redirect(['pista/pistas', 'id' => $model->id]);
     }
 
     /**
@@ -127,12 +146,13 @@ class ReservaController extends Controller
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
-
+        
+        
         if ($this->request->isPost && $model->load($this->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
         }
 
-        return $this->render('update', [
+        return $this->render('pista/pistas', [
             'model' => $model,
         ]);
     }
