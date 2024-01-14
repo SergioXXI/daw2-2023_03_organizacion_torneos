@@ -10,6 +10,8 @@ use yii\filters\VerbFilter;
 use yii\db\IntegrityException;
 use yii\data\ArrayDataProvider;
 
+use Yii;
+
 /**
  * DireccionController implements the CRUD actions for Direccion model.
  */
@@ -77,7 +79,7 @@ class DireccionController extends Controller
                 'attributes' => ['id', 'nombre'],
             ],
             'pagination' => [
-                'pageSize' => \Yii::$app->params['limiteGridView-View'],
+                'pageSize' => Yii::$app->params['limiteGridView-View'],
             ],
         ]);
 
@@ -141,7 +143,7 @@ class DireccionController extends Controller
         try{
             $this->findModel($id)->delete();
         } catch (IntegrityException $e) {
-            throw new \yii\web\HttpException(500,"No se puede eliminar este registro ya que está siendo utilizado por otra tabla.", 405);
+            throw new yii\web\HttpException(500,"No se puede eliminar este registro ya que está siendo utilizado por otra tabla.", 405);
         }
 
         return $this->redirect(['index']);

@@ -10,6 +10,7 @@ use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\db\IntegrityException;
 use yii\data\ArrayDataProvider;
+use Yii;
 
 /**
  * PistaController implements the CRUD actions for Pista model.
@@ -65,7 +66,7 @@ class PistaController extends Controller
         $searchModel = new PistaSearch();
         $dataProvider = $searchModel->search($this->request->queryParams);
 
-        $dataProvider->pagination->pageSize = \Yii::$app->params['limitePistas'];
+        $dataProvider->pagination->pageSize = Yii::$app->params['limitePistas'];
 
         /*echo '<pre>';
         print_r($dataProvider->getModels());*/
@@ -125,7 +126,7 @@ class PistaController extends Controller
                 'attributes' => ['id', 'fecha'],
             ],
             'pagination' => [
-                'pageSize' => \Yii::$app->params['limiteGridView-View'],
+                'pageSize' => Yii::$app->params['limiteGridView-View'],
             ],
         ]);
 
@@ -152,7 +153,7 @@ class PistaController extends Controller
                 ],
             ],
             'pagination' => [
-                'pageSize' => \Yii::$app->params['limiteEventos'],
+                'pageSize' => Yii::$app->params['limiteEventos'],
             ],
         ]);
 
@@ -179,7 +180,7 @@ class PistaController extends Controller
             //Primero se intenta crear la dirección
             //Para asegurar la integridad se van a realizar los guardados en formato transaccion
             //ya que se están generando dos modelos, el direccion y el pista
-            $transaction = \Yii::$app->db->beginTransaction();
+            $transaction = Yii::$app->db->beginTransaction();
             
             if($model_direccion->load($this->request->post())) {
 
@@ -194,7 +195,7 @@ class PistaController extends Controller
                     if($model_direccion->save()) {
                         //Si se genera correctamente la entrada direccion se recoge la id dejada por la base de datos
                         //Esta id será la id a guardar en la tabla Pista columna direccion_id
-                        $model->direccion_id = \Yii::$app->db->getLastInsertID();
+                        $model->direccion_id = Yii::$app->db->getLastInsertID();
                     }
                 }
 
@@ -232,7 +233,7 @@ class PistaController extends Controller
             
             //Para asegurar la integridad se van a realizar los guardados en formato transaccion
             //ya que se están generando dos modelos, el direccion y el pista
-            $transaction = \Yii::$app->db->beginTransaction();
+            $transaction = Yii::$app->db->beginTransaction();
             
             if($model_direccion->load($this->request->post())) {
 
@@ -249,7 +250,7 @@ class PistaController extends Controller
                     if($model_direccion->save()) {
                         //Si se genera correctamente la entrada direccion se recoge la id dejada por la base de datos
                         //Esta id será la id a guardar en la tabla Pista columna direccion_id
-                        $model->direccion_id = \Yii::$app->db->getLastInsertID();
+                        $model->direccion_id = Yii::$app->db->getLastInsertID();
                     }
                 }
 
@@ -294,7 +295,7 @@ class PistaController extends Controller
         $reservas_pista = $model->reservaPista;
         //Antes de comenzar el borrado se inicia una transaccion para asegurarse
         //de que el borrado se realiza completamente o no se realiza nada en caso de error
-        $transaction = \Yii::$app->db->beginTransaction();
+        $transaction = Yii::$app->db->beginTransaction();
         if(empty($reservas_pista)) $model->delete(); //Supuesto 1
         else { //Supuesto 2
             foreach($reservas_pista as $reserva_pista) {
@@ -328,6 +329,6 @@ class PistaController extends Controller
             return $model;
         }
 
-        throw new NotFoundHttpException(\Yii::t('app', 'The requested page does not exist.'));
+        throw new NotFoundHttpException(Yii::t('app', 'The requested page does not exist.'));
     }
 }

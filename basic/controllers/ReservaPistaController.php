@@ -8,6 +8,8 @@ use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
+use Yii;
+
 /**
  * ReservaPistaController implements the CRUD actions for ReservaPista model.
  */

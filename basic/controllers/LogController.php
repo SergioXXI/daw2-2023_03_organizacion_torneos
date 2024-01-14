@@ -11,6 +11,8 @@ use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\web\Request;
 
+use Yii;
+
 /**
  * LogController implements the CRUD actions for Log model.
  */
@@ -63,7 +65,7 @@ class LogController extends Controller
             $dataProvider->pagination = false;
         }
         else {
-            $dataProvider->pagination->pageSize = \Yii::$app->params['limiteLog'];
+            $dataProvider->pagination->pageSize = Yii::$app->params['limiteLog'];
             $paginar = true;
         }
 
@@ -110,7 +112,7 @@ class LogController extends Controller
         //este es desvinculado, haciendo que se elimine al ser temporal, de esta forma se tiene un borrado
         //controlado gracias al segmento finally
         try {
-            \Yii::$app->response->sendFile($fichero, 'logs.log')->send();
+            Yii::$app->response->sendFile($fichero, 'logs.log')->send();
         } finally {
             unlink($fichero);
         }
@@ -162,7 +164,7 @@ class LogController extends Controller
     //Función que determina la acción que se ha pulsado en el formulario de la vista index
     public function actionBotonGestor()
     {
-        $accion = \Yii::$app->request->post('accion');
+        $accion = Yii::$app->request->post('accion');
 
         switch ($accion) {
             case 'BtnEliminarSeleccionados':
@@ -200,11 +202,11 @@ class LogController extends Controller
     {
         //Como se van a borrar varias entradas una por una se va a realizar en formato transacción
         //de esta forma se asegura que solo se actualiza la db si todas las entradas se han borrado correctamente
-        $transaction = \Yii::$app->db->beginTransaction();
+        $transaction = Yii::$app->db->beginTransaction();
 
         
         if ($this->request->isPost) {
-            if (empty($this->request->post('selection'))) \Yii::$app->session->setFlash('error', 'No se ha seleccionado ningun elemento para el borrado.');
+            if (empty($this->request->post('selection'))) Yii::$app->session->setFlash('error', 'No se ha seleccionado ningun elemento para el borrado.');
             else
                 foreach($this->request->post('selection') as $id)
                     $this->findModel($id)->delete();
@@ -220,7 +222,7 @@ class LogController extends Controller
     {
         //Como se van a borrar varias entradas una por una se va a realizar en formato transacción
         //de esta forma se asegura que solo se actualiza la db si todas las entradas se han borrado correctamente
-        $transaction = \Yii::$app->db->beginTransaction();
+        $transaction = Yii::$app->db->beginTransaction();
 
         $searchModel = new LogSearch();
         $dataProvider = $searchModel->search($this->request->post()); //Los filtros llegan por post
@@ -259,19 +261,19 @@ class LogController extends Controller
             return $model;
         }
 
-        throw new NotFoundHttpException(\Yii::t('app', 'The requested page does not exist.'));
+        throw new NotFoundHttpException(Yii::t('app', 'The requested page does not exist.'));
     }
 
     /* Codigo fuente de como funciona la clase Pagination adaptado a el caso particular de activar y desactivar paginación */
     public static function desactivarPag($activar = true)
     {
-        $request = \Yii::$app->getRequest();
+        $request = Yii::$app->getRequest();
         $params = $request instanceof Request ? $request->getQueryParams() : [];
 
         $params['pagination'] = $activar;
 
-        $params[0] = \Yii::$app->controller->getRoute();
-        $urlManager = \Yii::$app->getUrlManager();
+        $params[0] = Yii::$app->controller->getRoute();
+        $urlManager = Yii::$app->getUrlManager();
 
         return $urlManager->createUrl($params);
     }
