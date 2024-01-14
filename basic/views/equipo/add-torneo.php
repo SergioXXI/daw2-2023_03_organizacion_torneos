@@ -37,7 +37,5 @@ $this->params['breadcrumbs'][] = $this->title;
                 ],
             ],
         ],
-    ]); 
-    echo Html::a('Volver', Yii::$app->request->referrer ?: ['site/index'], ['class' => 'btn btn-primary']);
-    ?>
+    ]) ?>
 </div>

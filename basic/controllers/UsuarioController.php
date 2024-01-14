@@ -2,18 +2,16 @@
 
 namespace app\controllers;
 
-use app\models\Disciplina;
-use app\models\Pista;
-use app\models\Reserva;
-use app\models\DisciplinaSearch;
+use app\models\Usuario;
+use app\models\UsuarioSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
 /**
- * DisciplinaController implements the CRUD actions for Disciplina model.
+ * UsuarioController implements the CRUD actions for Usuario model.
  */
-class DisciplinaController extends Controller
+class UsuarioController extends Controller
 {
     /**
      * @inheritDoc
@@ -29,33 +27,18 @@ class DisciplinaController extends Controller
                         'delete' => ['POST'],
                     ],
                 ],
-                'access' => [
-                    'class' => \yii\filters\AccessControl::class,
-                    'rules' => [
-                        [
-                            'actions' => ['index', 'view'],
-                            'allow' => true,
-                            'roles' => ['sysadmin','admin', 'participante', 'organizador', 'gestor'],
-                        ],
-                        [
-                            'actions' => ['create', 'update', 'delete'],
-                            'allow' => true,
-                            'roles' => ['sysadmin','admin'],
-                        ],
-                    ],
-                ],
             ]
         );
     }
 
     /**
-     * Lists all Disciplina models.
+     * Lists all Usuario models.
      *
      * @return string
      */
     public function actionIndex()
     {
-        $searchModel = new DisciplinaSearch();
+        $searchModel = new UsuarioSearch();
         $dataProvider = $searchModel->search($this->request->queryParams);
 
         return $this->render('index', [
@@ -65,7 +48,7 @@ class DisciplinaController extends Controller
     }
 
     /**
-     * Displays a single Disciplina model.
+     * Displays a single Usuario model.
      * @param int $id ID
      * @return string
      * @throws NotFoundHttpException if the model cannot be found
@@ -78,13 +61,13 @@ class DisciplinaController extends Controller
     }
 
     /**
-     * Creates a new Disciplina model.
+     * Creates a new Usuario model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return string|\yii\web\Response
      */
     public function actionCreate()
     {
-        $model = new Disciplina();
+        $model = new Usuario();
 
         if ($this->request->isPost) {
             if ($model->load($this->request->post()) && $model->save()) {
@@ -100,7 +83,7 @@ class DisciplinaController extends Controller
     }
 
     /**
-     * Updates an existing Disciplina model.
+     * Updates an existing Usuario model.
      * If update is successful, the browser will be redirected to the 'view' page.
      * @param int $id ID
      * @return string|\yii\web\Response
@@ -120,7 +103,7 @@ class DisciplinaController extends Controller
     }
 
     /**
-     * Deletes an existing Disciplina model.
+     * Deletes an existing Usuario model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
      * @param int $id ID
      * @return \yii\web\Response
@@ -128,20 +111,21 @@ class DisciplinaController extends Controller
      */
     public function actionDelete($id)
     {
-        $this->findModel($id)->delte();
+        $this->findModel($id)->delete();
+
         return $this->redirect(['index']);
     }
 
     /**
-     * Finds the Disciplina model based on its primary key value.
+     * Finds the Usuario model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
      * @param int $id ID
-     * @return Disciplina the loaded model
+     * @return Usuario the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id)
     {
-        if (($model = Disciplina::findOne(['id' => $id])) !== null) {
+        if (($model = Usuario::findOne(['id' => $id])) !== null) {
             return $model;
         }
 
