@@ -35,7 +35,7 @@ class UserController extends Controller
                         [
                             'allow' => true,
                             'actions' => ['register'],
-                            'roles' => ['?', 'sysadmin', 'admin', 'gestor'], // Solo acceden admin, sysadmin, gestor y invitados
+                            'roles' => ['?', 'sysadmin', 'admin'], // Solo acceden admin, sysadmin, gestor y invitados
                         ],
                         [
                             'actions' => ['view-profile', 'self-update'],
@@ -78,28 +78,11 @@ class UserController extends Controller
                 $userId = $model->id;
                 $auth = Yii::$app->authManager;
 
-                // Cargar automáticamente los datos del formulario en el modelo
-                if ($model->load(Yii::$app->request->post()) && $model->validate()) {
-                    $rol = $model->rol;
+                // Por defecto cuando se registra un usuario se le asigna el rol de usuario
+                $participanteRole = $auth->getRole('usuario');
 
-                    // Si $rol está definido y es válido, úsalo como el rol a asignar
-                    if ($rol) {
-                        $participanteRole = $auth->getRole($rol);
-
-                        if ($participanteRole) {
-                            $auth->assign($participanteRole, $userId);
-                        }
-
-                        // Si $rol está definido, redirige a la página de inicio
-                        return $this->goHome();
-                    } else {
-                        // Si $rol no está definido asigna el rol 'usuario'
-                        $participanteRole = $auth->getRole('usuario');
-
-                        if ($participanteRole) {
-                            $auth->assign($participanteRole, $userId);
-                        }
-                    }
+                if ($participanteRole) {
+                    $auth->assign($participanteRole, $userId);
                 }
 
                 // Redirige a la página de inicio de sesión
