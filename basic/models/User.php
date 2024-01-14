@@ -112,11 +112,11 @@ class User extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
 
     /**
      * {@inheritdoc}
-     * @return UsuarioQuery the active query used by this AR class.
+     * @return UserQuery the active query used by this AR class.
      */
     public static function find()
     {
-        return new UsuarioQuery(get_called_class());
+        return new UserQuery(get_called_class());
     }
 }
 
