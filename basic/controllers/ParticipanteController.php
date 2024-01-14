@@ -6,7 +6,7 @@ use app\models\Participante;
 use app\models\ParticipanteSearch;
 use app\models\TipoParticipante;
 use app\models\Equipo;
-use app\models\Usuario;
+use app\models\User;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -31,7 +31,7 @@ class ParticipanteController extends Controller
                         'delete' => ['POST'],
                     ],
                 ],
-<<<<<<< HEAD
+
                 'access' => [
                     'class' => \yii\filters\AccessControl::class,
                     'rules' => [
@@ -52,11 +52,10 @@ class ParticipanteController extends Controller
                         ],
                     ],
                 ],
-=======
->>>>>>> 993d3552b984915f8e535335554ecc321e5c7810
             ]
         );
     }
+    
 
     /**
      * Lists all Participante models.
@@ -157,7 +156,7 @@ class ParticipanteController extends Controller
     public function actionCreate()
     {
         $model = new Participante();
-        $usuarioModel = new Usuario();
+        $usuarioModel = new User();
         $userType = \Yii::$app->request->post('userType', null);
 
         // Obtener todos los tipos de participantes
@@ -168,10 +167,10 @@ class ParticipanteController extends Controller
         $listaTiposParticipantes = ArrayHelper::map($tiposParticipantes, 'id', 'nombre');    
 
           // Obtener usuarios que no están vinculados a un participante
-        $usuarios = Usuario::find()->leftJoin('participante', 'usuario.id = participante.usuario_id')
+        $usuarios = User::find()->leftJoin('participante', 'usuario.id = participante.usuario_id')
             ->where(['participante.usuario_id' => null])
             ->all();
-        $listaUsuarios = ArrayHelper::map($usuarios, 'id', 'nombre'); // Ajusta 'nombre' según tu modelo Usuario
+        $listaUsuarios = ArrayHelper::map($usuarios, 'id', 'nombre'); // Ajusta 'nombre' según tu modelo User
 
         if ($this->request->isPost) {
              // Cargar datos en el modelo Participante
@@ -214,7 +213,7 @@ class ParticipanteController extends Controller
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
-        $usuarioModel = Usuario::findOne($model->usuario_id);
+        $usuarioModel = User::findOne($model->usuario_id);
 
         // Obtener todos los tipos de participantes
         $tiposParticipantes = TipoParticipante::find()->all();
