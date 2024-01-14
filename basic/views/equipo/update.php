@@ -4,6 +4,8 @@ use yii\helpers\Html;
 use yii\grid\GridView;
 use yii\grid\ActionColumn;
 use yii\helpers\Url;
+use yii\widgets\DetailView;
+
 
 /** @var yii\web\View $this */
 /** @var app\models\Equipo $model */
@@ -19,8 +21,10 @@ $this->params['breadcrumbs'][] = Yii::t('app', 'Update');
 
     <h1><?= Html::encode($this->title) ?></h1>
 
-    <? if ((!\Yii::$app->user->can('gestor'))&&(!\Yii::$app->user->can('organizador'))&&(!\Yii::$app->user->can('sysadmin'))&&(\Yii::$app->user->can('usuario')))  
-        {?>
+    <?php 
+    if ((!\Yii::$app->user->can('gestor'))&&(!\Yii::$app->user->can('organizador'))&&(!\Yii::$app->user->can('sysadmin'))&&(\Yii::$app->user->can('usuario')))  
+    {
+    ?>
         <?= DetailView::widget([
             'model' => $model,
             'attributes' => [
@@ -30,13 +34,13 @@ $this->params['breadcrumbs'][] = Yii::t('app', 'Update');
                 'licencia',
                 'categoria.nombre',
             ],
-        ]) 
+        ]); 
         }else{?>
 
         <?= $this->render('_form', [
             'model' => $model,
             'listaCategorias' => $listaCategorias,
-        ]) 
+        ]) ;
         } 
     ?>
     <h2>Participantes</h2>

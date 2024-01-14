@@ -40,7 +40,7 @@ class ParticipanteController extends Controller
                             'roles' => ['sysadmin','admin', 'gestor'],
                         ],
                         [
-                            'actions' => ['update','view'],
+                            'actions' => ['update','view','add-participante'],
                             'allow' => true,
                             'roles' => ['sysadmin','admin', 'gestor', 'usuario'],
                         ],
