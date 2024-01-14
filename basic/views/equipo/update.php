@@ -19,11 +19,26 @@ $this->params['breadcrumbs'][] = Yii::t('app', 'Update');
 
     <h1><?= Html::encode($this->title) ?></h1>
 
-    <?= $this->render('_form', [
-        'model' => $model,
-        'listaCategorias' => $listaCategorias,
-    ]) ?>
+    <? if ((!\Yii::$app->user->can('gestor'))&&(!\Yii::$app->user->can('organizador'))&&(!\Yii::$app->user->can('sysadmin'))&&(\Yii::$app->user->can('usuario')))  
+        {?>
+        <?= DetailView::widget([
+            'model' => $model,
+            'attributes' => [
+                'id',
+                'nombre',
+                'descripcion',
+                'licencia',
+                'categoria.nombre',
+            ],
+        ]) 
+        }else{?>
 
+        <?= $this->render('_form', [
+            'model' => $model,
+            'listaCategorias' => $listaCategorias,
+        ]) 
+        } 
+    ?>
     <h2>Participantes</h2>
     <?= Html::a('Añadir Participante', ['add-participante', 'id' => $model->id], ['class' => 'btn btn-success']) ?>
     <?php if ($tieneParticipantes): ?>
