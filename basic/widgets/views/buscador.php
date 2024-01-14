@@ -28,7 +28,7 @@ foreach($campos as $campo) {
     <div class="busqueda-global row px-3">
         <?php //Se incluye la variable $campoPredeterminado correspondiente a la busqueda genérica ?> 
         <div class="col mx-1 px-0"><?= $form->field($model, $atributoPredeterminado, ['template' => $icon])->textInput(['placeholder' => 'Introduzca un término de búsqueda']) ?></div>
-        <div class="col-auto mx-1 px-0"><?= Html::a('Eliminar filtros', ['pistas'], ['class' => 'btn btn-outline-secondary fw-bold shadow-sm',]) ?></div>
+        <div class="col-auto mx-1 px-0"><?= Html::a('Eliminar filtros', [''], ['class' => 'btn btn-outline-secondary fw-bold shadow-sm',]) ?></div>
         <div class="col-auto mx-1 px-0"><?= Html::submitButton(Yii::t('app', 'Buscar'), ['class' => 'btn btn-success fw-bold shadow-sm']) ?></div>
     </div>
     <?php if ($filtros) { ?>

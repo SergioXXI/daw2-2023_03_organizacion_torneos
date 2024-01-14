@@ -1,89 +1,74 @@
-
 <?php
+use app\models\Torneo;
 use yii\web\View;
 use yii\helpers\Html;
 use yii\helpers\Url;
+use app\widgets\EventoTarjetaWidget;
+use yii\bootstrap5\LinkPager;
+
 
 $this->registerJsFile('https://cdn.jsdelivr.net/npm/fullcalendar@6.1.10/index.global.min.js', ['position' => View::POS_HEAD]);
-$this->registerJsFile('fullcalendar/dist/index.global.js', ['position' => View::POS_HEAD]);
-
-$this->registerJsFile('https://kit.fontawesome.com/6a8d4512ef.js', ['position' => View::POS_HEAD]);
-
 $this->registerCssFile("/torneos/basic/web/css/calendar.css");
 
-$eventos = [];
 
-//print_r($torneos->getModels());
 
-foreach ($torneos->getModels() as $torneo) {
-	$eventos[] = [
-        'title' => 'Inicio - ' . Html::encode($torneo->nombre),
-        'start' => Html::encode($torneo->fecha_inicio),
-        'color' => 'green',
-		'allDay' => true,
-		'url' => Url::toRoute(['torneo/view', 'id' => $torneo->id]),
-    ];
-
-    if($torneo->fecha_fin !== null) {
-        $eventos[] = [
-            'title' => 'Fin - ' . Html::encode($torneo->nombre),
-			'start' => Html::encode($torneo->fecha_fin),
-			'color' => 'red',
-			'allDay' => true,
-			'url' => Url::toRoute(['torneo/view', 'id' => $torneo->id]),
-        ];
-    }
-
-}
-$eventos = json_encode($eventos);
+$num_eventos = $eventosProvider->getCount();
+$num_total_eventos = $eventosProvider->getTotalCount();
 
 ?>
 
-<h1>Calendario de eventos</h1>
+<div class="d-flex justify-content-between">
+	<h2 class="my-0 h2">Proximos eventos</h2>
+	<?= Html::a('Calendario', ['calendario'], ['class' => 'btn btn-success fw-bold shadow-sm me-2',]) ?>
+</div>
 
-<div id="calendar-calendario"></div>
+<hr>
 
-
-<script>
-
-	document.addEventListener('DOMContentLoaded', function () {
-		var calendarEl = document.getElementById('calendar-calendario');
-
-		var calendar = new FullCalendar.Calendar(calendarEl, {
-			locale: 'es',
-			initialView: 'dayGridMonth',
-			events: <?php echo $eventos; ?>,
-			showNonCurrentDates: false,
-			eventTextColor: 'white',
-			firstDay: 1,
-
-			dayMaxEventRows: true, // for all non-TimeGrid views
-    		moreLinkClick: 'listDay', // Show a popover when the user clicks on "+X more"
-			eventLimitText: 'View more events', // Customize the "+ more" text
-			
-
-			buttonText: {
-				today: 'Actual',
-				list: 'Lista',
-				dayGridMonth: 'Meses',
-			},
-
-			headerToolbar: {
-				start: 'dayGridMonth,listMonth', // will normally be on the left. if RTL, will be on the right
-  				center: 'title',
-  				end: 'today,prev,next' // will normally be on the right. if RTL, will be on the left
-			},
-
-			moreLinkContent:function(args){
-      			return '+' + args.num + ' más';
-    		},
-
-		});
-
-		calendar.render();
-	});
+<?= $this->render('_searchbar',  ['model' => $searchModel]); ?>
+<div class="">
+	<div class="summary">Mostrando <b> <?= Html::encode($num_eventos) ?> </b> de <b> <?= Html::encode($num_total_eventos) ?> </b> elementos.</div>	
+	
+</div>
 
 
+<?php 
+
+//GESTIÓN DE EVENTOS PARA SER MOSTRADOS EN EL APARTADO DE PROXIMOS EVENTOS
+$i = 0;
+
+foreach ($eventosProvider->getModels() as $evento) {
 
 
-</script>
+		//Generar una tarjeta de evento de tipo reserva privada
+	if($evento instanceof Torneo) {
+		echo EventoTarjetaWidget::widget([
+			'titulo' => $evento->nombre,
+			'fecha' => date('Y-m-d',strtotime($evento->fecha_inicio)),
+			'resaltar' => false,
+		]);
+	} else {
+		$torneo = $evento->torneo;
+		echo EventoTarjetaWidget::widget([
+			'titulo' => $torneo->nombre . ' - Jornada ' . $evento->jornada,
+			'fecha' => date('Y-m-d',strtotime($evento->fecha)),
+			'resaltar' => false,
+		]);
+	}
+
+	$i++;
+	//No imprimir el <hr> en el ultimo elemento
+	if($i !== $num_eventos)
+		echo '<hr>';
+
+	}
+
+	
+
+//PAGINADOR
+echo LinkPager::widget([
+    'pagination' => $eventosProvider->pagination,
+    'maxButtonCount' => \Yii::$app->params['maxBotonPag'],
+    'options' => [
+        'class' => yii\bootstrap5\LinkPager::class
+    ]
+]);
