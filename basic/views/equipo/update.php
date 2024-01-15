@@ -51,62 +51,57 @@ $this->params['breadcrumbs'][] = Yii::t('app', 'Update');
     <h2>Participantes</h2>
     <?= Html::a('Añadir Participante', ['add-participante', 'id' => $model->id], ['class' => 'btn btn-success']) ?>
     <?php if ($tieneParticipantes): ?>
-        <?=
-        
-         GridView::widget([
-            'dataProvider' => $dataProvider,
-            'columns' => [
-                'id',
-                [
-                    'attribute' => 'usuario.nombre',
-                    'label' => 'Nombre del Usuario',
-                ],
-                [
-                    'attribute' => 'tipoParticipante.nombre',
-                    'label' => 'Tipo de Participante',
-                ],
-                [
-                    
-                    'class' => ActionColumn::className(),
-
-                    'template' => '{update} {expulsar},{lider}',
-                    'buttons' => [
-                        'expulsar' => function ($url, $model, $key) {
-                            return Html::a('X', $url, [
-                                'title' => Yii::t('app', 'Expulsar'),
-                                'data-confirm' => Yii::t('app', '¿Estás seguro de que deseas expulsar a este participante?'),
-                                'data-method' => 'post',
-                                'class' => 'btn btn-danger',
-                            ]);
-                            
-                        },
-                        
-                        'lider' => function ($url, $model, $key) {
+    <?=
+    GridView::widget([
+        'dataProvider' => $dataProvider,
+        'columns' => [
+            'id',
+            [
+                'attribute' => 'usuario.nombre',
+                'label' => 'Nombre del Usuario',
+            ],
+            [
+                'attribute' => 'tipoParticipante.nombre',
+                'label' => 'Tipo de Participante',
+            ],
+            [
+                'class' => ActionColumn::className(),
+                'template' => '{update} {expulsar}{lider}',
+                'buttons' => [
+                    'expulsar' => function ($url, $model, $key) {
+                        return Html::a('X', $url, [
+                            'title' => Yii::t('app', 'Expulsar'),
+                            'data-confirm' => Yii::t('app', '¿Estás seguro de que deseas expulsar a este participante?'),
+                            'data-method' => 'post',
+                            'class' => 'btn btn-danger',
+                        ]);
+                    },
+                    'lider' => function ($url, $model, $key) use ($equipo) {
+                        if ($model->id !== $equipo->creador_id) {
                             return Html::a('L', $url, [
                                 'title' => Yii::t('app', 'Lider'),
                                 'data-confirm' => Yii::t('app', '¿Estás seguro de que hacer lider a este participante?'),
                                 'data-method' => 'post',
                                 'class' => 'btn btn-primary',
                             ]);
-                            
-                        },
-                        // ... definiciones de otros botones ...
-                    ],
-                    'urlCreator' => function ($action, $model, $key, $index, $column) use ($equipo) {
-                        if ($action === 'expulsar') {
-                            return Url::toRoute(['expulsar-participante', 'equipoId' => $equipo->id, 'participanteId' => $model->id]);
                         }
-                        elseif($action === 'lider'){
-                            return Url::toRoute(['lider', 'equipoId' => $equipo->id, 'participante_id' => $model->id]);
-                        }
-                        
-                        else {
-                            return Url::toRoute(["participante/{$action}", 'id' => $model->id]);
-                        }
+                        return '';
                     },
-                ]
-            ],
-        ])
+                ],
+                'urlCreator' => function ($action, $model, $key, $index, $column) use ($equipo) {
+                    if ($action === 'expulsar') {
+                        return Url::toRoute(['expulsar-participante', 'equipoId' => $equipo->id, 'participanteId' => $model->id]);
+                    } elseif ($action === 'lider') {
+                        return Url::toRoute(['lider', 'equipoId' => $equipo->id, 'participante_id' => $model->id]);
+                    } else {
+                        return Url::toRoute(["participante/{$action}", 'id' => $model->id]);
+                    }
+                },
+            ], // Add a closing curly brace here
+        ],
+    ]);
+?>
+
         
         
         ?>
