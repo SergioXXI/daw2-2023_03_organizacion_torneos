@@ -2,6 +2,7 @@
 
 namespace app\models;
 
+
 use Yii;
 
 /**
@@ -13,6 +14,7 @@ use Yii;
  * @property string $licencia Numero de licencia
  * @property int $categoria_id
  *
+ * @property Usuario $usuario
  * @property Categoria $categoria
  * @property EquipoParticipante[] $equipoParticipantes
  * @property Participante[] $participantes
@@ -85,6 +87,7 @@ class Equipo extends \yii\db\ActiveRecord
     {
         return $this->hasOne(Categoria::class, ['id' => 'categoria_id']);
     }
+    
 
     /**
      * Gets query for [[EquipoParticipantes]].
@@ -105,6 +108,18 @@ class Equipo extends \yii\db\ActiveRecord
     {
         return $this->hasMany(Participante::class, ['id' => 'participante_id'])->viaTable('{{%equipo_participante}}', ['equipo_id' => 'id']);
     }
+
+
+    /**creadorid->participante.usuario_id->usuario.nombre
+     * Gets query for [[Usuario]].
+     *
+     * @return \yii\db\ActiveQuery|UsuarioQuery
+     */
+    public function getUsuario()  
+    {
+        return $this->hasOne(User::class, ['id' => 'usuario_id'])->viaTable('{{%participante}}', ['id' => 'creador_id']);
+    }
+    
 
     //Función para contar cuantos participantes tiene el equipo
     public function getNumParticipantes()

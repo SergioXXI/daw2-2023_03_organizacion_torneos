@@ -3,6 +3,7 @@
 namespace app\controllers;
 
 use app\models\Equipo;
+use app\models\Usuario;
 use app\models\Participante;
 use app\models\Categoria;
 use app\models\Torneo;
@@ -141,10 +142,13 @@ class EquipoController extends Controller
        
         $tieneParticipantes = $query->count() > 0;
 
+        $usuario=$model->getUsuario()->one();
+
         $esDelEquipo=0;
 
         return $this->render('view', [
             'model' => $model,
+            'usuario' => $usuario,
             'equipo' => $equipo,
             'dataProvider' => $dataProvider,
             'esDelEquipo' => $esDelEquipo,
@@ -184,6 +188,10 @@ class EquipoController extends Controller
 
         if ($this->request->isPost) {
             if ($model->load($this->request->post()) && $model->save()) {
+                \Yii::$app->db->createCommand()->insert('equipo_participante', [
+                    'equipo_id' => $model->id,
+                    'participante_id' => $model->creador_id,
+                ])->execute();
                 return $this->redirect(['view', 'id' => $model->id]);
             }
         } else {
@@ -210,41 +218,50 @@ class EquipoController extends Controller
     {
         $model = $this->findModel($id);
         $equipo = $this->findModel($id);
-        /* añadir vista publica
-        $inscritoEnTorneos = (new \yii\db\Query())
-            ->from('torneo_equipo')
-            ->where(['equipo_id' => $id])
-            ->exists();
+        $participantes = Participante::find()
+                ->joinWith('usuario')
+                ->orderBy('nombre')
+                ->all();
 
-        if ($inscritoEnTorneos) {
-            // Lógica para clonar el equipo
-            $nuevoEquipo = new Equipo();
-            $nuevoEquipo->attributes = $model->attributes; // Copia los atributos
-            //$nuevoEquipo->nombre .= " (Clon)"; // Opcional: Modifica el nombre para indicar que es un clon
-            $nuevoEquipo->save(false); // Guarda el nuevo equipo, asumiendo que la validación no es necesaria
+        $listaParticipantes = ArrayHelper::map($participantes, 'id', 'usuario.nombre');
 
-
-            // Obtener los ID de los participantes actuales del equipo
-            $participantesActuales = (new \yii\db\Query())
-                ->select('participante_id')
-                ->from('equipo_participante')
+        if ((!\Yii::$app->user->can('gestor'))&&(!\Yii::$app->user->can('organizador'))&&(!\Yii::$app->user->can('sysadmin'))&&(\Yii::$app->user->can('usuario'))) 
+        { 
+            $inscritoEnTorneos = (new \yii\db\Query())
+                ->from('torneo_equipo')
                 ->where(['equipo_id' => $id])
-                ->column();
+                ->exists();
+            
 
-            // Clonar las relaciones con los participantes
-            foreach ($participantesActuales as $participanteId) {
-                \Yii::$app->db->createCommand()
-                    ->insert('equipo_participante', [
-                        'equipo_id' => $nuevoEquipo->id,
-                        'participante_id' => $participanteId
-                    ])->execute();
+            if ($inscritoEnTorneos) {
+                // Lógica para clonar el equipo
+                $nuevoEquipo = new Equipo();
+                $nuevoEquipo->attributes = $model->attributes; // Copia los atributos
+                //$nuevoEquipo->nombre .= " (Clon)"; // Opcional: Modifica el nombre para indicar que es un clon
+                $nuevoEquipo->save(false); // Guarda el nuevo equipo, asumiendo que la validación no es necesaria
+
+
+                // Obtener los ID de los participantes actuales del equipo
+                $participantesActuales = (new \yii\db\Query())
+                    ->select('participante_id')
+                    ->from('equipo_participante')
+                    ->where(['equipo_id' => $id])
+                    ->column();
+
+                // Clonar las relaciones con los participantes
+                foreach ($participantesActuales as $participanteId) {
+                    \Yii::$app->db->createCommand()
+                        ->insert('equipo_participante', [
+                            'equipo_id' => $nuevoEquipo->id,
+                            'participante_id' => $participanteId
+                        ])->execute();
+                }
+
+                // Redirige a la acción de actualizar para el nuevo equipo clonado
+                return $this->redirect(['update', 'id' => $nuevoEquipo->id]);
             }
-
-            // Redirige a la acción de actualizar para el nuevo equipo clonado
-            return $this->redirect(['update', 'id' => $nuevoEquipo->id]);
         }
-
-       */
+       //*/
 
         // Obtener todas las categorías
         $categorias = Categoria::find()
@@ -269,9 +286,13 @@ class EquipoController extends Controller
             return $this->redirect(['view', 'id' => $model->id]);
         }
 
+        $usuario=$model->getUsuario()->one();
+
         return $this->render('update', [
             'model' => $model,
+            'usuario' => $usuario,
             'equipo' => $equipo,
+            'listaParticipantes' => $listaParticipantes, 
             'listaCategorias' => $listaCategorias,
             'dataProvider' => $dataProvider,
             'tieneParticipantes' => $tieneParticipantes,

@@ -44,6 +44,10 @@ $this->params['breadcrumbs'][] = $this->title;
             'descripcion',
             'licencia',
             'categoria.nombre',
+            [
+                'value' => $usuario->nombre,
+                'label' => 'Creador',
+            ],
         ],
     ]) ?>
 

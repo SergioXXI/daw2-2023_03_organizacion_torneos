@@ -33,6 +33,10 @@ $this->params['breadcrumbs'][] = Yii::t('app', 'Update');
                 'descripcion',
                 'licencia',
                 'categoria.nombre',
+                [
+                    'value' => $usuario->nombre,
+                    'label' => 'Creador',
+                ],
             ],
         ]); 
         }else{?>
@@ -40,6 +44,7 @@ $this->params['breadcrumbs'][] = Yii::t('app', 'Update');
         <?= $this->render('_form', [
             'model' => $model,
             'listaCategorias' => $listaCategorias,
+            'listaParticipantes' => $listaParticipantes, 
         ]) ;
         } 
     ?>
