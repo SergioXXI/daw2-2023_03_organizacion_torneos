@@ -125,7 +125,8 @@ CREATE TABLE `equipo` (
   `nombre` varchar(100) NOT NULL,
   `descripcion` varchar(10000),
   `licencia` varchar(250) NOT NULL COMMENT 'Numero de licencia',
-  `categoria_id` bigint NOT NULL
+  `categoria_id` bigint NOT NULL,
+  `creador_id` bigint
 );
 
 DROP TABLE IF EXISTS `equipo_participante`;
@@ -230,6 +231,40 @@ CREATE TABLE `imagen` (
   `ruta` varchar(250) UNIQUE NOT NULL
 );
 
+-- LOG
+
+SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+SET time_zone = "+00:00";
+
+
+--
+-- Estructura de tabla para la tabla `log`
+--
+
+CREATE TABLE `log` (
+  `id` int(11) NOT NULL,
+  `level` varchar(10) DEFAULT NULL,
+  `category` varchar(255) DEFAULT NULL,
+  `log_time` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  `prefix` text DEFAULT NULL,
+  `message` text DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Indices de la tabla `log`
+--
+ALTER TABLE `log`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- AUTO_INCREMENT de la tabla `log`
+--
+ALTER TABLE `log`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+
+
+
 ALTER TABLE `torneo` COMMENT = 'Tabla principal de torneo';
 
 ALTER TABLE `disciplina` COMMENT = 'Por ej si el torneo es de fútbol, baloncesto...';
@@ -309,6 +344,8 @@ ALTER TABLE `reserva_pista` ADD FOREIGN KEY (`reserva_id`) REFERENCES `reserva` 
 ALTER TABLE `reserva_pista` ADD FOREIGN KEY (`pista_id`) REFERENCES `pista` (`id`);
 
 ALTER TABLE `direccion` ADD UNIQUE(`calle`, `numero`, `cod_postal`, `ciudad`, `provincia`, `pais`);
+
+ALTER TABLE `equipo` ADD FOREIGN KEY (`creador_id`) REFERENCES `participante` (`id`);
 
 -- Confirmar la transacción
 COMMIT;

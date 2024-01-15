@@ -2,18 +2,16 @@
 
 namespace app\controllers;
 
-use app\models\Premio;
-use app\models\Torneo;
-use app\models\PremioSearch;
+use app\models\ReservaMaterial;
+use app\models\ReservaMaterialSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
-use yii\data\ArrayDataProvider;
 
 /**
- * PremioController implements the CRUD actions for Premio model.
+ * ReservaMaterialController implements the CRUD actions for ReservaMaterial model.
  */
-class PremioController extends Controller
+class ReservaMaterialController extends Controller
 {
     /**
      * @inheritDoc
@@ -35,7 +33,7 @@ class PremioController extends Controller
                         [
                             'actions' => ['index', 'view'],
                             'allow' => true,
-                            //'roles' => ['sysadmin','admin', 'usuario', 'organizador', 'gestor'],
+                            'roles' => ['sysadmin','admin',  'organizador'],
                         ],
                         [
                             'actions' => ['create', 'update', 'delete','asignar_ganador'],
@@ -49,13 +47,13 @@ class PremioController extends Controller
     }
 
     /**
-     * Lists all Premio models.
+     * Lists all ReservaMaterial models.
      *
      * @return string
      */
     public function actionIndex()
     {
-        $searchModel = new PremioSearch();
+        $searchModel = new ReservaMaterialSearch();
         $dataProvider = $searchModel->search($this->request->queryParams);
 
         return $this->render('index', [
@@ -65,41 +63,31 @@ class PremioController extends Controller
     }
 
     /**
-     * Displays a single Premio model.
-     * @param int $id ID
+     * Displays a single ReservaMaterial model.
+     * @param int $reserva_id Reserva ID
+     * @param int $material_id Material ID
      * @return string
      * @throws NotFoundHttpException if the model cannot be found
      */
-    public function actionView($id)
+    public function actionView($reserva_id, $material_id)
     {
-        $model = $this->findModel($id);
-        $torneoProvider = new ArrayDataProvider([
-            'allModels' => $model->torneos,
-            'sort' => [
-                'attributes' => ['id', 'nombre'],
-            ],
-            'pagination' => [
-                'pageSize' => 10,
-            ],
-        ]);
         return $this->render('view', [
-            'model' => $this->findModel($id),
-            'torneoProvider' => $torneoProvider,
+            'model' => $this->findModel($reserva_id, $material_id),
         ]);
     }
 
     /**
-     * Creates a new Premio model.
+     * Creates a new ReservaMaterial model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return string|\yii\web\Response
      */
     public function actionCreate()
     {
-        $model = new Premio();
+        $model = new ReservaMaterial();
 
         if ($this->request->isPost) {
             if ($model->load($this->request->post()) && $model->save()) {
-                return $this->redirect(['view', 'id' => $model->id]);
+                return $this->redirect(['view', 'reserva_id' => $model->reserva_id, 'material_id' => $model->material_id]);
             }
         } else {
             $model->loadDefaultValues();
@@ -111,18 +99,19 @@ class PremioController extends Controller
     }
 
     /**
-     * Updates an existing Premio model.
+     * Updates an existing ReservaMaterial model.
      * If update is successful, the browser will be redirected to the 'view' page.
-     * @param int $id ID
+     * @param int $reserva_id Reserva ID
+     * @param int $material_id Material ID
      * @return string|\yii\web\Response
      * @throws NotFoundHttpException if the model cannot be found
      */
-    public function actionUpdate($id)
+    public function actionUpdate($reserva_id, $material_id)
     {
-        $model = $this->findModel($id);
+        $model = $this->findModel($reserva_id, $material_id);
 
         if ($this->request->isPost && $model->load($this->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+            return $this->redirect(['view', 'reserva_id' => $model->reserva_id, 'material_id' => $model->material_id]);
         }
 
         return $this->render('update', [
@@ -131,45 +120,34 @@ class PremioController extends Controller
     }
 
     /**
-     * Deletes an existing Premio model.
+     * Deletes an existing ReservaMaterial model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
-     * @param int $id ID
+     * @param int $reserva_id Reserva ID
+     * @param int $material_id Material ID
      * @return \yii\web\Response
      * @throws NotFoundHttpException if the model cannot be found
      */
-    public function actionDelete($id)
+    public function actionDelete($reserva_id, $material_id)
     {
-        $this->findModel($id)->delete();
+        $this->findModel($reserva_id, $material_id)->delete();
 
         return $this->redirect(['index']);
     }
-    public function actionAsignar_ganador($id)
-    {
-        $model = $this->findModel($id);
-
-        if ($this->request->isPost && $model->load($this->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
-        }
-
-        return $this->render('asignar_ganador', [
-            'model' => $model,
-        ]);
-    }
 
     /**
-     * Finds the Premio model based on its primary key value.
+     * Finds the ReservaMaterial model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
-     * @param int $id ID
-     * @return Premio the loaded model
+     * @param int $reserva_id Reserva ID
+     * @param int $material_id Material ID
+     * @return ReservaMaterial the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
-    protected function findModel($id)
+    protected function findModel($reserva_id, $material_id)
     {
-        if (($model = Premio::findOne(['id' => $id])) !== null) {
+        if (($model = ReservaMaterial::findOne(['reserva_id' => $reserva_id, 'material_id' => $material_id])) !== null) {
             return $model;
         }
 
         throw new NotFoundHttpException(Yii::t('app', 'The requested page does not exist.'));
     }
-   
 }

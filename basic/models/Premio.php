@@ -91,6 +91,16 @@ class Premio extends \yii\db\ActiveRecord
     }
 
     /**
+     * Gets query for [[Torneo]].
+     *
+     * @return \yii\db\ActiveQuery|TorneoQuery
+     */
+    public function getTorneos()
+    {
+        return $this->hasMany(Torneo::class, ['id' => 'torneo_id']);
+    }
+
+    /**
      * {@inheritdoc}
      * @return PremioQuery the active query used by this AR class.
      */

@@ -60,11 +60,23 @@ INSERT INTO categoria (nombre, edad_min, edad_max) VALUES
     ('Juvenil', 13, 18),
     ('Adulto', 19, 99);
 
+-- Insertar datos de prueba para la tabla 'tipo_participante'
+INSERT INTO tipo_participante (nombre, descripcion) VALUES
+    ('Jugador', 'Participante que juega en equipos'),
+    ('Delegado de equipo', 'Oficial encargado del equipo'),
+    ('Entrenador', 'Persona a cargo del entrenamiento del equipo');
+
+-- Insertar datos de prueba para la tabla 'participante'
+INSERT INTO participante (fecha_nacimiento, licencia, tipo_participante_id, usuario_id) VALUES
+    ('1990-05-15', 'ABC123', 1, 6),
+    ('1985-12-10', 'XYZ789', 2, 7),
+    ('1995-08-22', 'DEF456', 3, 8);
+
 -- Insertar datos de prueba para la tabla 'equipo'
-INSERT INTO equipo (nombre, descripcion, licencia, categoria_id) VALUES
-    ('Equipo A', 'Descripción del Equipo A', 'ABC123', 1),
-    ('Equipo B', 'Descripción del Equipo B', 'XYZ789', 2),
-    ('Equipo C', 'Descripción del Equipo C', 'DEF456', 3);
+INSERT INTO equipo (nombre, descripcion, licencia, categoria_id, creador_id) VALUES
+    ('Equipo A', 'Descripción del Equipo A', 'ABC123', 1, 1),
+    ('Equipo B', 'Descripción del Equipo B', 'XYZ789', 2, 1),
+    ('Equipo C', 'Descripción del Equipo C', 'DEF456', 3, 2);
 
 -- Insertar datos de prueba para la tabla 'premio'
 INSERT INTO premio (nombre, descripcion, categoria_id, torneo_id, equipo_id) VALUES
@@ -106,18 +118,6 @@ INSERT INTO torneo_equipo (torneo_id, equipo_id) VALUES
     (1, 1),
     (2, 2),
     (3, 3);
-
--- Insertar datos de prueba para la tabla 'tipo_participante'
-INSERT INTO tipo_participante (nombre, descripcion) VALUES
-    ('Jugador', 'Participante que juega en equipos'),
-    ('Delegado de equipo', 'Oficial encargado del equipo'),
-    ('Entrenador', 'Persona a cargo del entrenamiento del equipo');
-
--- Insertar datos de prueba para la tabla 'participante'
-INSERT INTO participante (fecha_nacimiento, licencia, tipo_participante_id, usuario_id) VALUES
-    ('1990-05-15', 'ABC123', 1, 6),
-    ('1985-12-10', 'XYZ789', 2, 7),
-    ('1995-08-22', 'DEF456', 3, 8);
 
 -- Insertar datos de prueba para la tabla 'equipo_participante'
 INSERT INTO equipo_participante (equipo_id, participante_id) VALUES

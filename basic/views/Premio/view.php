@@ -2,6 +2,8 @@
 
 use yii\helpers\Html;
 use yii\widgets\DetailView;
+use yii\helpers\Url;
+use yii\grid\GridView;
 
 /** @var yii\web\View $this */
 /** @var app\models\Premio $model */
@@ -42,5 +44,27 @@ $this->params['breadcrumbs'][] = $this->title;
             'equipo_id',
         ],
     ]) ?>
+
+    <h2 class="mt-5 mb-4">Torneos</h2>
+    <?= GridView::widget([
+        'dataProvider' => $torneoProvider,
+        'summary' => 'Mostrando ' . Html::tag('b', '{begin}-{end}') . ' de ' .  Html::tag('b', '{totalCount}') . ' elementos', //Para cambiar el idioma del texto del summary
+        'emptyText' => 'No hay resultados',
+        'columns' => [
+            ['class' => 'yii\grid\SerialColumn'],
+
+            //Genera un enlace para poder ver la pista asociada a esta id
+            [
+                'format' => 'raw',
+                'attribute' => 'Nombre',
+                'value' => function ($model) {
+                    $url = Url::toRoute(['torneo/view', 'id' => $model->id]);
+                    return Html::a($model->nombre, $url);
+                },
+
+            ],
+        ],
+    ]); ?>
+    
 
 </div>
