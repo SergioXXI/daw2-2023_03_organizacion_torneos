@@ -49,6 +49,7 @@ NavBar::begin([
 $elementos_izquierda = [
     ['label' => 'Inicio', 'url' => ['/site/index']],
     ['label' => 'Torneos', 'url' => ['/torneo/index']],
+    ['label' => 'Partidos', 'url' => ['/partido/index']],
     ['label' => 'Pistas', 'url' => ['/pista/pistas']],
     ['label' => 'Calendario', 'url' => ['/calendario/index']],
     [
@@ -58,8 +59,8 @@ $elementos_izquierda = [
                 'visible' => Yii::$app->user->can('sysadmin') || Yii::$app->user->can('admin')],
             ['label' => 'Reservas', 'url' => ['/reserva/index'], 
                 'visible' => Yii::$app->user->can('sysadmin') || Yii::$app->user->can('admin') || Yii::$app->user->can('organizador') || Yii::$app->user->can('gestor')],
-            ['label' => 'Partidos', 'url' => ['/partido/index'], 
-                'visible' => Yii::$app->user->can('sysadmin') || Yii::$app->user->can('admin') || Yii::$app->user->can('organizador')],
+            /* ['label' => 'Partidos', 'url' => ['/partido/index'], 
+                'visible' => Yii::$app->user->can('sysadmin') || Yii::$app->user->can('admin') || Yii::$app->user->can('organizador')], */
             ['label' => 'Disciplinas', 'url' => ['/disciplina/index'], 
                 'visible' => Yii::$app->user->can('sysadmin') || Yii::$app->user->can('admin')],
             ['label' => 'Categorias de Torneo', 'url' => ['/categoria/index'], 
