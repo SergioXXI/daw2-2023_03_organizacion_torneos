@@ -45,10 +45,6 @@ $this->params['breadcrumbs'][] = $this->title;
         ],
     ]) ?>
 
-<<<<<<< Updated upstream
-<h2 class="mt-5 mb-4">Torneo</h2>
-
-=======
     <h2 class="mt-5 mb-4">Torneos</h2>
     <?= GridView::widget([
         'dataProvider' => $torneoProvider,
@@ -70,6 +66,5 @@ $this->params['breadcrumbs'][] = $this->title;
         ],
     ]); ?>
     
->>>>>>> Stashed changes
 
 </div>
