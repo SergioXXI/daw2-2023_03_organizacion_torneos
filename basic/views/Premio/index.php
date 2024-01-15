@@ -34,8 +34,29 @@ $this->params['breadcrumbs'][] = $this->title;
                     'id',
                     'nombre',
                     'descripcion',
-                    'categoria_id',
-                    'torneo_id',
+                    [
+                        'attribute' => 'Categoria',
+                        'value' => 'categoria.nombre', 
+                    ],
+                    [
+                        'attribute' => 'Torneo',
+                        'value' => 'torneo.nombre', 
+                    ],
+                    [
+                        'attribute' => 'equipo_id',
+                        'format' => 'raw',
+                        'value' => function ($model) {
+                            if ($model->equipo_id === null) {
+                                return Html::a(
+                                    'Asignar ganador', // Texto del botón
+                                    ['asignar_ganador', 'id' => $model->id],
+                                    ['class' => 'btn btn-success']
+                                );
+                            } else {
+                                return $model->equipo_id; // O el valor real de reserva_id si no es nulo
+                            }
+                        },
+                    ],
                     //'equipo_id',
                     [
                         'class' => ActionColumn::className(),

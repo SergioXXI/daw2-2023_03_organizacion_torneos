@@ -14,7 +14,7 @@ use Yii;
  * @property int $torneo_id
  * @property int|null $equipo_id
  *
- * @property Categorium $categoria
+ * @property  Categoria $categoria
  * @property Equipo $equipo
  * @property Torneo $torneo
  */
@@ -39,7 +39,7 @@ class Premio extends \yii\db\ActiveRecord
             [['nombre'], 'string', 'max' => 100],
             [['descripcion'], 'string', 'max' => 500],
             [['nombre'], 'unique'],
-            [['categoria_id'], 'exist', 'skipOnError' => true, 'targetClass' => Categorium::class, 'targetAttribute' => ['categoria_id' => 'id']],
+            [['categoria_id'], 'exist', 'skipOnError' => true, 'targetClass' => Categoria::class, 'targetAttribute' => ['categoria_id' => 'id']],
             [['torneo_id'], 'exist', 'skipOnError' => true, 'targetClass' => Torneo::class, 'targetAttribute' => ['torneo_id' => 'id']],
             [['equipo_id'], 'exist', 'skipOnError' => true, 'targetClass' => Equipo::class, 'targetAttribute' => ['equipo_id' => 'id']],
         ];
@@ -63,11 +63,11 @@ class Premio extends \yii\db\ActiveRecord
     /**
      * Gets query for [[Categoria]].
      *
-     * @return \yii\db\ActiveQuery|CategoriumQuery
+     * @return \yii\db\ActiveQuery|CategoriaQuery
      */
     public function getCategoria()
     {
-        return $this->hasOne(Categorium::class, ['id' => 'categoria_id']);
+        return $this->hasOne(Categoria::class, ['id' => 'categoria_id']);
     }
 
     /**

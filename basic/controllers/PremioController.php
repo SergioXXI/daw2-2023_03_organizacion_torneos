@@ -36,7 +36,7 @@ class PremioController extends Controller
                             //'roles' => ['sysadmin','admin', 'usuario', 'organizador', 'gestor'],
                         ],
                         [
-                            'actions' => ['create', 'update', 'delete'],
+                            'actions' => ['create', 'update', 'delete','asignar_ganador'],
                             'allow' => true,
                             'roles' => ['sysadmin','admin','organizador'],
                         ],
@@ -130,6 +130,18 @@ class PremioController extends Controller
 
         return $this->redirect(['index']);
     }
+    public function actionAsignar_ganador($id)
+    {
+        $model = $this->findModel($id);
+
+        if ($this->request->isPost && $model->load($this->request->post()) && $model->save()) {
+            return $this->redirect(['view', 'id' => $model->id]);
+        }
+
+        return $this->render('asignar_ganador', [
+            'model' => $model,
+        ]);
+    }
 
     /**
      * Finds the Premio model based on its primary key value.
@@ -146,4 +158,5 @@ class PremioController extends Controller
 
         throw new NotFoundHttpException(Yii::t('app', 'The requested page does not exist.'));
     }
+   
 }
