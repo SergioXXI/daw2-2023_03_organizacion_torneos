@@ -241,6 +241,7 @@ SET time_zone = "+00:00";
 -- Estructura de tabla para la tabla `log`
 --
 
+DROP TABLE IF EXISTS `log`;
 CREATE TABLE `log` (
   `id` int(11) NOT NULL,
   `level` varchar(10) DEFAULT NULL,

@@ -22,23 +22,23 @@ $this->title = Yii::t('app', 'Logs');
     <h1 class='mb-4'><?= Html::encode($this->title) ?></h1>
 
     <?php /* PRIMERA SECCIÓN, ESTO CORRESPONDE AL FORMULARIO INICIAL CON LOS FILTROS DE FECHA */ ?>
-
     <?php echo $this->render('_search', ['model' => $searchModel]); ?>
 
-    
 
-    <?php /* TERCERA SECCIÓN, ESTO CORRESPONDE AL BOTÓN PARA ELIMINAR TODO CON FILTROS */ ?>
 
+    <?php /* SEGUNDA SECCIÓN, ESTO CORRESPONDE AL FORMULARIO DE LOS BOTONES DE ELIMINACIÓN*/ 
+    //Para poder utilizar los datos seleccionados mediante la vista con checkbox hay que encapsular el gridview en un formulario?>
     <?=Html::beginForm(['boton-gestor'],'post');?>
-
-    <?php /* SEGUNDA SECCIÓN, ESTO CORRESPONDE AL BOTÓN PARA DESACTIVAR PAGINACIÓN */ ?>
 
     <div class="mb-2">
 
         <?= Html::a('Exportar',['exportar'], ['class' => 'btn btn-dark']) ?>
 
-        <?= Html::a('Desactivar paginación',LogController::DesactivarPag($paginar ? false : true), ['class' => 'btn btn-success']) ?>
+        <?php //Botón para activar/desactivar la paginación ?>
+        <?= Html::a($paginar ? 'Desactivar paginación' : 'Activar paginación',LogController::DesactivarPag($paginar ? false : true), ['class' => 'btn btn-success']) ?>
 
+        <?php //Al tener 3 tipos de eliminación dentro del mismo formulario se va a ir a una misma acción comun pero cambiando el parametro accion
+         //En el cual irá el nombre del boton pulsado, siendo esta la accion a realizar ?>
         <?= Html::submitButton('Eliminar seleccionados', [
             'name' => 'accion',
             'value' => 'BtnEliminarSeleccionados',
@@ -100,6 +100,8 @@ $this->title = Yii::t('app', 'Logs');
         ],
     ]); ?>
 
+    <?php //Se incluyen estos inputs hidden para que al pulsar un boton de eliminación también se tengan en cuenta los valores
+     //de los filtros del formulario de arriba del fichero _search ?>
     <?= Html::hiddenInput('LogSearch[fecha_ini]', $searchModel->fecha_ini); ?>
     <?= Html::hiddenInput('LogSearch[fecha_fin]', $searchModel->fecha_fin); ?>
     <?= Html::hiddenInput('LogSearch[fecha_posterior]', $searchModel->fecha_posterior); ?>

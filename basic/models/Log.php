@@ -67,6 +67,11 @@ class Log extends \yii\db\ActiveRecord
         return new LogQuery(get_called_class());
     }
 
+    /*
+     * Función que devuelve el listado de niveles de log presentes en la aplicación
+     * En este caso se van a utilizar unicamente los 4 niveles predeterminados de yii
+     * @return: array asociativo valor-nombre
+     */
     public static function getListadoNiveles()
     {
         //En este caso solo se van a utilizar los niveles predeterminados de yii

@@ -13,8 +13,40 @@ use yii\web\Request;
 
 use Yii;
 
+
+/**********************************************************************************************/
+/*                                          IMPORTANTE                                        
+ * 
+ * por defecto el registro de logs está desactivado ya que genera una gran cantidad de datos
+ * muy rapidamente, si se quiere probar este controlador hay que descomentar las líneas del
+ * fichero de configuracion config/web.php correspondientes al registro de logs
+ * Estas líneas se encuentran dentro del atributo log y son las siguientes:
+ * 
+ * [
+                    'class' => 'app\components\CustomDbTarget',
+                    'levels' => ['info'],
+                    'logTable' => 'log', // the name of the log table
+                ],
+                [
+                    'class' => 'app\components\CustomDbTarget',
+                    'levels' => ['error'],
+                    'logTable' => 'log', // the name of the log table
+                ],
+                [
+                    'class' => 'app\components\CustomDbTarget',
+                    'levels' => ['warning'],
+                    'logTable' => 'log', // the name of the log table
+                ],
+                [
+                    'class' => 'app\components\CustomDbTarget',
+                    'levels' => ['trace'],
+                    'logTable' => 'log', // the name of the log table
+                ],
+**********************************************************************************************/
+
 /**
  * LogController implements the CRUD actions for Log model.
+ * 
  */
 class LogController extends Controller
 {
@@ -60,6 +92,8 @@ class LogController extends Controller
 
 
         //Determinar si se quiere o no la paginación
+        //Esta función es util por si se quieren seleccionar multiples
+        //registros para realizar borrados
         if($this->request->get('pagination') == '0') {
             $paginar = false;
             $dataProvider->pagination = false;
@@ -105,12 +139,12 @@ class LogController extends Controller
         foreach($models as $model) {
             $linea = $model->log_time . ' (' . $model->id . ') ' . $model->prefix . '[' . $model->level . ']' .
             '[' . $model->category . '] ' . $model->message . "\n";
-            file_put_contents($fichero,$linea,FILE_APPEND); //Flag file_append para realizar insertar al final del fichero
+            file_put_contents($fichero,$linea,FILE_APPEND); //Flag file_append para realizar inserción al final del fichero
         }
 
-        //La respuesta se encapsula en la siguiente secuencia para asegurarse de que trasdevolver el fichero
+        //La respuesta se encapsula en la siguiente secuencia para asegurarse de que tras devolver el fichero
         //este es desvinculado, haciendo que se elimine al ser temporal, de esta forma se tiene un borrado
-        //controlado gracias al segmento finally
+        //controlado gracias al segmento finally que siempre se ejecuta independientemente de lo que suceda en el try
         try {
             Yii::$app->response->sendFile($fichero, 'logs.log')->send();
         } finally {
@@ -166,6 +200,7 @@ class LogController extends Controller
     {
         $accion = Yii::$app->request->post('accion');
 
+        //Ejecutar una acción en función del boton recibido por post
         switch ($accion) {
             case 'BtnEliminarSeleccionados':
                 $this->eliminarSeleccionados();
@@ -189,6 +224,8 @@ class LogController extends Controller
      * @param int $id ID
      * @return \yii\web\Response
      * @throws NotFoundHttpException if the model cannot be found
+     * 
+     * Este delete simplemente elimina el log que haya sido seleccionado
      */
     public function actionDelete($id)
     {
@@ -198,12 +235,15 @@ class LogController extends Controller
     }
 
 
+    /*
+     * Función que se encarga de eliminar los registros que hayan sido seleccionados mediante el checkbox de la vista index.php
+     * Este borrado recogerá el id de los logs que han sido pasados por post y los irá borrando uno a uno
+     */ 
     public function eliminarSeleccionados()
     {
         //Como se van a borrar varias entradas una por una se va a realizar en formato transacción
         //de esta forma se asegura que solo se actualiza la db si todas las entradas se han borrado correctamente
         $transaction = Yii::$app->db->beginTransaction();
-
         
         if ($this->request->isPost) {
             if (empty($this->request->post('selection'))) Yii::$app->session->setFlash('error', 'No se ha seleccionado ningun elemento para el borrado.');
@@ -217,7 +257,10 @@ class LogController extends Controller
         return $this->redirect(['index']);
     }
 
-
+    /*
+     * Función que se encarga de eliminar los registros que cumplan con los filtros seleccionados en la vista index.php
+     * Este borrado hará una petición para obtener los logs que cumplan los filtros recibidos y los borrara uno por uno
+     */ 
     public function eliminarFiltrados()
     {
         //Como se van a borrar varias entradas una por una se va a realizar en formato transacción
@@ -228,10 +271,7 @@ class LogController extends Controller
         $dataProvider = $searchModel->search($this->request->post()); //Los filtros llegan por post
         $dataProvider->pagination = false; //Eliminar la paginación para hacer el borrado
 
-        /* echo '<pre>';
-        print_r($searchModel->search($this->request->queryParams));
-        print_r($dataProvider->getModels()); */
-
+        //Obtener el modelo del dataprovider para poder eliminarlo
         foreach($dataProvider->getModels() as $model)
             $model->delete();
 
@@ -240,7 +280,9 @@ class LogController extends Controller
         return $this->redirect(['index']);
     }
 
-
+    /*
+     * Función que se encarga de eliminar todos los registro
+     */ 
     public function eliminarTodos()
     {
         Log::deleteAll();

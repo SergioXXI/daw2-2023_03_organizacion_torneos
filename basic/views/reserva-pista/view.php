@@ -41,14 +41,24 @@ $this->params['breadcrumbs'][] = $this->title;
     <?= DetailView::widget([
         'model' => $reserva,
         'attributes' => [
-            'id',
+
+            [
+                'format' => 'raw',
+                'label' => 'ID',
+                'value' => function ($model) {
+                    $url = Url::toRoute(['reserva/view', 'id' => $model->id]);
+                    return Html::a($model->id, $url);
+                },
+
+            ],
+
             'fecha',
 
             [
                 'format' => 'raw',
                 'label' => 'Usuario ID',
                 'value' => function ($model) {
-                    $url = Url::toRoute(['usuario/view', 'id' => $model->usuario_id]);
+                    $url = Url::toRoute(['user/view', 'id' => $model->usuario_id]);
                     return Html::a($model->usuario_id, $url);
                 },
 
@@ -61,7 +71,17 @@ $this->params['breadcrumbs'][] = $this->title;
     <?= DetailView::widget([
         'model' => $pista,
         'attributes' => [
-            'id',
+            
+            [
+                'format' => 'raw',
+                'label' => 'ID',
+                'value' => function ($model) {
+                    $url = Url::toRoute(['pista/view', 'id' => $model->id]);
+                    return Html::a($model->id, $url);
+                },
+
+            ],
+
             'nombre',
             'descripcion',
 

@@ -50,13 +50,13 @@ class ReservaPistaSearch extends ReservaPista
             'query' => $query,
         ]);
 
-        //Esto permite ordenar segun la reserva fecha y la pista nombre
+        //Esto permite ordenar segun la reserva fecha
         $orden = $dataProvider->getSort();
         $orden->attributes['reservaFecha'] = [
             'asc' => ['fecha' => SORT_ASC],
             'desc' => ['fecha' => SORT_DESC],
         ];
-
+        //Esto permite ordenar segun la pista nombre
         $orden->attributes['pistaNombre'] = [
             'asc' => ['nombre' => SORT_ASC],
             'desc' => ['nombre' => SORT_DESC],
@@ -65,8 +65,6 @@ class ReservaPistaSearch extends ReservaPista
         $this->load($params);
 
         if (!$this->validate()) {
-            // uncomment the following line if you do not want to return any records when validation fails
-            // $query->where('0=1');
             return $dataProvider;
         }
 
@@ -85,10 +83,10 @@ class ReservaPistaSearch extends ReservaPista
             'pista_id' => $this->pista_id,
         ]);
 
-        //Obtener la expresión usada para poder llevar a cabo este filtro
+        //Filtrado mediante la fecha de la tabla reserva
         $query->andFilterWhere(['like','reserva.fecha',$this->reservaFecha]);
 
-        //Obtener la expresión usada para poder llevar a cabo este filtro
+        //Filtrado mediante el nombre de la tabla pista
         $query->andFilterWhere(['like','pista.nombre',$this->pistaNombre]);
 
         return $dataProvider;
