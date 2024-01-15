@@ -40,9 +40,9 @@ if (Yii::$app->user->can('admin') || Yii::$app->user->can('sysadmin')) {
     <h1><?= Html::encode($model->nombre . ' ' . $model->apellido1) ?></h1>
 
     <p>
-        <?= Html::submitButton('Ver informacion de Participante', [
+        <?= Html::submitButton('Crear informacion de Participante', [
         'class' => 'btn btn-primary',
-        'onclick' => 'window.location.href="' . Url::to(['participante/view', 'id' => $result['id']]) . '"',
+        'onclick' => 'window.location.href="' . Url::to(['participante/create', 'id' => $model->id]) . '"',
         ]) ?>
         <?= Html::a(Yii::t('app', 'Actualizar'), [Yii::$app->user->can('admin') ? 'update' : 'self-update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
         <?= Yii::$app->user->can('admin') || Yii::$app->user->can('sysadmin')

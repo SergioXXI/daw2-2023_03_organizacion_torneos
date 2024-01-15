@@ -8,6 +8,7 @@ use app\models\UserSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\models\Participante;
 
 
 /**
@@ -138,9 +139,22 @@ class UserController extends Controller
 
     public function actionViewProfile()
     {
-        return $this->render('view', [
-            'model' => $this->findModel(Yii::$app->user->id),
-        ]);
+        $result = Yii::$app->db->createCommand('SELECT id FROM participante WHERE usuario_id = :usuarioId', [':usuarioId' => Yii::$app->user->id])->queryOne();
+        
+        if($result !== false)
+        {
+            return $this->render('view', [
+                'model' => $this->findModel(Yii::$app->user->id),
+                'result' => $result,
+            ]);
+        }
+        else
+        {
+            return $this->render('viewSinPart', [
+                'model' => $this->findModel(Yii::$app->user->id),
+            ]);
+        }
+        
     }
 
     /**
@@ -334,5 +348,7 @@ class UserController extends Controller
             'model' => $model,
         ]);
     }
+
+    
 
 }
