@@ -3,10 +3,12 @@
 namespace app\controllers;
 
 use app\models\Premio;
+use app\models\Torneo;
 use app\models\PremioSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\data\ArrayDataProvider;
 
 /**
  * PremioController implements the CRUD actions for Premio model.
@@ -70,8 +72,19 @@ class PremioController extends Controller
      */
     public function actionView($id)
     {
+        $model = $this->findModel($id);
+        $torneoProvider = new ArrayDataProvider([
+            'allModels' => $model->torneos,
+            'sort' => [
+                'attributes' => ['id', 'nombre'],
+            ],
+            'pagination' => [
+                'pageSize' => 10,
+            ],
+        ]);
         return $this->render('view', [
             'model' => $this->findModel($id),
+            'torneoProvider' => $torneoProvider,
         ]);
     }
 
