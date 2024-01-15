@@ -42,7 +42,6 @@ class DireccionSearch extends Direccion
     {
         $query = Direccion::find();
 
-        // add conditions that should always apply here
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
@@ -51,18 +50,15 @@ class DireccionSearch extends Direccion
         $this->load($params);
 
         if (!$this->validate()) {
-            // uncomment the following line if you do not want to return any records when validation fails
-            // $query->where('0=1');
             return $dataProvider;
         }
 
-        // grid filtering conditions
+        //Filtros básicos por campo
         $query->andFilterWhere([
             'id' => $this->id,
             'numero' => $this->numero,
             'cod_postal' => $this->cod_postal,
         ]);
-
         $query->andFilterWhere(['like', 'calle', $this->calle])
             ->andFilterWhere(['like', 'ciudad', $this->ciudad])
             ->andFilterWhere(['like', 'provincia', $this->provincia])

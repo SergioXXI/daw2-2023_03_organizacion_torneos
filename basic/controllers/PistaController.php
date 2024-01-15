@@ -231,8 +231,8 @@ class PistaController extends Controller
                 if(empty($model_direccion->numero)) unset($model_direccion->numero);
                 //En caso de existir una dirección con los mismos parametros no se creará y simplemente
                 //se asociara la direccion_ïd de la pista a esta dirección ya existente
-                unset($model_direccion->id);
-                $existe = Direccion::findOne($model_direccion->getAttributes($model_direccion->fields())); //Al usar fields con get attributes solo se usan los campos rellenados, dejando así excluido el id de la busqueda
+                unset($model_direccion->id); //Excluir el id de la busqueda
+                $existe = Direccion::findOne($model_direccion->getAttributes($model_direccion->fields())); //Al usar fields con get attributes solo se usan los campos rellenados
                 if($existe !== null) {
                     //Si ya existe la dirección se asigna el id de la misma al nuevo modelo creado
                     $model->direccion_id = $existe->id;

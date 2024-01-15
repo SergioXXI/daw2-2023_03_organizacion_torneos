@@ -147,7 +147,7 @@ class BackupController extends Controller
             }
             
         }
-        return $this->render('index');
+        return $this->redirect(['index', 'model' => $model]);
     }
 
 }
