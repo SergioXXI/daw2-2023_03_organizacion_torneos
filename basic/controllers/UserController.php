@@ -131,8 +131,11 @@ class UserController extends Controller
      */
     public function actionView($id)
     {
+        $result = Yii::$app->db->createCommand('SELECT id FROM participante WHERE usuario_id = :usuarioId', [':usuarioId' => $id])->queryOne();
+        
         return $this->render('view', [
             'model' => $this->findModel($id),
+            'result' => $result,
         ]);
         
     }
