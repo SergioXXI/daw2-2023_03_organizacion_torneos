@@ -40,10 +40,19 @@ if (Yii::$app->user->can('admin') || Yii::$app->user->can('sysadmin')) {
     <h1><?= Html::encode($model->nombre . ' ' . $model->apellido1) ?></h1>
 
     <p>
-        <?= Html::submitButton('Ver informacion de Participante', [
-        'class' => 'btn btn-primary',
-        'onclick' => 'window.location.href="' . Url::to(['participante/view', 'id' => $result['id']]) . '"',
-        ]) ?>
+        <?php
+        if ($result) : ?>
+            <?= Html::submitButton('Ver informacion de Participante', [
+                'class' => 'btn btn-primary',
+                'onclick' => 'window.location.href="' . Url::to(['participante/view', 'id' => $result['id']]) . '"',
+            ]) ?>
+        <?php else : ?>
+            <?= Html::submitButton('Crear informacion de Participante', [
+                'class' => 'btn btn-primary',
+                'onclick' => 'window.location.href="' . Url::to(['participante/create', 'id' => $model->id]) . '"',
+            ]) ?>
+        <?php endif; ?>
+
         <?= Html::a(Yii::t('app', 'Actualizar'), [Yii::$app->user->can('admin') ? 'update' : 'self-update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
         <?= Yii::$app->user->can('admin') || Yii::$app->user->can('sysadmin')
             ? Html::a(Yii::t('app', 'Borrar'), ['delete', 'id' => $model->id], [

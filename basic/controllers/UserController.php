@@ -141,20 +141,10 @@ class UserController extends Controller
     {
         $result = Yii::$app->db->createCommand('SELECT id FROM participante WHERE usuario_id = :usuarioId', [':usuarioId' => Yii::$app->user->id])->queryOne();
         
-        if($result !== false)
-        {
-            return $this->render('view', [
-                'model' => $this->findModel(Yii::$app->user->id),
-                'result' => $result,
-            ]);
-        }
-        else
-        {
-            return $this->render('viewSinPart', [
-                'model' => $this->findModel(Yii::$app->user->id),
-            ]);
-        }
-        
+        return $this->render('view', [
+            'model' => $this->findModel(Yii::$app->user->id),
+            'result' => $result,
+        ]);
     }
 
     /**
