@@ -11,7 +11,7 @@ use yii\helpers\ArrayHelper;
 /** @var yii\web\View $this */
 /** @var app\models\Participante $model */
 /** @var app\models\Equipo $equipoModel */
-echo "ID del Modelo: " . $model->id;
+
 $this->title = $model->usuario->nombre;
 $this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Participantes'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
@@ -103,6 +103,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <?php else: ?>
         <p>Este participante no tiene equipo.</p>
     <?php endif; ?>
-    <?php //echo Html::a('Volver', Yii::$app->request->referrer ?: ['site/index'], ['class' => 'btn btn-primary']);
-    ?>
+
+    <?= Html::a('Volver', ['user/view-profile'], ['class' => 'btn btn-primary']) ?>
+    
 </div>

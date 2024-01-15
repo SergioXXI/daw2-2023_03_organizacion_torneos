@@ -44,6 +44,7 @@ class Equipo extends \yii\db\ActiveRecord
             [['descripcion'], 'string', 'max' => 10000],
             [['licencia'], 'string', 'max' => 250],
             [['categoria_id'], 'exist', 'skipOnError' => true, 'targetClass' => Categoria::class, 'targetAttribute' => ['categoria_id' => 'id']],
+            [['creador_id'], 'exist', 'skipOnError' => true, 'targetClass' => Participante::class, 'targetAttribute' => ['creador_id' => 'id']],
             [['numParticipantes'], 'integer'],
         ];
     }
@@ -60,8 +61,20 @@ class Equipo extends \yii\db\ActiveRecord
             'licencia' => Yii::t('app', 'Licencia'),
             'categoria_id' => Yii::t('app', 'Categoria'),
             'numParticipantes' => Yii::t('app', 'Numero Participantes'),
+            'creador_id' => Yii::t('app', 'Lider/Creador'),
         ];
     }
+
+    /**
+     * Gets query for [[Categoria]].
+     *
+     * @return \yii\db\ActiveQuery|CreadorQuery
+     */
+    public function getCreador()
+    {
+        return $this->hasOne(Participante::class, ['id' => 'creador_id']);
+    }
+
 
     /**
      * Gets query for [[Categoria]].

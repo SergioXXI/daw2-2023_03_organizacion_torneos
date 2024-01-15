@@ -148,11 +148,13 @@ class ParticipanteController extends Controller
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return string|\yii\web\Response
      */
-    public function actionCreate($idUser=null)
+    public function actionCreate()
     {
         $model = new Participante();
         $usuarioModel = new User();
         $userType = \Yii::$app->request->post('userType', null);
+
+        $idUser = \Yii::$app->request->get('id', null);
 
         // Obtener todos los tipos de participantes
         $tiposParticipantes = TipoParticipante::find()->all();

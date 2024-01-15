@@ -39,7 +39,7 @@ class EquipoController extends Controller
                         [
                             'actions' => ['index'],
                             'allow' => true,
-                            'roles' => ['sysadmin','admin', 'gestor', 'usuario'],
+                            'roles' => ['sysadmin','admin', 'gestor'],
                         ],
                         [
                             'actions' => ['update','view','add-participante','add-torneo'],
@@ -141,10 +141,13 @@ class EquipoController extends Controller
        
         $tieneParticipantes = $query->count() > 0;
 
+        $esDelEquipo=0;
+
         return $this->render('view', [
             'model' => $model,
             'equipo' => $equipo,
             'dataProvider' => $dataProvider,
+            'esDelEquipo' => $esDelEquipo,
             'tieneParticipantes' => $tieneParticipantes,
             'torneosFinalizados' => $torneosFinalizados,
             'torneosEnCurso' => $torneosEnCurso,
@@ -169,8 +172,15 @@ class EquipoController extends Controller
             ->orderBy('nombre')
             ->all();
 
+        $participantes = Participante::find()
+            ->joinWith('usuario')
+            ->orderBy('nombre')
+            ->all();
+
         // Convertir a un array para el desplegable, usando 'id' como clave y 'nombre' como valor
         $listaCategorias = ArrayHelper::map($categorias, 'id', 'nombre');
+
+        $listaParticipantes = ArrayHelper::map($participantes, 'id', 'usuario.nombre');
 
         if ($this->request->isPost) {
             if ($model->load($this->request->post()) && $model->save()) {
@@ -182,8 +192,11 @@ class EquipoController extends Controller
 
         return $this->render('create', [
             'model' => $model,
-            'listaCategorias' => $listaCategorias, // Pasar la lista de categorías a la vista
+            'listaCategorias' => $listaCategorias, //Pasar la lista de categorías a la vista
+            'listaParticipantes' => $listaParticipantes, 
+            'participantes' => $participantes,
         ]);
+
     }
 
     /**

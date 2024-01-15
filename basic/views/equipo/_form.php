@@ -22,6 +22,11 @@ use yii\widgets\ActiveForm;
         $listaCategorias, 
         ['prompt' => 'Selecciona una Categoría']
     ) ?>
+
+    <?= $form->field($model, 'creador_id')->dropDownList(
+        $listaParticipantes, 
+        ['prompt' => 'Selecciona un Lider']
+    ) ?>
     <div class="form-group">
         <?= Html::submitButton(Yii::t('app', 'Guardar'), ['class' => 'btn btn-success']) ?>
     </div>
