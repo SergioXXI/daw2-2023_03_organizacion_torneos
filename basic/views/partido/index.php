@@ -40,8 +40,9 @@ $this->params['breadcrumbs'][] = $this->title;
                 if ($model->reserva_id === null) {
                     return Html::a(
                         'Reservar Pista', // Texto del botón
-                        ['pista/pistas', 'id' => $model->id],
+                        ['generar_reserva', 'id' => $model->id],
                         ['class' => 'btn btn-success']
+
                     );
                 } else {
                     return $model->reserva_id; // O el valor real de reserva_id si no es nulo

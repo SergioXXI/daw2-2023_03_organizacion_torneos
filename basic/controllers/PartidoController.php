@@ -2,6 +2,7 @@
 
 namespace app\controllers;
 
+use Yii;
 use app\models\Partido;
 use app\models\PartidoSearch;
 use app\models\PartidoEquipo;
@@ -153,5 +154,18 @@ class PartidoController extends Controller
             'model_equipo1' => $model_equipo1,
             'model_equipo2' => $model_equipo2,
         ]);
+    }
+
+    public function actionGenerar_reserva($id)
+    {
+        // Obtener el objeto de sesión
+        $session = Yii::$app->session;
+
+        // Abre la sesión si aún no está abierta
+        if (!$session->isActive) {
+            $session->open();
+        }
+        $session->set('id_partido', $id );
+        return $this->redirect(['pista/pistas']);
     }
 }

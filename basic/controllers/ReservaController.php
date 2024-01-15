@@ -5,7 +5,7 @@ namespace app\controllers;
 use Yii;
 use app\models\Reserva;
 use app\models\ReservaPista;
-use app\models\Material;
+use app\models\Partido;
 use app\models\ReservaSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -105,6 +105,7 @@ class ReservaController extends Controller
     public function actionCreate()
     {
         $model = new Reserva();
+        $partido = new Partido();
         $reserva_pista = new ReservaPista();
 
         $sessionId = Yii::$app->user->id;
@@ -114,6 +115,7 @@ class ReservaController extends Controller
         
         if($sessionId!=null && $pista_id!=null && $fecha!=null)
         {
+            $session = Yii::$app->session;
             $model->fecha=$fecha;
             $model->usuario_id=$sessionId;
             $model->save();
@@ -121,8 +123,14 @@ class ReservaController extends Controller
             $reserva_pista->reserva_id=$model->id;
             $reserva_pista->pista_id=$pista_id;
             $reserva_pista->save();
-            return $this->redirect(['view', 'id' => $model->id]);
             
+            if($session->get('id_partido')!=null){
+                
+                $partido = Partido::find()->where(['id' => $session->get('id_partido')])->one();
+                $partido->reserva_id=$model->id;
+                $partido->update();
+            }
+            return $this->redirect(['view', 'id' => $model->id]);
         }
 
         if ($this->request->isPost) {
