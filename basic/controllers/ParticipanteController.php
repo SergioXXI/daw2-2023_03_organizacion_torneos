@@ -41,14 +41,9 @@ class ParticipanteController extends Controller
                             'roles' => ['sysadmin','admin', 'gestor'],
                         ],
                         [
-                            'actions' => ['update','view','add-participante'],
+                            'actions' => ['update','view','add-equipo', 'abandonar-equipo','delete','create'],
                             'allow' => true,
                             'roles' => ['sysadmin','admin', 'gestor', 'usuario'],
-                        ],
-                        [
-                            'actions' => ['create', 'update', 'delete'],
-                            'allow' => true,
-                            'roles' => ['sysadmin','admin','gestor'],
                         ],
                     ],
                 ],
@@ -85,14 +80,14 @@ class ParticipanteController extends Controller
         $model = $this->findModel($id);
         $participante = $this->findModel($id);
 
-        $query = $model->getEquipos();
+        $query = $model->getEquipos()->with('torneos');
         $equiposDataProvider = new \yii\data\ActiveDataProvider(['query' => $query]);
 
         $tieneEquipo = $query->count() > 0;
 
         return $this->render('view', [
             'model' => $model,
-            'participante' => $participante,
+            'participante' => $participante,//modelo
             'equiposDataProvider' => $equiposDataProvider,
             'tieneEquipo' => $tieneEquipo,
         ]);
@@ -153,7 +148,7 @@ class ParticipanteController extends Controller
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return string|\yii\web\Response
      */
-    public function actionCreate()
+    public function actionCreate($idUser=null)
     {
         $model = new Participante();
         $usuarioModel = new User();
@@ -175,10 +170,10 @@ class ParticipanteController extends Controller
         if ($this->request->isPost) {
              // Cargar datos en el modelo Participante
             $model->load($this->request->post());
+            
             // Verificar si se seleccionó un usuario existente
             if (!empty($this->request->post('Participante')['usuario_id'])) {
                 // Participante vinculado a un usuario existente
-                
                 if ($model->save()) {
                     return $this->redirect(['view', 'id' => $model->id]);
                 }
@@ -198,6 +193,7 @@ class ParticipanteController extends Controller
             'model' => $model,
             'listaTiposParticipantes' => $listaTiposParticipantes,
             'listaUsuarios' => $listaUsuarios,
+            'idUser' => $idUser,
             'usuarioModel' => $usuarioModel,
             'userType' => $userType,
         ]);
@@ -242,9 +238,48 @@ class ParticipanteController extends Controller
      */
     public function actionDelete($id)
     {
-        $this->findModel($id)->delete();
-
-        return $this->redirect(['index']);
+        $transaction = \Yii::$app->db->beginTransaction();
+        try {
+            $participante = Participante::findOne($id);
+            if (!$participante) {
+                throw new NotFoundHttpException("Participante no encontrado.");
+            }
+    
+            // Comprobar equipos y estado de torneos
+            $puedeBorrar = true;
+            $fechaActual = new \DateTime();
+            $fechaActualString = $fechaActual->format('Y-m-d H:i:s');
+            foreach ($participante->equipos as $equipo) {
+                foreach ($equipo->torneos as $torneo) {
+                    if ($torneo->fecha_fin === null || $torneo->fecha_fin > $fechaActualString) {
+                        // El torneo no ha terminado o la fecha fin es null
+                        $puedeBorrar = false;
+                        break 2; // Sale de ambos bucles
+                    }
+                }
+            }
+            if ($puedeBorrar) {
+                // Eliminar el participante de los equipos que estan en algun torneo que ya ha finalizado
+                \Yii::$app->db->createCommand()->delete('equipo_participante', ['participante_id' => $id])->execute();
+                //Eliminar doc del participante
+                \Yii::$app->db->createCommand()->delete('participante_documento', ['participante_id' => $id])->execute();
+                // Borrar el participante
+                $participante->delete();
+                $transaction->commit();
+                \Yii::$app->session->setFlash('success', 'Participante borrado con éxito.');
+                return $this->redirect(['user/view-profile', 'id' => $participante->usuario->id]);
+            } else {
+                // No se puede borrar el participante
+                \Yii::$app->session->setFlash('error', 'El participante pertenece a un equipo que está en un torneo activo .');
+                return $this->redirect(['view', 'id' => $id]);
+            }
+        } catch (\Exception $e) {
+            $transaction->rollBack();
+            throw $e;
+        } catch (\Throwable $e) {
+            $transaction->rollBack();
+            throw $e;
+        }
     }
 
     /**

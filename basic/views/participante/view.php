@@ -5,10 +5,13 @@ use yii\widgets\DetailView;
 use yii\grid\GridView;
 use yii\grid\ActionColumn;
 use yii\helpers\Url;
+use yii\helpers\ArrayHelper;
+
 
 /** @var yii\web\View $this */
 /** @var app\models\Participante $model */
-
+/** @var app\models\Equipo $equipoModel */
+echo "ID del Modelo: " . $model->id;
 $this->title = $model->usuario->nombre;
 $this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Participantes'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
@@ -20,7 +23,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <p>
         <?= Html::a(Yii::t('app', 'Actualizar'), ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
-        <?= Html::a(Yii::t('app', 'Borrar'), ['usuario/delete', 'id' => $model->id], [
+        <?= Html::a(Yii::t('app', 'Borrar'), ['delete', 'id' => $model->id], [
             'class' => 'btn btn-danger',
             'data' => [
                 'confirm' => Yii::t('app', 'Are you sure you want to delete this item?'),
@@ -55,7 +58,7 @@ $this->params['breadcrumbs'][] = $this->title;
         ],
     ]) ?>
 
-    <h2>Equipos</h2>
+    <h2>Equipo - Torneo</h2>
     <?= Html::a('Unirse a un equipo', ['add-equipo', 'id' => $model->id], ['class' => 'btn btn-success']) ?>
     <?php if ($tieneEquipo): ?>
         <?= GridView::widget([
@@ -64,18 +67,28 @@ $this->params['breadcrumbs'][] = $this->title;
                 'id',
                 'nombre',
                 [
+                    'label' => 'Torneos',
+                    'value' => function ($model) {
+                        // Concatenar los nombres de los torneos.
+                        return implode(', ', ArrayHelper::map($model->torneos, 'id', 'nombre'));
+                    },
+                ],
+                [
                     'class' => ActionColumn::className(),
                     'template' => '{update} {abandonar}',
                     'buttons' => [
                         'abandonar' => function ($url, $model, $key) {
-                            return Html::a('X', $url, [
-                                'title' => Yii::t('app', 'Abandonar'),
-                                'data-confirm' => Yii::t('app', '¿Estás seguro de que deseas abandonar el equipo?'),
-                                'data-method' => 'post',
-                                'class' => 'btn btn-primary',
-                            ]);
+                            // Verifica si el equipo está inscrito en algún torneo.
+                            if ((Yii::$app->user->can('admin') || Yii::$app->user->can('gestor') || Yii::$app->user->can('sysadmin')) || empty($model->torneos)) {
+                                return Html::a('X', $url, [
+                                    'title' => Yii::t('app', 'Abandonar'),
+                                    'data-confirm' => Yii::t('app', '¿Estás seguro de que deseas abandonar el equipo?'),
+                                    'data-method' => 'post',
+                                    'class' => 'btn btn-primary',
+                                ]);
+                            }
+                            return ''; // No muestra nada si el equipo está en torneos.
                         },
-                        // ... definiciones de otros botones ...
                     ],
                     'urlCreator' => function ($action, $model, $key, $index, $column) use ($participante) {
                         if ($action === 'abandonar') {

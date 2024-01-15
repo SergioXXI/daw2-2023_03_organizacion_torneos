@@ -29,13 +29,16 @@ use yii\jui\DatePicker;
 
     <?= $form->field($model, 'imagen_id')->textInput() ?>
 
-    <?= $form->field($model, 'usuario_id')->dropDownList(
-        $listaUsuarios, 
-        ['prompt' => 'Seleccione un Usuario']
-    ) ?>
-
+    <?php if((Yii::$app->user->can('admin') || Yii::$app->user->can('sysadmin') || Yii::$app->user->can('gestor'))){?>
+        <?= $form->field($model, 'usuario_id')->dropDownList(
+            $listaUsuarios, 
+            ['prompt' => 'Seleccione un Usuario']
+        ) ?>
+    <?php }else{?>
+        <?= $form->field($model, 'usuario_id')->hiddenInput(['value' => $idUser])->label(false) ?>
+    <?php } ?>
     <div class="form-group">
-        <?= Html::submitButton(Yii::t('app', 'Save'), ['class' => 'btn btn-success']) ?>
+        <?= Html::submitButton(Yii::t('app', 'Guardar'), ['class' => 'btn btn-success']) ?>
     </div>
 
     <?php ActiveForm::end(); ?>
