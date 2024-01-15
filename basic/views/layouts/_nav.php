@@ -106,8 +106,6 @@ if(Yii::$app->user->isGuest) {
             'label' => Html::encode(Yii::$app->user->identity->nombre),
             'items' => [
                 ['label' => 'Perfil', 'url' => ['/user/view-profile']],
-                ['label' => 'Registrar usuario', 'url' => ['/user/register'], 
-                    'visible' => Yii::$app->user->can('sysadmin') || Yii::$app->user->can('admin') || Yii::$app->user->can('gestor')],
                 ['label' => 'Logout', 'url' => ['/site/logout'], 'linkOptions' => ['data-method' => 'post']],
             ],
             'dropdownOptions' => [
