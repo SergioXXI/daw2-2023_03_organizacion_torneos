@@ -52,7 +52,6 @@ class LogSearch extends Log
     {
         $query = Log::find();
 
-        // add conditions that should always apply here
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
@@ -61,16 +60,13 @@ class LogSearch extends Log
         $this->load($params);
 
         if (!$this->validate()) {
-            // uncomment the following line if you do not want to return any records when validation fails
-            // $query->where('0=1');
             return $dataProvider;
         }
 
-        // grid filtering conditions
+        //Filtrado básico
         $query->andFilterWhere([
             'id' => $this->id,
         ]);
-
         $query->andFilterWhere(['like', 'level', $this->level])
             ->andFilterWhere(['like', 'category', $this->category])
             ->andFilterWhere(['like', 'log_time', $this->log_time])
@@ -78,11 +74,12 @@ class LogSearch extends Log
             ->andFilterWhere(['like', 'message', $this->message]);
 
         
-        //Buscar 
-        $query->andFilterWhere(['>', 'log_time' , $this->fecha_ini]);
-        $query->andFilterWhere(['<', 'log_time' , $this->fecha_fin]);
-        $query->andFilterWhere(['>', 'log_time' , $this->fecha_posterior]);
-        $query->andFilterWhere(['<', 'log_time' , $this->fecha_anterior]);
+        //Filtros correspondientes a la sección temporal del buscador superior de la vista index 
+        //Se tiene que transformar la fecha ya que se filtra por dia y está guardada en la base de datos con horas minutos y segundos
+        $query->andFilterWhere(['>=', 'STR_TO_DATE(log_time, "%Y-%m-%d")' , $this->fecha_ini]);
+        $query->andFilterWhere(['<=', 'STR_TO_DATE(log_time, "%Y-%m-%d")' , $this->fecha_fin]);
+        $query->andFilterWhere(['>', 'STR_TO_DATE(log_time, "%Y-%m-%d")' , $this->fecha_posterior]);
+        $query->andFilterWhere(['<', 'STR_TO_DATE(log_time, "%Y-%m-%d")' , $this->fecha_anterior]);
 
         return $dataProvider;
     }

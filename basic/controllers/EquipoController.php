@@ -45,7 +45,7 @@ class EquipoController extends Controller
                             'roles' => ['sysadmin','admin', 'gestor'],
                         ],
                         [
-                            'actions' => ['update','view','expulsar-participante','add-torneo'],
+                            'actions' => ['update','view','expulsar-participante','add-torneo','lider','expulsar-participante'],
                             'allow' => true,
                             'roles' => ['sysadmin','admin', 'gestor', 'usuario'],
                         ],
@@ -512,7 +512,5 @@ class EquipoController extends Controller
 
         throw new NotFoundHttpException(Yii::t('app', 'The requested page does not exist.'));
     }
-
-
 }
 

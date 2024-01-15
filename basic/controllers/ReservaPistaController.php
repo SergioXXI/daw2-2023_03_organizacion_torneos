@@ -40,6 +40,7 @@ class ReservaPistaController extends Controller
      */
     public function actionIndex()
     {
+        //Creación del nuevo modelo de busqueda y uso mediante los parametros llegados por Get
         $searchModel = new ReservaPistaSearch();
         $dataProvider = $searchModel->search($this->request->queryParams);
 
@@ -59,6 +60,7 @@ class ReservaPistaController extends Controller
     public function actionView($reserva_id, $pista_id)
     {
         $model = $this->findModel($reserva_id, $pista_id);
+        //Obtener los modelos pista y reserva para mostrar su información
         $pista = $model->pista;
         $reserva = $model->reserva;
 
@@ -98,8 +100,10 @@ class ReservaPistaController extends Controller
      * @param int $pista_id Pista ID
      * @return string|\yii\web\Response
      * @throws NotFoundHttpException if the model cannot be found
+     * 
+     * No se va a permitir editar esta tabla
      */
-    public function actionUpdate($reserva_id, $pista_id)
+    /* public function actionUpdate($reserva_id, $pista_id)
     {
         $model = $this->findModel($reserva_id, $pista_id);
 
@@ -110,7 +114,7 @@ class ReservaPistaController extends Controller
         return $this->render('update', [
             'model' => $model,
         ]);
-    }
+    } */
 
     /**
      * Deletes an existing ReservaPista model.
