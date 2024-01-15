@@ -8,7 +8,7 @@ use yii\helpers\Html;
 GENERAL - Inicio (todos) | (A = menu administración)
 
 GRUPO 1 - 
-    -> Registro [/user/register] -> Invitado y gestor
+    -> Registro [/user/register] -> Invitado
     -> Login [/site/login] -> Invitado
     -> Logout [/site/logout] -> Todos menos Invitado
     A<- Roles [/auth-item] -> sysadmin 
