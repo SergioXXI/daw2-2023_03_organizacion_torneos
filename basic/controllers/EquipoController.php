@@ -2,6 +2,7 @@
 
 namespace app\controllers;
 
+
 use app\models\Equipo;
 use app\models\Usuario;
 use app\models\Participante;
@@ -13,6 +14,7 @@ use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\helpers\ArrayHelper;
 use app\controllers\ArrayDataProvider;
+
 
 
 /**
@@ -43,7 +45,7 @@ class EquipoController extends Controller
                             'roles' => ['sysadmin','admin', 'gestor'],
                         ],
                         [
-                            'actions' => ['update','view','add-participante','add-torneo'],
+                            'actions' => ['update','view','expulsar-participante','add-torneo'],
                             'allow' => true,
                             'roles' => ['sysadmin','admin', 'gestor', 'usuario'],
                         ],
@@ -170,7 +172,7 @@ class EquipoController extends Controller
     public function actionCreate()
     {
         $model = new Equipo();
-
+        
         // Obtener todas las categorías
         $categorias = Categoria::find()
             ->orderBy('nombre')
@@ -185,14 +187,20 @@ class EquipoController extends Controller
         $listaCategorias = ArrayHelper::map($categorias, 'id', 'nombre');
 
         $listaParticipantes = ArrayHelper::map($participantes, 'id', 'usuario.nombre');
+        
+        $participanteSesion = Participante::findOne(['usuario_id' => \Yii::$app->user->id]);
+        
 
+  
         if ($this->request->isPost) {
             if ($model->load($this->request->post()) && $model->save()) {
-                \Yii::$app->db->createCommand()->insert('equipo_participante', [
-                    'equipo_id' => $model->id,
-                    'participante_id' => $model->creador_id,
-                ])->execute();
-                return $this->redirect(['view', 'id' => $model->id]);
+                if($model->creador_id != null){
+                    \Yii::$app->db->createCommand()->insert('equipo_participante', [
+                        'equipo_id' => $model->id,
+                        'participante_id' => $model->creador_id,
+                    ])->execute();
+                }
+            return $this->redirect(['view', 'id' => $model->id]);
             }
         } else {
             $model->loadDefaultValues();
@@ -200,6 +208,7 @@ class EquipoController extends Controller
 
         return $this->render('create', [
             'model' => $model,
+            'participanteSesion' => $participanteSesion,
             'listaCategorias' => $listaCategorias, //Pasar la lista de categorías a la vista
             'listaParticipantes' => $listaParticipantes, 
             'participantes' => $participantes,
@@ -338,12 +347,31 @@ class EquipoController extends Controller
 
     public function actionExpulsarParticipante($equipoId, $participanteId)
     {
-        // Aquí va la lógica para eliminar la relación entre el equipo y el participante
+        $equipo  = (Equipo::findOne($equipoId));
+        
+        if($equipo->id  == $participanteId)
+        {
+            // Contar otros participantes en el equipo
+            $otrosParticipantes = Yii::$app->db->createCommand('SELECT participante_id FROM equipo_participante WHERE equipo_id = :equipoId AND participante_id != :participanteId')
+                ->bindValue(':equipoId', $equipoId)
+                ->bindValue(':participanteId', $participanteId)
+                ->queryAll();
+            if (!empty($otrosParticipantes)) {
+                // Hay otros participantes, selecciona uno como nuevo creador
+                $nuevoCreadorId = $otrosParticipantes[0]['participante_id'];
+                $equipo->creador_id = $nuevoCreadorId;
+            }else {
+                // No hay otros participantes, establece creador_id a null
+                $equipo->creador_id = null;
+            } 
+            // Guardar el cambio en el equipo
+             $equipo->save();   
+        }
+        
         \Yii::$app->db->createCommand()->delete('equipo_participante', [
             'equipo_id' => $equipoId,
             'participante_id' => $participanteId,
         ])->execute();
-
         return $this->redirect(['update', 'id' => $equipoId]);
     }
 
@@ -484,4 +512,7 @@ class EquipoController extends Controller
 
         throw new NotFoundHttpException(Yii::t('app', 'The requested page does not exist.'));
     }
+
+
 }
+

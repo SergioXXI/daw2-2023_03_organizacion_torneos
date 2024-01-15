@@ -45,7 +45,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'licencia',
             'categoria.nombre',
             [
-                'value' => $usuario->nombre,
+                'value' => $usuario!==null ? $usuario->nombre : "",
                 'label' => 'Creador',
             ],
         ],

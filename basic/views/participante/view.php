@@ -60,6 +60,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <h2>Equipo - Torneo</h2>
     <?= Html::a('Unirse a un equipo', ['add-equipo', 'id' => $model->id], ['class' => 'btn btn-success']) ?>
+    <?= Html::a(Yii::t('app', 'Crear Equipo'), ['equipo/create', 'creador_id'=>$model->id], ['class' => 'btn btn-success']) ?>
     <?php if ($tieneEquipo): ?>
         <?= GridView::widget([
             'dataProvider' => $equiposDataProvider,
@@ -100,9 +101,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 ]
             ],
         ]) ?>
-        <p>
-            <?= Html::a(Yii::t('app', 'Crear Equipo'), ['equipo/create', 'creador_id'=>$model->id], ['class' => 'btn btn-success']) ?>
-        </p>
+
     <?php else: ?>
         <p>Este participante no tiene equipo.</p>
     <?php endif; ?>
