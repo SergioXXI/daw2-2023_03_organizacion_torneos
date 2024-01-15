@@ -130,7 +130,7 @@ class ReservaController extends Controller
                 $partido->reserva_id=$model->id;
                 $partido->update();
             }
-            return $this->redirect(['view', 'id' => $model->id]);
+            return $this->redirect(['partidos/index', 'id' => $model->id]);
         }
 
         if ($this->request->isPost) {
