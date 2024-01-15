@@ -78,29 +78,6 @@ class TorneoController extends Controller
             'dataProvider' => $dataProvider,
         ]);
     }
-    /**
-     * Lists all Torneo models.
-     * Admmin view
-     *
-     * @return string
-     */
-    public function actionIndex_admin()
-    {
-        $searchModel = new TorneoSearch();
-        $query = Torneo::find();
-        $dataProvider = new ActiveDataProvider([
-            'query' => $query,
-            'pagination' => [
-                'pageSize' => 10, // Numero de paginas
-            ],
-        ]);
-        //$dataProvider = $searchModel->search($this->request->queryParams);
-
-        return $this->render('index_admin', [
-            'searchModel' => $searchModel,
-            'dataProvider' => $dataProvider,
-        ]);
-    }
 
     /**
      * Displays a single Torneo model.
@@ -136,12 +113,6 @@ class TorneoController extends Controller
             'model' => $model,
             'equipoProvider' => $equipoProvider,
             'premioProvider' => $premioProvider,
-        ]);
-    }
-    public function actionView_admin($id)
-    {
-        return $this->render('view_admin', [
-            'model' => $this->findModel($id),
         ]);
     }
 
