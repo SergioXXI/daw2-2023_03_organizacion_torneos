@@ -16,7 +16,6 @@ use yii\helpers\ArrayHelper;
  * @property string $provincia
  * @property string $pais
  *
- * @property Partido[] $partidos
  * @property Pista[] $pista
  */
 class Direccion extends \yii\db\ActiveRecord
@@ -58,16 +57,6 @@ class Direccion extends \yii\db\ActiveRecord
     }
 
     /**
-     * Gets query for [[Partidos]].
-     *
-     * @return \yii\db\ActiveQuery|PartidoQuery
-     */
-    /*public function getPartidos()
-    {
-        return $this->hasMany(Partido::class, ['direccion_id' => 'id']);
-    }*/
-
-    /**
      * Gets query for [[Pista]].
      *
      * @return \yii\db\ActiveQuery|PistaQuery
@@ -86,11 +75,16 @@ class Direccion extends \yii\db\ActiveRecord
         return new DireccionQuery(get_called_class());
     }
 
+    //Función que devuelve una string con la dirección formateada mediante la concatenación
+    //de campos pertenencientes al modelo
+    // @return: String
     public function getDireccionCompleta()
     {
         return $this->calle . ' ' . $this->numero . ', ' . $this->ciudad . ', ' . $this->provincia . ', ' . $this->pais . ', CP: ' . $this->cod_postal;
     }
 
+    //Función que devuelve un listado de todas las direcciones formateadas segun direccionCompleta
+    // @return: array
     public static function getListadoDirecciones()
     {
         return ArrayHelper::map(Direccion::find()->all(), 'id', 'direccionCompleta');

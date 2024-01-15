@@ -1,6 +1,11 @@
-<?php use yii\helpers\Html; ?> 
+<?php 
+use yii\helpers\Html; 
+use app\models\Pista;
 
-<?php //print_r($model->attributes); ?>
+
+//comprobar que las variable han llegado
+if(!isset($model)) $model = new Pista();
+ ?>
 
 <div class="col-md-6 mb-4">
 <div class="card">

@@ -4,12 +4,12 @@ namespace app\models;
 
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use app\models\Direccion;
+use app\models\ReservaMaterial;
 
 /**
- * DireccionSearch represents the model behind the search form of `app\models\Direccion`.
+ * ReservaMaterialSearch represents the model behind the search form of `app\models\ReservaMaterial`.
  */
-class DireccionSearch extends Direccion
+class ReservaMaterialSearch extends ReservaMaterial
 {
     /**
      * {@inheritdoc}
@@ -17,8 +17,7 @@ class DireccionSearch extends Direccion
     public function rules()
     {
         return [
-            [['id', 'numero', 'cod_postal'], 'integer'],
-            [['calle', 'ciudad', 'provincia', 'pais'], 'safe'],
+            [['reserva_id', 'material_id'], 'integer'],
         ];
     }
 
@@ -40,8 +39,9 @@ class DireccionSearch extends Direccion
      */
     public function search($params)
     {
-        $query = Direccion::find();
+        $query = ReservaMaterial::find();
 
+        // add conditions that should always apply here
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
@@ -50,19 +50,16 @@ class DireccionSearch extends Direccion
         $this->load($params);
 
         if (!$this->validate()) {
+            // uncomment the following line if you do not want to return any records when validation fails
+            // $query->where('0=1');
             return $dataProvider;
         }
 
-        //Filtros básicos por campo
+        // grid filtering conditions
         $query->andFilterWhere([
-            'id' => $this->id,
-            'numero' => $this->numero,
-            'cod_postal' => $this->cod_postal,
+            'reserva_id' => $this->reserva_id,
+            'material_id' => $this->material_id,
         ]);
-        $query->andFilterWhere(['like', 'calle', $this->calle])
-            ->andFilterWhere(['like', 'ciudad', $this->ciudad])
-            ->andFilterWhere(['like', 'provincia', $this->provincia])
-            ->andFilterWhere(['like', 'pais', $this->pais]);
 
         return $dataProvider;
     }

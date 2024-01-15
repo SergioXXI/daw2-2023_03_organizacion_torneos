@@ -17,6 +17,7 @@ GRUPO 1 -
 
 GRUPO 2 -
     <- Torneos [/torneo/index] -> Todos
+    A<- Partidos [partidoS/index]-> sysadmin, admin, organizador
     A<- Reservas [/reserva/index] -> sysadmin, admin, organizador, gestor
     A<- Disciplina [/disciplinas/index] -> sysadmin, admin
     A<- Categoria [/categoria/index] -> sysadmin, admin
@@ -48,30 +49,43 @@ NavBar::begin([
 $elementos_izquierda = [
     ['label' => 'Inicio', 'url' => ['/site/index']],
     ['label' => 'Torneos', 'url' => ['/torneo/index']],
+    ['label' => 'Partidos', 'url' => ['/partido/index']],
     ['label' => 'Pistas', 'url' => ['/pista/pistas']],
     ['label' => 'Calendario', 'url' => ['/calendario/index']],
     [
         'label' => 'Panel de administración',
         'items' => [
-            ['label' => 'Usuarios', 'url' => ['/user/index'], 'visible' => Yii::$app->user->can('sysadmin') || Yii::$app->user->can('admin')],
-            ['label' => 'Reservas', 'url' => ['/reserva/index'], 'visible' => Yii::$app->user->can('sysadmin') || Yii::$app->user->can('admin') ||
-                                                                              Yii::$app->user->can('organizador') || Yii::$app->user->can('gestor')],
-            ['label' => 'Disciplinas', 'url' => ['/disciplina/index'], 'visible' => Yii::$app->user->can('sysadmin') || Yii::$app->user->can('admin')],
-            ['label' => 'Categorias de Torneo', 'url' => ['/categoria/index'], 'visible' => Yii::$app->user->can('sysadmin') || Yii::$app->user->can('admin')],
-            ['label' => 'Clases de Torneo', 'url' => ['/clase/index'], 'visible' => Yii::$app->user->can('sysadmin') || Yii::$app->user->can('admin')],
-            ['label' => 'Tipo de Torneo', 'url' => ['/tipo-torneo/index'], 'visible' => Yii::$app->user->can('sysadmin') || Yii::$app->user->can('admin')],
-            ['label' => 'Premios', 'url' => ['/premio/index'], 'visible' => Yii::$app->user->can('sysadmin') || Yii::$app->user->can('admin') ||
-                                                                            Yii::$app->user->can('organizador')],
-            ['label' => 'Equipos', 'url' => ['/equipo/index'], 'visible' => Yii::$app->user->can('sysadmin') || Yii::$app->user->can('admin') ||
-                                                                            Yii::$app->user->can('gestor')],
-            ['label' => 'Participantes', 'url' => ['/participante/index'], 'visible' => Yii::$app->user->can('sysadmin') || Yii::$app->user->can('admin') ||
-                                                                                        Yii::$app->user->can('gestor')],
-            ['label' => 'Pistas', 'url' => ['/pista/index'], 'visible' => Yii::$app->user->can('sysadmin') || Yii::$app->user->can('admin')],
+            ['label' => 'Usuarios', 'url' => ['/user/index'], 
+                'visible' => Yii::$app->user->can('sysadmin') || Yii::$app->user->can('admin')],
+            ['label' => 'Reservas', 'url' => ['/reserva/index'], 
+                'visible' => Yii::$app->user->can('sysadmin') || Yii::$app->user->can('admin') || Yii::$app->user->can('organizador') || Yii::$app->user->can('gestor')],
+            /* ['label' => 'Partidos', 'url' => ['/partido/index'], 
+                'visible' => Yii::$app->user->can('sysadmin') || Yii::$app->user->can('admin') || Yii::$app->user->can('organizador')], */
+            ['label' => 'Disciplinas', 'url' => ['/disciplina/index'], 
+                'visible' => Yii::$app->user->can('sysadmin') || Yii::$app->user->can('admin')],
+            ['label' => 'Categorias de Torneo', 'url' => ['/categoria/index'], 
+                'visible' => Yii::$app->user->can('sysadmin') || Yii::$app->user->can('admin')],
+            ['label' => 'Clases de Torneo', 'url' => ['/clase/index'], 
+                'visible' => Yii::$app->user->can('sysadmin') || Yii::$app->user->can('admin')],
+            ['label' => 'Tipo de Torneo', 'url' => ['/tipo-torneo/index'], 
+                'visible' => Yii::$app->user->can('sysadmin') || Yii::$app->user->can('admin')],
+            ['label' => 'Premios', 'url' => ['/premio/index'], 
+                'visible' => Yii::$app->user->can('sysadmin') || Yii::$app->user->can('admin') || Yii::$app->user->can('organizador')],
+            ['label' => 'Equipos', 'url' => ['/equipo/index'], 
+                'visible' => Yii::$app->user->can('sysadmin') || Yii::$app->user->can('admin') || Yii::$app->user->can('gestor')],
+            ['label' => 'Participantes', 'url' => ['/participante/index'], 
+                'visible' => Yii::$app->user->can('sysadmin') || Yii::$app->user->can('admin') || Yii::$app->user->can('gestor')],
+            ['label' => 'Pistas', 'url' => ['/pista/index'], 
+                'visible' => Yii::$app->user->can('sysadmin') || Yii::$app->user->can('admin')],
             /* ['label' => 'Reserva Pistas', 'url' => ['/reserva-pista/index'], 'visible' => Yii::$app->user->can('sysadmin') || Yii::$app->user->can('admin')], */
-            ['label' => 'Direcciones', 'url' => ['/direccion/index'], 'visible' => Yii::$app->user->can('sysadmin') || Yii::$app->user->can('admin')],
-            ['label' => 'Backups base de datos', 'url' => ['/backup/index'], 'visible' => Yii::$app->user->can('sysadmin') || Yii::$app->user->can('admin')],
-            ['label' => 'Logs', 'url' => ['/log/index'], 'visible' => Yii::$app->user->can('sysadmin') || Yii::$app->user->can('admin')],
-            ['label' => 'Roles', 'url' => ['/auth-item/index'], 'visible' => Yii::$app->user->can('sysadmin')],
+            ['label' => 'Direcciones', 'url' => ['/direccion/index'], 
+                'visible' => Yii::$app->user->can('sysadmin') || Yii::$app->user->can('admin')],
+            ['label' => 'Backups base de datos', 'url' => ['/backup/index'], 
+                'visible' => Yii::$app->user->can('sysadmin') || Yii::$app->user->can('admin')],
+            ['label' => 'Logs', 'url' => ['/log/index'], 
+                'visible' => Yii::$app->user->can('sysadmin') || Yii::$app->user->can('admin')],
+            ['label' => 'Roles', 'url' => ['/auth-item/index'], 
+                'visible' => Yii::$app->user->can('sysadmin')],
         ],
         'visible' => Yii::$app->user->can('sysadmin') || Yii::$app->user->can('admin') || Yii::$app->user->can('organizador') || Yii::$app->user->can('gestor'),
         'dropdownOptions' => [
@@ -92,8 +106,8 @@ if(Yii::$app->user->isGuest) {
             'label' => Html::encode(Yii::$app->user->identity->nombre),
             'items' => [
                 ['label' => 'Perfil', 'url' => ['/user/view-profile']],
-                ['label' => 'Registrar usuario', 'url' => ['/user/register'], 'visible' => Yii::$app->user->can('sysadmin') || Yii::$app->user->can('admin') ||
-                                                                                            Yii::$app->user->can('gestor')],
+                ['label' => 'Registrar usuario', 'url' => ['/user/register'], 
+                    'visible' => Yii::$app->user->can('sysadmin') || Yii::$app->user->can('admin') || Yii::$app->user->can('gestor')],
                 ['label' => 'Logout', 'url' => ['/site/logout'], 'linkOptions' => ['data-method' => 'post']],
             ],
             'dropdownOptions' => [
