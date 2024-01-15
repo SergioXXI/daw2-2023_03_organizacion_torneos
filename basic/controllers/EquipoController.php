@@ -50,7 +50,7 @@ class EquipoController extends Controller
                         [
                             'actions' => ['create', 'update', 'delete'],
                             'allow' => true,
-                            'roles' => ['sysadmin','admin','gestor'],
+                            'roles' => ['sysadmin','admin','gestor', 'usuario'],
                         ],
                     ],
                 ],
