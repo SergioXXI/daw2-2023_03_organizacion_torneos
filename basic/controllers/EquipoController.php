@@ -43,7 +43,7 @@ class EquipoController extends Controller
                             'roles' => ['sysadmin','admin', 'gestor'],
                         ],
                         [
-                            'actions' => ['update','view','add-participante','add-torneo'],
+                            'actions' => ['update','view','add-participante','add-torneo','lider','expulsar-participante'],
                             'allow' => true,
                             'roles' => ['sysadmin','admin', 'gestor', 'usuario'],
                         ],
@@ -484,4 +484,19 @@ class EquipoController extends Controller
 
         throw new NotFoundHttpException(Yii::t('app', 'The requested page does not exist.'));
     }
+
+
+    public function actionLider( $equipoId,$participante_id)
+    {
+        $equipo= $this->findModel($equipoId);
+        \Yii::$app->db->createCommand()->update('equipo', [
+             // Replace with the actual attributes and values you want to update
+            'creador_id' => $participante_id,
+            // ...
+        ], [
+            'id' => $equipoId,
+        ])->execute();
+        return $this->redirect(['view', 'id' => $equipoId]);
+    }
+
 }
