@@ -37,29 +37,31 @@ foreach($campos as $campo) {
             <summary class="text-center btn btn-success fw-bold shadow-sm">Filtros avanzados</summary>
             <fieldset id="filtros">
                 <div class="busqueda-filtros">
-                    <div class="row filtros-pistas mt-4">
-                        <?php
+                        <?php 
+                            $i=0;
                             foreach($campos as $campo) {
+                                if($i%4 == 0) echo '<div class="row filtros-pistas mt-4">'; //Se podria usar Html::tag pero esto es más sencillo, ya que en el otro caso habria que meter todo lo del bucle en una string y pasarsela a la tag
                                 //Imprimir el input correspondiente al valor de $campo['tipo']
                                 switch ($campo['tipo']) {
                                     case 'text':
-                                        echo $form->field($model, $campo['atributo'], ['template' => '{input}'])->textInput(['placeholder' => $campo['placeholder']]);
+                                        echo $form->field($model, $campo['atributo'], ['template' => '{input}', 'options' => ['class' => 'col px-2']])->textInput(['placeholder' => $campo['placeholder']]);
                                         break;
                                     case 'dropdown':
-                                        echo $form->field($model, $campo['atributo'], ['template' => '{input}'])->dropDownList($campo['opciones'], [
+                                        echo $form->field($model, $campo['atributo'], ['template' => '{input}', 'options' => ['class' => 'col px-2']])->dropDownList($campo['opciones'], [
                                             'prompt' => $campo['placeholder'],
                                             'class' => 'form-select',
                                         ]);
                                         break;
                                     case 'number':
-                                        echo $form->field($model, $campo['atributo'], ['template' => '{input}'])->textInput(['placeholder' => $campo['placeholder'], 'type' => 'number']);
+                                        echo $form->field($model, $campo['atributo'], ['template' => '{input}', 'options' => ['class' => 'col px-2']])->textInput(['placeholder' => $campo['placeholder'], 'type' => 'number']);
                                         break;
                                     default:
                                         break;
                                 }
+                                $i++;
+                                if($i%4 == 0) echo '</div>'; //Si es multiplo de 4 se han añadido 4 inputs y se cambia de fila
                             }
                         ?>
-                    </div>
                 </div>
             </fieldset>
             </details>

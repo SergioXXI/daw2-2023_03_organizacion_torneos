@@ -18,8 +18,8 @@ class TorneoSearch extends Torneo
     public function rules()
     {
         return [
-            [['id', 'participantes_max', 'disciplina_id', 'tipo_torneo_id', 'clase_id'], 'integer'],
-            [['nombre', 'descripcion', 'fecha_inicio', 'fecha_limite', 'fecha_fin', 'jornada'], 'safe'],
+            [['id', 'participantes_max', 'disciplina_id', 'tipo_torneo_id', 'clase_id', 'jornada'], 'integer'],
+            [['nombre', 'descripcion', 'fecha_inicio', 'fecha_limite', 'fecha_fin'], 'safe'],
         ];
     }
 
