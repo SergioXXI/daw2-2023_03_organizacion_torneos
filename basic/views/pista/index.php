@@ -1,6 +1,5 @@
 <?php
 
-use app\models\Direccion;
 use app\models\Disciplina;
 use app\models\Pista;
 use yii\helpers\Html;
@@ -52,7 +51,7 @@ $this->title = Yii::t('app', 'Pistas');
             
             'direccionCompleta',
 
-            //Genera un enlace para poder ver la dirección de la pista asociada a la id mostrada
+            //Genera un enlace para poder ver la disciplina de la pista asociada a la id mostrada
             [
                 'format' => 'raw',
                 'attribute' => 'disciplina_id',
@@ -63,6 +62,7 @@ $this->title = Yii::t('app', 'Pistas');
 
             ],
 
+            //Generar un menu drowpdown para poder visualizar las disciplinas disponibles
             [
                 'attribute' => 'disciplinaNombre', 'value' => function ($model) {
                     return $model->disciplinaNombre;
@@ -71,14 +71,6 @@ $this->title = Yii::t('app', 'Pistas');
                 'filterInputOptions' => ['class' => 'form-select']
             ],
             
-
-            /*[
-                'label' => 'Dirección',
-                'value' => function ($model) {
-                    return Direccion::find()->where(['id' => $model->direccion_id])->one()->direccionCompleta;
-                },
-            ],*/
-
             //Botones de accion
             [
                 'class' => ActionColumn::className(),

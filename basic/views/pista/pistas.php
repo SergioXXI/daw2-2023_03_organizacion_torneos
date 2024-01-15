@@ -22,6 +22,7 @@ use yii\helpers\Html;
 // Use the widget
 foreach($models->getModels() as $model)
 {
+    //Se usa el widget PistaTajeta para poder imprimir la información de las pistas
     echo PistaTarjetaWidget::widget([
         'model' => $model,
     ]);

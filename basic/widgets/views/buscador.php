@@ -37,10 +37,9 @@ foreach($campos as $campo) {
             <summary class="text-center btn btn-success fw-bold shadow-sm">Filtros avanzados</summary>
             <fieldset id="filtros">
                 <div class="busqueda-filtros">
+                    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-4 mt-0">
                         <?php 
-                            $i=0;
                             foreach($campos as $campo) {
-                                if($i%4 == 0) echo '<div class="row filtros-pistas mt-4">'; //Se podria usar Html::tag pero esto es más sencillo, ya que en el otro caso habria que meter todo lo del bucle en una string y pasarsela a la tag
                                 //Imprimir el input correspondiente al valor de $campo['tipo']
                                 switch ($campo['tipo']) {
                                     case 'text':
@@ -58,14 +57,12 @@ foreach($campos as $campo) {
                                     default:
                                         break;
                                 }
-                                $i++;
-                                if($i%4 == 0) echo '</div>'; //Si es multiplo de 4 se han añadido 4 inputs y se cambia de fila
                             }
                         ?>
+                    </div>
                 </div>
             </fieldset>
             </details>
-            
         </div>
     <?php }; ?>
 </div>

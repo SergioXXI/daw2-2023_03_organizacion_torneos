@@ -32,11 +32,14 @@ class PistaQuery extends \yii\db\ActiveQuery
         return parent::one($db);
     }
 
-    //Devuelve la expresión a utilizar dentro de la query, hecho así para unificar frente a busquedas con distintos operadores
+    /* 
+     * Función que devuelve una expresión sql en formato string para poder ser utilizada durante el filtrado
+     * En este caso se genera una dirección uniendo todos los campos para asi poder buscar de forma global
+     * Se devuelve solo este segmento string para poder ser utilizada en diversos operadores como and,or...
+    */
     public function porDireccionCompleta($direccionCompleta)
     {
         $expresion = 'CONCAT(calle, " ", numero, ", ", ciudad, ", ", provincia, ", ", pais, ", CP: ", cod_postal)';
-        //$this->andFilterWhere(['like', $expresion , $direccionCompleta]);
         return $expresion;
     }
 

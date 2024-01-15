@@ -22,7 +22,7 @@ $form = ActiveForm::begin([
     'campos' => [
         ['atributo' => 'direccionProvincia', 'tipo' => 'text', 'placeholder' => 'Introduzca una provincia'],
         ['atributo' => 'direccionCiudad', 'tipo' => 'text', 'placeholder' => 'Introduzca una ciudad'],
-        ['atributo' => 'direccionPais', 'tipo' => 'text', 'placeholder' => 'Introduzca una provincia'],
+        ['atributo' => 'direccionPais', 'tipo' => 'text', 'placeholder' => 'Introduzca un país'],
         ['atributo' => 'disciplinaNombre', 'tipo' => 'dropdown', 'opciones' => Disciplina::getListadoDisciplinasPorNombre() ,'placeholder' => 'Seleccione una disciplina'],
     ],
 ]); ?>

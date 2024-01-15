@@ -12,12 +12,12 @@ use app\models\Pista;
 class PistaSearch extends Pista
 {
 
-    public $direccionCompleta;
-    public $disciplinaNombre;
-    public $direccionProvincia;
-    public $direccionCiudad;
-    public $direccionPais;
-    public $busquedaGlobal;
+    public $direccionCompleta; //Dirección concatenada de la pista
+    public $disciplinaNombre; //Nombre de la disciplina asociada a la pista
+    public $direccionProvincia; //Campo provincia de la dirección asociada a la pista
+    public $direccionCiudad; //Campo ciudad de la dirección asociada a la pista
+    public $direccionPais; //Campo pais de la dirección asociada a la pista
+    public $busquedaGlobal; //Parametro usado durante las busqueda por termino generales
 
     /**
      * {@inheritdoc}
@@ -63,6 +63,7 @@ class PistaSearch extends Pista
             'desc' => ['calle' => SORT_DESC],
         ];
 
+        //Ordenar en función del nombre de la disciplina asociada
         $orden->attributes['disciplinaNombre'] = [
             'asc' => ['disciplina.nombre' => SORT_ASC],
             'desc' => ['disciplina.nombre' => SORT_DESC],
@@ -71,8 +72,6 @@ class PistaSearch extends Pista
         $this->load($params);
 
         if (!$this->validate()) {
-            // uncomment the following line if you do not want to return any records when validation fails
-            // $query->where('0=1');
             return $dataProvider;
         }
 
@@ -93,8 +92,8 @@ class PistaSearch extends Pista
             'direccion_id' => $this->direccion_id,
             'disciplina_id' => $this->disciplina_id,
         ]);
-        $query->andFilterWhere(['like', 'nombre', $this->nombre])
-            ->andFilterWhere(['like', 'descripcion', $this->descripcion]);
+        $query->andFilterWhere(['like', 'pista.nombre', $this->nombre])
+            ->andFilterWhere(['like', 'pista.descripcion', $this->descripcion]);
 
 
 
@@ -114,13 +113,14 @@ class PistaSearch extends Pista
 
 
         /* FILTROS DE BUSQUEDA GLOBAL */
-
-        $query->andFilterWhere(['like', 'pista.nombre', $this->busquedaGlobal])
-                ->orFilterWhere(['like', 'pista.descripcion', $this->busquedaGlobal])
-                ->orFilterWhere(['like', 'pista.id', $this->busquedaGlobal])
-                ->orFilterWhere(['like', 'direccion_id', $this->busquedaGlobal])
-                ->orFilterWhere(['like', 'disciplina.nombre', $this->busquedaGlobal])
-                ->orFilterWhere(['like', $expresionDireccionCompleta, $this->busquedaGlobal]);
+        $query->andFilterWhere(['or',
+            ['like', 'pista.nombre', $this->busquedaGlobal],
+            ['like', 'pista.descripcion', $this->busquedaGlobal],
+            ['like', 'pista.id', $this->busquedaGlobal],
+            ['like', 'direccion_id', $this->busquedaGlobal],
+            ['like', 'disciplina.nombre', $this->busquedaGlobal],
+            ['like', $expresionDireccionCompleta, $this->busquedaGlobal],
+        ]);
 
         return $dataProvider;
     }

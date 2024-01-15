@@ -55,36 +55,18 @@ class PistaController extends Controller
         );
     }
 
-    /**
-     * Muestra todas las pistas al usuario para poder consultar datos y disponibilidad de las mismas
-     *
-     * @return string
-     */
+    /* 
+     * Acción que permite a un usuario visualizar un listado con todas las pistas existentes en la base de datos,
+     * esta acción incluye la capacidad de filtrar dichas pistas segun los parametros recibidos
+    */
     public function actionPistas()
     {
-    
+        //Creación del nuevo modelo de busqueda y uso mediante los parametros llegados por Get
         $searchModel = new PistaSearch();
         $dataProvider = $searchModel->search($this->request->queryParams);
 
+        //Se establece la paginación al limite establecido en el fichero params.php de config
         $dataProvider->pagination->pageSize = Yii::$app->params['limitePistas'];
-
-        /*echo '<pre>';
-        print_r($dataProvider->getModels());*/
-
-        /*$query = Pista::find();
-        $countQuery = clone $query;
-        $pages = new Pagination([
-            'totalCount' => $countQuery->count(),
-            'pageSize' => \Yii::$app->params['limitePistas'],
-        ]);
-        $models = $query->offset($pages->offset)
-            ->limit($pages->limit)
-            ->all();
-
-        return $this->render('pistas', [
-            'models' => $models,
-            'pages' => $pages,
-        ]);*/
 
         return $this->render('pistas', [
             'models' => $dataProvider,
@@ -101,6 +83,7 @@ class PistaController extends Controller
      */
     public function actionIndex()
     {
+        //Creación del nuevo modelo de busqueda y uso mediante los parametros llegados por Get
         $searchModel = new PistaSearch();
         $dataProvider = $searchModel->search($this->request->queryParams);
 
@@ -120,6 +103,8 @@ class PistaController extends Controller
     {
         $model = $this->findModel($id);
 
+        //Crear un nuevo arrayprovider que permite visualizar en que reservas
+        //esta siendo utilizado este modelo
         $pistasProvider = new ArrayDataProvider([
             'allModels' => $model->reservas,
             'sort' => [
@@ -174,7 +159,6 @@ class PistaController extends Controller
         $model = new Pista();
         $model_direccion = new Direccion();
 
-        
         if ($this->request->isPost) {
             
             //Primero se intenta crear la dirección
@@ -184,6 +168,10 @@ class PistaController extends Controller
             
             if($model_direccion->load($this->request->post())) {
 
+                //Si el numero llega vacio, como el campo en la db puede ser null, al hacer la busqueda con findOne no
+                //realiza bien la comparación del numero y no detecta la dirección como existente aun estándo ya en la db
+                //Por lo tanto si llega vacio se elimina
+                if(empty($model_direccion->numero)) unset($model_direccion->numero);
                 //En caso de existir una dirección con los mismos parametros no se creará y simplemente
                 //se asociara la direccion_ïd de la pista a esta dirección ya existente
                 $existe = Direccion::findOne($model_direccion->getAttributes($model_direccion->fields())); //Al usar fields con get attributes solo se usan los campos rellenados, dejando así excluido el id de la busqueda
@@ -237,7 +225,10 @@ class PistaController extends Controller
             
             if($model_direccion->load($this->request->post())) {
 
-                
+                //Si el numero llega vacio, como el campo en la db puede ser null, al hacer la busqueda con findOne no
+                //realiza bien la comparación del numero y no detecta la dirección como existente aun estándo ya en la db
+                //Por lo tanto si llega vacio se elimina
+                if(empty($model_direccion->numero)) unset($model_direccion->numero);
                 //En caso de existir una dirección con los mismos parametros no se creará y simplemente
                 //se asociara la direccion_ïd de la pista a esta dirección ya existente
                 unset($model_direccion->id);
@@ -246,6 +237,8 @@ class PistaController extends Controller
                     //Si ya existe la dirección se asigna el id de la misma al nuevo modelo creado
                     $model->direccion_id = $existe->id;
                 } else {
+                    //Técnicamente se está editando una dirección, pero si al editarla no existe se creará, por lo tanto, hay que activar NewRecord
+                    $model_direccion->isNewRecord = true; 
                     //Si no existe la dirección se crear una nueva y se le asigna el id de la creación
                     if($model_direccion->save()) {
                         //Si se genera correctamente la entrada direccion se recoge la id dejada por la base de datos
@@ -254,11 +247,12 @@ class PistaController extends Controller
                     }
                 }
 
+                
                 if ($model->load($this->request->post()) && $model->save()) {
                     //Si se llega a este punto se confirma la transaccion
                     $transaction->commit();
                     return $this->redirect(['view', 'id' => $model->id]);
-                }   
+                }  
             }
         } else {
             $model->loadDefaultValues();
@@ -284,6 +278,8 @@ class PistaController extends Controller
      *      1. Si la entrada de la reserva unicamente está asociada con la pista se eliminan
      *         tanto la entrada de la pista como la entrada de la reserva de la db, eliminando
      *         primeramente la entrada que las une ubicada en la tabla reserva_pista.
+     *          1. Si además la reserva esta asociada a un partido se establece el reserva_id de
+     *             la tabla partido a null antes de la eliminación de la reserva.
      *      2. Si la entrada de la reserva, a parte de estar asociada con la pista, también lo
      *         está con materiales mediante una entrada en la tabla reserva_materiales
      *         no es eliminada de la db, simplemente es eliminada la relación con la pista de la
@@ -303,7 +299,15 @@ class PistaController extends Controller
                 $reservas_material = $reserva->reservaMateriales;
                 if(empty($reservas_material)) { //Supuesto 2.1
                     $reserva_pista->delete();
-                    $reserva->delete();
+                    $partido = $reserva->partido;
+                    if(!empty($partido)) { //Supuesto 2.1.1
+                        $partido->reserva_id = null;
+                        if($partido->save()) {
+                            $reserva->delete();
+                        }
+                    } else {
+                        $reserva->delete();
+                    }
                 } else { //Supuesto 2.2
                     $reserva_pista->delete();
                 }
