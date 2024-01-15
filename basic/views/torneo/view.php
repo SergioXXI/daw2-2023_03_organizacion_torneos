@@ -8,7 +8,7 @@ use yii\grid\GridView;
 /** @var yii\web\View $this */
 /** @var app\models\Torneo $model */
 
-$this->title = $model->id;
+$this->title = $model->nombre;
 $this->params['breadcrumbs'][] = ['label' => 'Torneos', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 \yii\web\YiiAsset::register($this);
