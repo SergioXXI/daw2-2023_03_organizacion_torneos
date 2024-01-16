@@ -39,7 +39,7 @@ class PartidoController extends Controller
                             
                         ],
                         [
-                            'actions' => ['create', 'update', 'delete'],
+                            'actions' => ['create', 'update', 'delete','generar_reserva','equipos_partidos'],
                             'allow' => true,
                             'roles' => ['sysadmin','admin','organizador'],
                         ],
