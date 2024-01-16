@@ -29,7 +29,7 @@ use yii\jui\DatePicker;
 
     <?= $form->field($model, 'imagen_id')->textInput() ?>
 
-    <?php if((Yii::$app->user->can('admin') || Yii::$app->user->can('sysadmin') || Yii::$app->user->can('gestor'))  && $idUser==null){?>
+    <?php if((Yii::$app->user->can('admin') || Yii::$app->user->can('sysadmin') || Yii::$app->user->can('gestor'))){?>
         <?= $form->field($model, 'usuario_id')->dropDownList(
             $listaUsuarios, 
             ['prompt' => 'Seleccione un Usuario']

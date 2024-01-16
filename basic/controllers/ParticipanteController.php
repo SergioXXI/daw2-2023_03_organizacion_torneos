@@ -81,7 +81,7 @@ class ParticipanteController extends Controller
     {
         $model = $this->findModel($id);
         $participante = $this->findModel($id);
-
+        $participanteSesion = Participante::findOne(['usuario_id' => \Yii::$app->user->id]);
         $query = $model->getEquipos()->with('torneos');
         $equiposDataProvider = new \yii\data\ActiveDataProvider(['query' => $query]);
 
@@ -90,6 +90,7 @@ class ParticipanteController extends Controller
         return $this->render('view', [
             'model' => $model,
             'participante' => $participante,//modelo
+            'participanteSesion' => $participanteSesion,//modelo
             'equiposDataProvider' => $equiposDataProvider,
             'tieneEquipo' => $tieneEquipo,
         ]);
@@ -137,10 +138,10 @@ class ParticipanteController extends Controller
     {
         $equipo  = (Equipo::findOne($equipoId));
         
-        if($equipo->id  == $participanteId)
+        if($equipo->creador_id  == $participanteId)
         {
             // Contar otros participantes en el equipo
-            $otrosParticipantes = Yii::$app->db->createCommand('SELECT participante_id FROM equipo_participante WHERE equipo_id = :equipoId AND participante_id != :participanteId')
+            $otrosParticipantes = \Yii::$app->db->createCommand('SELECT participante_id FROM equipo_participante WHERE equipo_id = :equipoId AND participante_id != :participanteId')
                 ->bindValue(':equipoId', $equipoId)
                 ->bindValue(':participanteId', $participanteId)
                 ->queryAll();
@@ -282,16 +283,43 @@ class ParticipanteController extends Controller
                     }
                 }
             }
+            echo '<pre>';
             if ($puedeBorrar) {
+                foreach ($participante->equiposCreador as $equipo) {
+                    //print_r($equipo);
+                    // Contar otros participantes en el equipo
+                    $otrosParticipantes = \Yii::$app->db->createCommand('SELECT participante_id FROM equipo_participante WHERE equipo_id = :equipoId AND participante_id != :participanteId')
+                    ->bindValue(':equipoId', $equipo->id)
+                    ->bindValue(':participanteId', $participante->id)
+                    ->queryAll();
+                    if (!empty($otrosParticipantes)) {
+                        // Hay otros participantes, selecciona uno como nuevo creador
+                        $nuevoCreadorId = $otrosParticipantes[0]['participante_id'];
+                        $equipo->creador_id = $nuevoCreadorId;
+                    }else {
+                        // No hay otros participantes, establece creador_id a null
+                        $equipo->creador_id = null;
+                    } //print_r($equipo);print('FIN');
+                    // Guardar el cambio en el equipo
+                    $equipo->save();     
+                }
+                
                 // Eliminar el participante de los equipos que estan en algun torneo que ya ha finalizado
                 \Yii::$app->db->createCommand()->delete('equipo_participante', ['participante_id' => $id])->execute();
                 //Eliminar doc del participante
                 \Yii::$app->db->createCommand()->delete('participante_documento', ['participante_id' => $id])->execute();
+                
+
+
                 // Borrar el participante
                 $participante->delete();
                 $transaction->commit();
                 \Yii::$app->session->setFlash('success', 'Participante borrado con éxito.');
-                return $this->redirect(['user/view-profile', 'id' => $participante->usuario->id]);
+                if(\Yii::$app->user->can('admin') || \Yii::$app->user->can('sysadmin') || \Yii::$app->user->can('gestor')){
+                    return $this->redirect(['index']);
+                }else{
+                    return $this->redirect(['user/view-profile', 'id' => $participante->usuario->id]);
+                }
             } else {
                 // No se puede borrar el participante
                 \Yii::$app->session->setFlash('error', 'El participante pertenece a un equipo que está en un torneo activo .');

@@ -58,7 +58,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'urlCreator' => function ($action, Participante $model, $key, $index, $column) {
                     if ($action === 'delete') {
                         // Ruta personalizada para el botón delete
-                        return Url::toRoute(['usuario/delete', 'id' => $model->usuario_id]);
+                        return Url::toRoute(['delete', 'id' => $model->id]);
                     } else {
                         // Rutas estándar para las acciones view y update
                         return Url::toRoute([$action, 'id' => $model->id]);

@@ -20,7 +20,7 @@ use app\controllers\ArrayDataProvider;
 /**
  * EquipoController.
  * 
- * actionIndex, actionView, actionCreate, actionUpdate, actionAddParticipante, actionExpulsarParticipante, actionAddTorneo, actionSalirTorneo, actionDelete
+ * actionIndex, actionView, actionCreate, actionUpdate, actionAddParticipante, actionExpulsarParticipante, actionAddTorneo, actionSalirTorneo, actionDelete, actionLider
  */
 class EquipoController extends Controller
 {
@@ -47,7 +47,7 @@ class EquipoController extends Controller
                             'roles' => ['sysadmin','admin', 'gestor'],
                         ],
                         [
-                            'actions' => ['update','view','expulsar-participante','add-torneo','lider','expulsar-participante'],
+                            'actions' => ['update','create','view','add-participante','expulsar-participante','add-torneo','salir-torneo','lider','delete'],
                             'allow' => true,
                             'roles' => ['sysadmin','admin', 'gestor', 'usuario'],
                         ],
@@ -73,6 +73,19 @@ class EquipoController extends Controller
         ]);
     }
 
+    public function actionLider( $equipoId,$participante_id)
+    {
+        $equipo= $this->findModel($equipoId);
+        \Yii::$app->db->createCommand()->update('equipo', [
+             // Replace with the actual attributes and values you want to update
+            'creador_id' => $participante_id,
+            // ...
+        ], [
+            'id' => $equipoId,
+        ])->execute();
+        return $this->redirect(['view', 'id' => $equipoId]);
+    }
+
     /**
      * Displays a single Equipo model.
      * @param int $id ID
@@ -84,6 +97,7 @@ class EquipoController extends Controller
 
         $model = $this->findModel($id);
         $equipo = $this->findModel($id);
+        $participanteSesion = Participante::findOne(['usuario_id' => \Yii::$app->user->id]);
 
         $clonesIds = Equipo::find()
         ->select('id')
@@ -143,14 +157,13 @@ class EquipoController extends Controller
 
         $usuario=$model->getUsuario()->one();
 
-        $esDelEquipo=0;
 
         return $this->render('view', [
             'model' => $model,
             'usuario' => $usuario,
             'equipo' => $equipo,
+            'participanteSesion' => $participanteSesion,
             'dataProvider' => $dataProvider,
-            'esDelEquipo' => $esDelEquipo,
             'tieneParticipantes' => $tieneParticipantes,
             'torneosFinalizados' => $torneosFinalizados,
             'torneosEnCurso' => $torneosEnCurso,
@@ -224,13 +237,17 @@ class EquipoController extends Controller
     {
         $model = $this->findModel($id);
         $equipo = $this->findModel($id);
+        $participanteSesion = Participante::findOne(['usuario_id' => \Yii::$app->user->id]);
+
         $participantes = Participante::find()
                 ->joinWith('usuario')
                 ->orderBy('nombre')
                 ->all();
 
         $listaParticipantes = ArrayHelper::map($participantes, 'id', 'usuario.nombre');
-
+        /////////////////////////////
+        //logica de clonación
+        //////////////////////////
         if ((!\Yii::$app->user->can('gestor'))&&(!\Yii::$app->user->can('organizador'))&&(!\Yii::$app->user->can('sysadmin'))&&(\Yii::$app->user->can('usuario'))) 
         { 
             $inscritoEnTorneos = (new \yii\db\Query())
@@ -238,7 +255,6 @@ class EquipoController extends Controller
                 ->where(['equipo_id' => $id])
                 ->exists();
             
-
             if ($inscritoEnTorneos) {
                 // Lógica para clonar el equipo
                 $nuevoEquipo = new Equipo();
@@ -267,7 +283,7 @@ class EquipoController extends Controller
                 return $this->redirect(['update', 'id' => $nuevoEquipo->id]);
             }
         }
-       //*/
+       //*/////////////////////////////////////
 
         // Obtener todas las categorías
         $categorias = Categoria::find()
@@ -289,6 +305,12 @@ class EquipoController extends Controller
         $tieneParticipantes = $query->count() > 0;
 
         if ($this->request->isPost && $model->load($this->request->post()) && $model->save()) {
+            if($model->creador_id != null){
+                \Yii::$app->db->createCommand()->insert('equipo_participante', [
+                    'equipo_id' => $model->id,
+                    'participante_id' => $model->creador_id,
+                ])->execute();
+            }
             return $this->redirect(['view', 'id' => $model->id]);
         }
 
@@ -298,6 +320,7 @@ class EquipoController extends Controller
             'model' => $model,
             'usuario' => $usuario,
             'equipo' => $equipo,
+            'participanteSesion' => $participanteSesion,
             'listaParticipantes' => $listaParticipantes, 
             'listaCategorias' => $listaCategorias,
             'dataProvider' => $dataProvider,
@@ -346,10 +369,10 @@ class EquipoController extends Controller
     {
         $equipo  = (Equipo::findOne($equipoId));
         
-        if($equipo->id  == $participanteId)
+        if($equipo->creador_id  == $participanteId)
         {
             // Contar otros participantes en el equipo
-            $otrosParticipantes = Yii::$app->db->createCommand('SELECT participante_id FROM equipo_participante WHERE equipo_id = :equipoId AND participante_id != :participanteId')
+            $otrosParticipantes = \Yii::$app->db->createCommand('SELECT participante_id FROM equipo_participante WHERE equipo_id = :equipoId AND participante_id != :participanteId')
                 ->bindValue(':equipoId', $equipoId)
                 ->bindValue(':participanteId', $participanteId)
                 ->queryAll();

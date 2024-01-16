@@ -98,6 +98,18 @@ class Participante extends \yii\db\ActiveRecord
         return $this->hasMany(Equipo::class, ['id' => 'equipo_id'])->viaTable('{{%equipo_participante}}', ['participante_id' => 'id']);
     }
 
+
+    
+    /**
+     * Gets query for [[EquiposCreador]].
+     *
+     * @return \yii\db\ActiveQuery|EquipoQuery
+     */
+    public function getEquiposCreador()
+    {
+        return $this->hasMany(Equipo::class, ['creador_id' => 'id']);
+    }
+
     /**
      * Gets query for [[Imagen]].
      *
