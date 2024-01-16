@@ -10,6 +10,7 @@ use app\models\Torneo;
 use app\models\Premio;
 use app\models\TorneoSearch;
 use app\models\User;
+use Exception;
 use yii\data\ActiveDataProvider;
 use yii\web\UploadedFile;
 use yii\web\Controller;
@@ -131,43 +132,56 @@ class TorneoController extends Controller
         $model = new torneo();
         $imagen = new Imagen();
         $union = new TorneoImagen();
+        $equipoProvider = new ArrayDataProvider([
+            'allModels' => $model->equipos,
+            'sort' => [
+                'attributes' => ['id', 'nombre'],
+            ],
+            'pagination' => [
+                'pageSize' => 10,
+            ],
+        ]);
+        $premioProvider = new ArrayDataProvider([
+            'allModels' => $model->premios,
+            'sort' => [
+                'attributes' => ['id', 'nombre'],
+            ],
+            'pagination' => [
+                'pageSize' => 10,
+            ],
+        ]);
 
         if ($model->load($this->request->post()) && $model->save())  {
-            $destino = './imagenes';
-            $model->imageFile = UploadedFile::getInstance($model, 'imageFile');
-            $rutaFichero = $destino . '/' . $model->imageFile;
-            if ($model->subirImagen($destino)) {
-                // file is uploaded successfully
-                $imagen->ruta = $rutaFichero;
-                $imagen->save();
 
-                $union->torneo_id = $model->id;
-                $union->imagen_id = $imagen->id;
-                $union->save();
-                $equipoProvider = new ArrayDataProvider([
-                    'allModels' => $model->equipos,
-                    'sort' => [
-                        'attributes' => ['id', 'nombre'],
-                    ],
-                    'pagination' => [
-                        'pageSize' => 10,
-                    ],
-                ]);
-                $premioProvider = new ArrayDataProvider([
-                    'allModels' => $model->premios,
-                    'sort' => [
-                        'attributes' => ['id', 'nombre'],
-                    ],
-                    'pagination' => [
-                        'pageSize' => 10,
-                    ],
-                ]);
+            //if($this->request->post()['Torneo']['imageFile'])
+            try{
+                $destino = './imagenes';
+                $model->imageFile = UploadedFile::getInstance($model, 'imageFile');
+                $rutaFichero = $destino . '/' . $model->imageFile;
+                if ($model->subirImagen($destino)) {
+                    
+                    // file is uploaded successfully
+                    $imagen->ruta = $rutaFichero;
+                    $imagen->save();
+
+                    $union->torneo_id = $model->id;
+                    $union->imagen_id = $imagen->id;
+                    $union->save();
+                }
+            }catch(Exception $e){
                 return $this->render('view', [
                     'model' => $model,
                     'equipoProvider' => $equipoProvider,
                     'premioProvider' => $premioProvider,
-                ]);;
+                ]);
             }
+                
+                return $this->render('view', [
+                    'model' => $model,
+                    'equipoProvider' => $equipoProvider,
+                    'premioProvider' => $premioProvider,
+                ]);
+            
         }
 
         return $this->render('create', [
@@ -187,44 +201,53 @@ class TorneoController extends Controller
         $model = $this->findModel($id);
         $imagen = new Imagen();
         $union = new TorneoImagen();
+        $equipoProvider = new ArrayDataProvider([
+            'allModels' => $model->equipos,
+            'sort' => [
+                'attributes' => ['id', 'nombre'],
+            ],
+            'pagination' => [
+                'pageSize' => 10,
+            ],
+        ]);
 
+        $premioProvider = new ArrayDataProvider([
+            'allModels' => $model->premios,
+            'sort' => [
+                'attributes' => ['id', 'nombre'],
+            ],
+            'pagination' => [
+                'pageSize' => 10,
+            ],
+        ]);
         if ($model->load($this->request->post()) && $model->save())  {
-            $destino = './imagenes';
-            $model->imageFile = UploadedFile::getInstance($model, 'imageFile');
-            $rutaFichero = $destino . '/' . $model->imageFile;
-            if ($model->subirImagen($destino)) {
-                // file is uploaded successfully
-                $imagen->ruta = $rutaFichero;
-                $imagen->save();
+            //if($this->request->post()['Torneo']['imageFile'])
+            try{
+                $destino = './imagenes';
+                $model->imageFile = UploadedFile::getInstance($model, 'imageFile');
+                $rutaFichero = $destino . '/' . $model->imageFile;
+                if ($model->subirImagen($destino)) {
+                    // file is uploaded successfully
+                    $imagen->ruta = $rutaFichero;
+                    $imagen->save();
 
-                $union->torneo_id = $model->id;
-                $union->imagen_id = $imagen->id;
-                $union->save();
-                $equipoProvider = new ArrayDataProvider([
-                    'allModels' => $model->equipos,
-                    'sort' => [
-                        'attributes' => ['id', 'nombre'],
-                    ],
-                    'pagination' => [
-                        'pageSize' => 10,
-                    ],
-                ]);
-
-                $premioProvider = new ArrayDataProvider([
-                    'allModels' => $model->premios,
-                    'sort' => [
-                        'attributes' => ['id', 'nombre'],
-                    ],
-                    'pagination' => [
-                        'pageSize' => 10,
-                    ],
-                ]);
+                    $union->torneo_id = $model->id;
+                    $union->imagen_id = $imagen->id;
+                    $union->save();
+                }
+            }catch(Exception $e){
                 return $this->render('view', [
                     'model' => $model,
                     'equipoProvider' => $equipoProvider,
                     'premioProvider' => $premioProvider,
                 ]);
             }
+            return $this->render('view', [
+                'model' => $model,
+                'equipoProvider' => $equipoProvider,
+                'premioProvider' => $premioProvider,
+            ]);
+            
         }
 
         return $this->render('update', [
