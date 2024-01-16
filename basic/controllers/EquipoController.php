@@ -42,7 +42,7 @@ class EquipoController extends Controller
                         [
                             'actions' => ['index'],
                             'allow' => true,
-                            'roles' => ['sysadmin','admin', 'gestor'],
+                            //'roles' => ['sysadmin','admin', 'gestor'],
                         ],
                         [
                             'actions' => ['update','view','expulsar-participante','add-torneo','lider','expulsar-participante'],
