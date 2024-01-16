@@ -6,6 +6,7 @@ use Yii;
 use app\models\Partido;
 use app\models\PartidoSearch;
 use app\models\PartidoEquipo;
+use app\models\ResultadoForm; // Add this import statement
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -15,39 +16,36 @@ use yii\filters\VerbFilter;
  */
 class PartidoController extends Controller
 {
-    /**
-     * @inheritDoc
-     */
-    public function behaviors()
+
+    public function actualizarResultado($idPartido, $idEquipo, $puntos)
     {
-        return array_merge(
-            parent::behaviors(),
-            [
-                'verbs' => [
-                    'class' => VerbFilter::className(),
-                    'actions' => [
-                        'delete' => ['POST'],
-                    ],
-                ],
-                'access' => [
-                    'class' => \yii\filters\AccessControl::class,
-                    'rules' => [
-                        [
-                            'actions' => ['index', 'view'],
-                            'allow' => true,
-                            //'roles' => ['sysadmin','admin', 'usuario', 'organizador', 'gestor'],
-                            
-                        ],
-                        [
-                            'actions' => ['create', 'update', 'delete','generar_reserva','equipos_partidos'],
-                            'allow' => true,
-                            'roles' => ['sysadmin','admin','organizador'],
-                        ],
-                    ],
-                ],
-            ]
-        );
+        $partidoEquipo = PartidoEquipo::findOne(['partido_id' => (int)$idPartido, 'equipo_id' => (int)$idEquipo]);
+        $partidoEquipo->puntos = $puntos;
+        $partidoEquipo->save();
     }
+
+    public function actionActualizarResultado()
+    {
+        // $idPartido = $this->request->get('idPartido');
+        $model = new ResultadoForm();
+
+        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
+
+            $this->actualizarResultado($model->idPartido, $model->idEquipo1, $model->puntosEquipo1);
+            $this->actualizarResultado($model->idPartido, $model->idEquipo2, $model->puntosEquipo2);
+            Yii::$app->session->setFlash('success', 'Resultados actualizados exitosamente.');
+            
+            return $this->render('view', [
+                'model' => $this->findModel($model->idPartido),
+            ]);
+        }
+
+        return $this->render('actualizarResultado', [
+            'model' => $model,
+        ]);
+    }
+
+
 
     /**
      * Lists all Partido models.
