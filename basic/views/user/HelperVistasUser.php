@@ -8,7 +8,7 @@ Class HelperVistasUser
      * 
      * @return array|null
      */
-    static public function extraerRolesDesplegable($rolAnadir = null) {
+    static public function extraerRolesDesplegable() {
         $roles = null;
         if (Yii::$app->user->can('sysadmin')) {
             // Obtenemos los roles hijos del rol asignado al usuario
@@ -26,15 +26,6 @@ Class HelperVistasUser
             }
         } else {
             return null;
-        }
-
-        if ($rolAnadir != null) {
-            // creamos nuevo rol sin guardarlo
-            $rolAnadir = Yii::$app->authManager->createRole($rolAnadir);
-            // añadimos el rol al array de roles
-            array_push($roles, $rolAnadir);
-        } else {
-            array_push($roles, '');
         }
 
 

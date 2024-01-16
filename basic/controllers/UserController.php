@@ -160,7 +160,7 @@ class UserController extends Controller
 
         if ($this->request->isPost) {
             $request = $this->request->post();
-            // nos quedamos con el nombre del ro
+            // nos quedamos con el nombre del rol
             $rolName = $request['User']['rol'];
             unset($request['User']['rol']);
 
@@ -270,7 +270,7 @@ class UserController extends Controller
             Yii::$app->authManager->revokeAll($id);
             Yii::$app->authManager->assign(Yii::$app->authManager->getRole($rol), $id);
             return true; 
-        } else if ($rol == null) {
+        } else if ($rol == null) { //nunca deberia de llegar aqui pero en caso de que suceda le quitamos todos los roles
             Yii::$app->authManager->revokeAll($id);
             return true;
         }
