@@ -10,6 +10,22 @@ use yii\data\ArrayDataProvider;
 
 use Yii;
 
+
+/**********************************************************************************************/
+/*                                          IMPORTANTE                                        
+ * 
+ * Para que funcione el sistema de backups tanto a la hora de crear nuevas copias de la base
+ * de datos como de restaurar copias hay que modificar la ruta a los ejecutables usados
+ * en los comandos dentro del fichero de configuración param.php.
+ * 
+ * Hay que cambiar la ruta a mysqldump.exe y a mysql, correspondiente a los siguientes parámetros
+ * 
+ * 'rutaMysqldump' => 'C:\xampp\mysql\bin\mysqldump.exe',
+ * 'rutaMysql' => 'C:\xampp\mysql\bin\mysql.exe',
+ *
+**********************************************************************************************/
+
+
 /**
  * BackupController implements the CRUD actions for Torneo model.
  */
