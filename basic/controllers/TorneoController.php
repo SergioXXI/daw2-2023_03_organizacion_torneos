@@ -2,17 +2,22 @@
 
 namespace app\controllers;
 
+use app\models\EquipoParticipante;
+use app\models\Participante;
 use app\models\TorneoImagen;
 use app\models\Imagen;
 use app\models\Torneo;
 use app\models\Premio;
 use app\models\TorneoSearch;
+use app\models\User;
 use yii\data\ActiveDataProvider;
 use yii\web\UploadedFile;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\data\ArrayDataProvider;
+
+use Yii;
 
 /**
  * TorneoController implements the CRUD actions for Torneo model.
@@ -39,7 +44,7 @@ class TorneoController extends Controller
                     'class' => \yii\filters\AccessControl::class,
                     'rules' => [
                         [
-                            'actions' => ['index', 'view'],
+                            'actions' => ['index', 'view','ver-partidos','add-torneo'],
                             'allow' => true,
                             //'roles' => ['sysadmin','admin', 'usuario', 'organizador', 'gestor'],
                             
@@ -64,14 +69,14 @@ class TorneoController extends Controller
     public function actionIndex()
     {
         $searchModel = new TorneoSearch();
-        $query = Torneo::find();
+        $dataProvider = $searchModel->search($this->request->queryParams);
+        /* $query = Torneo::find();
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
             'pagination' => [
                 'pageSize' => 10, // Numero de paginas
             ],
-        ]);
-        //$dataProvider = $searchModel->search($this->request->queryParams);
+        ]); */
 
         return $this->render('index', [
             'searchModel' => $searchModel,
@@ -273,6 +278,26 @@ class TorneoController extends Controller
         return $this->redirect(['index']);
     }
 
+    public function actionVerPartidos($id)
+    {
+        $model = $this->findModel($id);
+        $partidos = new ArrayDataProvider([
+            'allModels' => $model->partidos,
+            'sort' => [
+                'attributes' => ['fecha'], //Se va a ordenar por fecha por defecto
+                'defaultOrder' => ['fecha' => SORT_ASC],
+            ],
+            'pagination' => [
+                'pageSize' => Yii::$app->params['limitePartidos'],
+            ],
+        ]);
+
+        return $this->render('ver_partidos', [
+            'torneo' => $model,
+            'partidos' => $partidos,
+        ]);
+    }
+
     /**
      * Finds the Torneo model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
@@ -287,5 +312,18 @@ class TorneoController extends Controller
         }
 
         throw new NotFoundHttpException(Yii::t('app', 'The requested page does not exist.'));
+    }
+    
+
+    public function actionAddTorneo()
+    {
+        $usuario= new User();
+        $participante= new Participante();
+        $equipo_participante= new EquipoParticipante();
+        $sessionId = Yii::$app->user->id;
+        $participante=$participante::findOne(['usuario_id' => $sessionId]);
+        $equipo_participante=$equipo_participante::findOne(['participante_id' => $participante->id]);
+        
+        return $this->redirect(['equipo/add-torneo', 'id' => $equipo_participante->equipo_id]);
     }
 }

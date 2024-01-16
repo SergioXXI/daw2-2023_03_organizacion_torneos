@@ -41,9 +41,13 @@ GRUPO 4 -
 NavBar::begin([
     'brandLabel' => Yii::$app->name,
     'brandUrl' => Yii::$app->homeUrl,
-    'options' => ['class' => 'navbar-expand-md navbar-dark bg-dark fixed-top'],
+    'options' => [
+        'class' => 'navbar-expand-md navbar-dark bg-dark fixed-top',
+        'style' => 'box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1)', // Add box shadow here
+    ],
     'innerContainerOptions' => ['class' => 'container-fluid px-4'],
     'containerOptions' => ['class' => 'justify-content-between'],
+    'brandOptions' => ['class' => 'text-success fw-bold'],
 ]);
 
 $elementos_izquierda = [

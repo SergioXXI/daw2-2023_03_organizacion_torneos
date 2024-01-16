@@ -128,6 +128,7 @@ class ReservaController extends Controller
                 
                 $partido = Partido::find()->where(['id' => $session->get('id_partido')])->one();
                 $partido->reserva_id=$model->id;
+                $partido->fecha=$model->fecha;
                 $partido->update();
             }
             return $this->redirect(['view', 'id' => $model->id]);

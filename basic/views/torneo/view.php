@@ -16,6 +16,8 @@ $this->params['breadcrumbs'][] = $this->title;
 <div class="torneo-view">
 
     <h1><?= Html::encode($this->title) ?></h1>
+    <?= Html::a('Unirse al torneo', ['add-torneo', 'model' => $model], ['class' => 'btn btn-success']) ?>
+    <?= Html::a('Ver Partidos', ['ver-partidos', 'id' => $model->id], ['class' => 'btn btn-success']); ?>
     <?php
     if ((Yii::$app->user->can('admin'))||(Yii::$app->user->can('organizador'))||(Yii::$app->user->can('sysadmin'))) 
     {

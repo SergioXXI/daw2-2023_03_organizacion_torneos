@@ -46,11 +46,10 @@ $this->registerJsFile('https://kit.fontawesome.com/6a8d4512ef.js', ['position' =
     </div>
 </main>
 
-<footer id="footer" class="mt-auto py-3 bg-light">
+<footer id="footer" class="mt-auto py-2 bg-dark">
     <div class="container">
-        <div class="row text-muted">
-            <div class="col-md-6 text-center text-md-start">&copy; My Company <?= date('Y') ?></div>
-            <div class="col-md-6 text-center text-md-end"><?= Yii::powered() ?></div>
+        <div class="text-center text-secondary">
+            DAW2 - Grupo organización de torneos <?= date('Y') ?>
         </div>
     </div>
 </footer>

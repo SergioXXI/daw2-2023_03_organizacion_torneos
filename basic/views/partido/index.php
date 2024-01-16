@@ -18,12 +18,19 @@ $this->params['breadcrumbs'][] = $this->title;
     <h1><?= Html::encode($this->title) ?></h1>
 
     <p>
-        <?= Html::a(Yii::t('app', 'Create Partido'), ['create'], ['class' => 'btn btn-success']) ?>
+        <?php   
+        if ((Yii::$app->user->can('admin'))||(Yii::$app->user->can('organizador'))||(Yii::$app->user->can('sysadmin'))) {
+         echo Html::a(Yii::t('app', 'Create Partido'), ['create'], ['class' => 'btn btn-success']);
+        }
+         ?>
     </p>
 
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
-    <?= GridView::widget([
+    <?php
+    if ((Yii::$app->user->can('admin'))||(Yii::$app->user->can('organizador'))||(Yii::$app->user->can('sysadmin'))) 
+    {
+    echo GridView::widget([
     'dataProvider' => $dataProvider,
     'filterModel' => $searchModel,
     'columns' => [
@@ -56,7 +63,47 @@ $this->params['breadcrumbs'][] = $this->title;
              }
         ],
     ],
-]); ?>
+]); 
+}else{
+    echo GridView::widget([
+        'dataProvider' => $dataProvider,
+        'filterModel' => $searchModel,
+        'columns' => [
+            ['class' => 'yii\grid\SerialColumn'],
+    
+            
+            'jornada',
+            'fecha',
+            [
+                'attribute' => 'torneo_id',
+                'value' => 'torneo.nombre', 
+            ],
+            [
+                'attribute' => 'reserva_id',
+                'format' => 'raw',
+                'value' => function ($model) {
+                    if ($model->reserva_id === null) {
+                        return Html::a(
+                            'Reservar Pista', // Texto del botón
+                            ['generar_reserva', 'id' => $model->id],
+                            ['class' => 'btn btn-success']
+    
+                        );
+                    } else {
+                        return $model->reserva_id; // O el valor real de reserva_id si no es nulo
+                    }
+                },
+            ],
+            [
+                'class' => ActionColumn::className(),'template'=>'{view}',
+                'urlCreator' => function ($action, Partido $model, $key, $index, $column) {
+                    return Url::toRoute([$action, 'id' => $model->id]);
+                 }
+            ],
+        ],
+    ]); 
+}
+    ?>
 
 
 

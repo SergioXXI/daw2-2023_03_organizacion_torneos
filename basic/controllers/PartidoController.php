@@ -29,6 +29,22 @@ class PartidoController extends Controller
                         'delete' => ['POST'],
                     ],
                 ],
+                'access' => [
+                    'class' => \yii\filters\AccessControl::class,
+                    'rules' => [
+                        [
+                            'actions' => ['index', 'view'],
+                            'allow' => true,
+                            //'roles' => ['sysadmin','admin', 'usuario', 'organizador', 'gestor'],
+                            
+                        ],
+                        [
+                            'actions' => ['create', 'update', 'delete','generar_reserva','equipos_partidos'],
+                            'allow' => true,
+                            'roles' => ['sysadmin','admin','organizador'],
+                        ],
+                    ],
+                ],
             ]
         );
     }
