@@ -34,7 +34,7 @@ class MaterialController extends Controller
                         [
                             'actions' => ['index', 'view','materiales_reservas', 'materiales_reservas2'],
                             'allow' => true,
-                            'roles' => ['sysadmin','admin', 'participante', 'organizador', 'gestor'],
+                            'roles' => ['sysadmin','admin', 'usuario', 'organizador', 'gestor'],
                         ],
                         [
                             'actions' => ['create', 'update', 'delete', 'materiales_reservas', 'materiales_reservas2'],
