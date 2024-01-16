@@ -42,6 +42,35 @@ main > .container {
     word-wrap: break-word;
 }
 
+.blur{
+    background-color: rgba(0, 0, 0, 0.7); /* Dark background color */
+    padding: 20px;
+    border-radius: 10px;
+    backdrop-filter: blur(50px); /* Apply blur effect */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Optional shadow */
+    z-index: 1; /* Set the card above the overlay */
+}
+
+.nav-link:hover{
+    text-decoration: underline !important;
+    color: lightgreen !important;
+    text-underline-offset: 8px !important;
+}
+
+.nav-link.active{
+    color: lightgreen !important;
+}
+
+.dropdown-item.active{
+    background: none !important;
+    color: lightgreen !important;
+}
+
+.dropdown-item:active{
+    background: none !important;
+    color: lightgreen !important;
+}
+
 #details {
     display: none;
     /* Additional styles for the hidden details */

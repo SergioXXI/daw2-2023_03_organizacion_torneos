@@ -64,14 +64,14 @@ class TorneoController extends Controller
     public function actionIndex()
     {
         $searchModel = new TorneoSearch();
-        $query = Torneo::find();
+        $dataProvider = $searchModel->search($this->request->queryParams);
+        /* $query = Torneo::find();
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
             'pagination' => [
                 'pageSize' => 10, // Numero de paginas
             ],
-        ]);
-        //$dataProvider = $searchModel->search($this->request->queryParams);
+        ]); */
 
         return $this->render('index', [
             'searchModel' => $searchModel,
