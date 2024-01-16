@@ -4,7 +4,7 @@ return [
     'adminEmail' => 'admin@example.com',
     'senderEmail' => 'noreply@example.com',
     'senderName' => 'Example.com mailer',
-    'limitePistas' => 4,
+    'limitePistas' => 12,
     'limiteEventos' => 10,
     'limiteGridView-View' => 10,
     'limiteLog' => 50,

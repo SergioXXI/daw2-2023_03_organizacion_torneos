@@ -10,59 +10,41 @@ use yii\bootstrap5\LinkPager;
 $this->registerJsFile('https://cdn.jsdelivr.net/npm/fullcalendar@6.1.10/index.global.min.js', ['position' => View::POS_HEAD]);
 $this->registerCssFile(Yii::getAlias('@web/css/calendar.css'));
 
+$consulta_direccion = 'https://maps.google.com/maps?q=' . urlencode(Html::encode($model->direccionCompleta)) . '';
+
+$consulta_embed = $consulta_direccion . ';&amp;t=&amp;z=14&amp;ie=UTF8&amp;iwloc=B&amp;output=embed';
+
 ?>
 
 <h1 class="mb-2 h1 mt-0">Información sobre la pista</h2>
 
 <hr>
 
-<h1> <?= $model->nombre ?> </h1>
+<div class="row d-flex justify-content-between px-2 gap-4">
+	<div class="col-7" id="izq">
+		<div class="">
+			<h1> <?= $model->nombre ?> </h1>
+			<p class="mt-3 d-block fs-5 text-truncate"><b>Disciplina:</b> <?= $model->disciplinaNombre ?></p>
+			<p class="fs-5 d-block text-truncate-long"><b>Descripción:</b> <?= $model->descripcion ?></p>
+			<p class="mt-3 d-block fs-5 text-truncate-long"><b>Dirección: </b><?= $model->direccionCompleta ?></p>
+		</div>
+	</div>
+	<div class="col-auto d-flex flex-column" id="der">
+		<iframe src="<?= $consulta_embed; ?>" frameborder="0" scrolling="no" style="width: 400px; height: 300px; border: 1px solid black;"></iframe>
+		<?= Html::a(Html::tag('i', '', ['class' => 'fa-solid fa-location-dot']) . ' Consultar en el mapa ', $consulta_direccion, ['class' => 'btn btn-outline-dark mt-4', 'title' => 'Consultar en el mapa', 'target' => '_blank']) ?>
+	</div>
+</div>
 
-<p> <?= $model->direccionCompleta ?></p>
-
-<?= Html::a(Html::tag('i', '', ['class' => 'fa-solid fa-location-dot']) . ' Consultar en el mapa ', 'https://maps.google.com/maps?q=' . Html::encode($model->direccionCompleta) . '', ['class' => 'btn btn-outline-dark', 'title' => 'Consultar en el mapa', 'target' => '_blank']) ?>
 
 
-<h2 class="mt-5 mb-2 h2">Calendario de disponibilidad</h2>
-<hr>
+<h2 class="mt-0 mb-2 h2">Calendario de disponibilidad</h2>
+<p class="mt-3 mb-1 fs-5">Seleccione un dia libre para realizar una reserva</p>
+<hr class="mt-2">
 
-<?php
-//GESTIÓN DE EVENTOS PARA INTRODUCIRLOS EN EL CALENDARIO
-$eventos = [];
-
-
-foreach ($reservas as $reserva) {
-
-	$partido = $reserva->partido;
-
-	if(!empty($partido)) {
-		$torneo = $partido->torneo; //si existe un partido tiene que estar asociado a un torneo
-		$url = Url::toRoute(['pista/ver-pista', 'id' => $model->id, '#' => Html::encode($reserva->fecha)]);
-		$titulo = Html::encode($torneo->nombre . ' - J' . $partido->jornada);
-	} else {
-		$url = '';
-		$titulo = 'Reserva privada';
-	}
-	
-	//Guardar los eventos en un array que será utilizado por el script de FullCalendar
-	$eventos[] = [
-		'title' => $titulo,
-		'start' => $reserva->fecha,
-		'color' => 'red',
-		'display' => 'background',
-		'url' => $url, // Adjust the route as needed
-	];
-
-}
-
-$eventos = json_encode($eventos);
-
-?>
 
 <div id="calendar-pista"></div>
 
 <h2 class="mt-5 mb-2 h2">Proximos eventos</h2>
-
 <hr>
 
 <?php 
@@ -77,15 +59,13 @@ foreach ($reservasProvider->getModels() as $reserva) {
 	//Si la reserva está asociada a un partido
 	if(!empty($partido)) {
 		$torneo = $partido->torneo; //si existe un partido tiene que estar asociado a un torneo
-		$titulo = Html::encode($torneo->nombre . ' - J' . $partido->jornada);
 		//Generar una tarjeta de evento de tipo partido
 		echo EventoTarjetaWidget::widget([
-			'id' => $partido->id,
 			'datos' => [
-				'titulo' => $torneo->nombre . ' - Jornada ' . $partido->jornada,
+				'id' => $partido->id,
+				'titulo' => (isset($torneo->nombre) ? $torneo->nombre : '') . ' - Jornada ' . $partido->jornada,
 				'fecha' => $reserva->fecha,
 			],
-			'resaltar' => false,
 		]);
 	}
 	else {
@@ -95,7 +75,6 @@ foreach ($reservasProvider->getModels() as $reserva) {
 				'titulo' => 'Reserva para uso particular',
 				'fecha' => $reserva->fecha,
 			],
-			'resaltar' => false,
 			'botonInfo' => false,
 		]);
 

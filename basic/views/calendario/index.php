@@ -15,7 +15,7 @@ use yii\bootstrap5\LinkPager;
     <?= Html::a('Ver Calendario', ['calendario'], ['class' => 'text-center btn btn-success fw-bold shadow-sm me-4']) ?>
 </div>
 
-<div class="summary mt-2 ms-3">Mostrando <b> <?= Html::encode($eventosProvider->getCount()) ?> </b> de <b> <?= Html::encode($eventosProvider->getTotalCount()) ?> </b> elementos.</div>
+<div class="summary mt-2 ms-2">Se han encontrado <b> <?= Html::encode($eventosProvider->getTotalCount()) ?> </b> elementos.</div>
 <hr class="mt-1">
 
 <?php 
@@ -36,7 +36,6 @@ foreach($eventosProvider->models as $evento) {
             'id' => $evento['id'],
             'jornada' => isset($evento['jornada']) ? $evento['jornada'] : '',
         ],
-        'resaltar' => false,
         'tarjetaEvento' => 'ampliada',
     ]);
 

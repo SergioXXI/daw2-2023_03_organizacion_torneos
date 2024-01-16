@@ -3,12 +3,16 @@
 namespace app\widgets;
 use yii\base\Widget;
 
+//widget que permite pasados unos parametros imprimir una tarjeta de evento
 class EventoTarjetaWidget extends Widget
 {
+    //Id del evento utilizada en caso de necesitar redirigir a vistas
     public $id = null;
+    //Datos que se van a mostrar en la tarjeta
     public $datos = [];
+    //Bool que determina si se debe añadir un botón de información
     public $botonInfo = true;
-    public $resaltar = false;
+    //String con el tipo de tarjeta mostrada, puede ser ampliada o normal
     public $tarjetaEvento = 'normal';
 
     public function run()
@@ -18,7 +22,6 @@ class EventoTarjetaWidget extends Widget
             'id' => $this->id,
             'datos' => $this->datos,
             'botonInfo' => $this->botonInfo,
-            'resaltar' => $this->resaltar,
         ]);
     }
 }

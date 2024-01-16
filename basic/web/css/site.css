@@ -22,6 +22,26 @@ main > .container {
     font-style: italic;
 }
 
+.text-truncate{
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    text-overflow: ellipsis;
+    -webkit-line-clamp: 2;
+    white-space: normal !important;
+    word-wrap: break-word;
+}
+
+.text-truncate-long{
+    overflow: auto;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    text-overflow: ellipsis;
+    -webkit-line-clamp: 5;
+    white-space: normal !important;
+    word-wrap: break-word;
+}
+
 #details {
     display: none;
     /* Additional styles for the hidden details */

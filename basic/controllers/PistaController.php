@@ -3,6 +3,7 @@
 namespace app\controllers;
 use app\models\Direccion;
 use app\models\Pista;
+use app\models\Torneo;
 use app\models\PistaSearch;
 use yii\data\ActiveDataProvider;
 use yii\web\Controller;
@@ -10,6 +11,9 @@ use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\db\IntegrityException;
 use yii\data\ArrayDataProvider;
+use yii\helpers\Html;
+use yii\helpers\Url;
+
 use Yii;
 
 /**
@@ -125,11 +129,32 @@ class PistaController extends Controller
     public function actionVerPista($id)
     {
         $model = $this->findModel($id);
-        //Crear dos modelos distintos para poder gestionar tanto los eventos mostrados
-        //en el calendario como los mostrados abajo
-        //Si se usa el mismo DataProvider al tener que cambiar entre paginar y no paginar
-        //no serviria, ya que tras el primer getModels se queda configurada una de las dos opciones
         $reservas = $model->reservas;
+
+        $eventos = [];
+        //Crear los eventos correspondientes a cada reserva asignada a la pista
+        foreach ($reservas as $reserva) {
+
+            $partido = $reserva->partido;
+            $torneo = empty($partido) ? new Torneo() : $partido->torneo; //Si existe partido se coge el torneo si existe (siempre deberia existir ya que un partido existe siempre dentro de un torneo)
+
+            //Los dos tipos de eventos es reserva para uso privado o para un partido
+            $eventos[] = [
+                'title' => empty($partido) ? 'Reserva privada' : Html::encode((isset($torneo->nombre) ? $torneo ->nombre : '') . ' - J' . $partido->jornada), //si existe un partido tiene que estar asociado a un torneo
+                'start' => $reserva->fecha,
+                'color' => 'red',
+                'display' => 'background',
+                'url' => empty($partido) ? '' : Url::toRoute(['partido/view', 'id' => $model->id]), 
+            ];
+        }
+
+        $eventos = json_encode($eventos); //El FullCalendar requiere los eventos en formato json
+
+        //Crear dos modelos distintos para poder gestionar tanto los eventos mostrados
+        //en el calendario como los mostrados abajo debido a la paginación
+        //Si se usa el mismo DataProvider al tener que cambiar entre paginar y no paginar para mostrar
+        //los eventos tanto en el calendario como en la lista no serviria,
+        //ya que tras el primer getModels se queda configurada una de las dos opciones de paginación
         $reservasProvider = new ActiveDataProvider([
             'query' => $model->getReservas(),
             'sort' => [
@@ -141,11 +166,13 @@ class PistaController extends Controller
                 'pageSize' => Yii::$app->params['limiteEventos'],
             ],
         ]);
+        //Añadido un filtro para que solo se muestren las reservas con fecha mayor o igual a la actual
+        $reservasProvider->query->andFilterWhere(['>=', 'fecha', date('Y-m-d')]);
 
         return $this->render('verpista', [
             'model' => $model,
+            'eventos' => $eventos,
             'reservasProvider' => $reservasProvider,
-            'reservas' => $reservas,
         ]);
     }
 

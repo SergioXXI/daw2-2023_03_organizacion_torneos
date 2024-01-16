@@ -13,7 +13,7 @@ if(!isset($datos['id'])) $datos['id'] = '';
 if(!isset($datos['jornada'])) $datos['jornada'] = '';
  ?>
 
-<div class="d-flex justify-content-between px-3 py-2 <?= $resaltar ? 'bg-light bg-gradient rounded' : ''; ?>" id="<?= Html::encode($datos['fecha']) ?>">
+<div class="d-flex justify-content-between px-3 py-2" id="<?= Html::encode($datos['fecha']) ?>">
 	<div>
 		<p class="h4"><?= Html::encode($datos['titulo']) ?></p>
 		<div class="d-flex align-items-center mb-0 gap-3">
