@@ -44,7 +44,7 @@ class TorneoController extends Controller
                     'class' => \yii\filters\AccessControl::class,
                     'rules' => [
                         [
-                            'actions' => ['index', 'view','ver-partidos','add-torneo'],
+                            'actions' => ['index', 'view','ver-partidos'],
                             'allow' => true,
                             //'roles' => ['sysadmin','admin', 'usuario', 'organizador', 'gestor'],
                             
@@ -314,15 +314,4 @@ class TorneoController extends Controller
         throw new NotFoundHttpException(Yii::t('app', 'The requested page does not exist.'));
     }
     
-
-    public function actionAddTorneo()
-    {
-        $usuario= new User();
-        $participante= new Participante();
-        $sessionId = Yii::$app->user->id;
-        $participante=$participante::findOne(['usuario_id' => $sessionId]);
-        return $this->redirect(['participante/view', 'id' => $participante->id]);
-        
-        
-    }
 }

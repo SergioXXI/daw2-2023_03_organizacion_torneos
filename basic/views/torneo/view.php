@@ -16,7 +16,7 @@ $this->params['breadcrumbs'][] = $this->title;
 <div class="torneo-view">
 
     <h1><?= Html::encode($this->title) ?></h1>
-    <?= Html::a('Unirse al torneo', ['add-torneo', 'model' => $model], ['class' => 'btn btn-success']) ?>
+    
     <?= Html::a('Ver Partidos', ['ver-partidos', 'id' => $model->id], ['class' => 'btn btn-success']); ?>
     <?php
     if ((Yii::$app->user->can('admin'))||(Yii::$app->user->can('organizador'))||(Yii::$app->user->can('sysadmin'))) 
@@ -32,7 +32,10 @@ $this->params['breadcrumbs'][] = $this->title;
         ]);
     }
     ?>
-    <?= DetailView::widget([
+    <?php
+    if ((Yii::$app->user->can('admin'))||(Yii::$app->user->can('organizador'))||(Yii::$app->user->can('sysadmin'))) 
+    {
+        echo DetailView::widget([
         'model' => $model,
         'attributes' => [
             'id',
@@ -45,7 +48,42 @@ $this->params['breadcrumbs'][] = $this->title;
             'fecha_inicio',
             'fecha_limite',
         ],
-    ]) ?>
+        ]);
+
+    }
+    else{
+        echo DetailView::widget([
+            'model' => $model,
+            'attributes' => [
+                'id',
+                'nombre',
+                'descripcion',
+                'participantes_max',
+                [
+                    'attribute' => 'disciplina_id',
+                    'value' => function ($model) {
+                        return $model->disciplina->nombre;
+                    },
+                ],
+                [
+                    'attribute' => 'tipo_torneo_id',
+                    'value' => function ($model) {
+                        return $model->tipoTorneo->nombre;
+                    },
+                ],
+                [
+                    'attribute' => 'clase_id',
+                    'value' => function ($model) {
+                        return $model->clase->titulo;
+                    },
+                ],
+                
+                'fecha_inicio',
+                'fecha_limite',
+            ],
+            ]);
+    }
+    ?>
 
     <h2 class="mt-5 mb-4">Equipos Apuntados</h2>
     <?= GridView::widget([
