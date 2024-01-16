@@ -159,7 +159,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <?php if ($tieneEnInscripcion):?>
     <?= GridView::widget([
         'dataProvider' => new \yii\data\ArrayDataProvider(['allModels' => $torneosEnInscripcion]),
-        'columns' => $columnsTA,
+        'columns' => $columnsT,
     ]) ?>
     <?php else: ?>
         <p>Este equipo no tiene torneos en curso.</p>
