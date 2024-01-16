@@ -278,6 +278,10 @@ class TorneoController extends Controller
         return $this->redirect(['index']);
     }
 
+    /*
+     * Función que permite visualizar todos los partidos asociados a un
+     * torneo y ver los equipos que se enfrentan en dichos partidos
+    */
     public function actionVerPartidos($id)
     {
         $model = $this->findModel($id);
