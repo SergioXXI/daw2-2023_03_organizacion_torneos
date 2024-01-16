@@ -23,8 +23,8 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <p>
     <?php
-    if($participanteSesion != null){ 
-        if((Yii::$app->user->can('admin') || Yii::$app->user->can('sysadmin') || Yii::$app->user->can('gestor') || $participanteSesion->id == $model->id)) 
+ 
+        if((Yii::$app->user->can('admin') || Yii::$app->user->can('sysadmin') || Yii::$app->user->can('gestor'))) 
         { ?>   
             <?= Html::a(Yii::t('app', 'Actualizar'), ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
             <?= Html::a(Yii::t('app', 'Borrar'), ['delete', 'id' => $model->id], [
@@ -35,8 +35,20 @@ $this->params['breadcrumbs'][] = $this->title;
                 ],
             ]) ?>
         <?php 
+        } else if($participanteSesion != null) {
+            if($participanteSesion->id == $model->id)
+            {?>
+                <?= Html::a(Yii::t('app', 'Actualizar'), ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
+                <?= Html::a(Yii::t('app', 'Borrar'), ['delete', 'id' => $model->id], [
+                    'class' => 'btn btn-danger',
+                    'data' => [
+                        'confirm' => Yii::t('app', 'Are you sure you want to delete this item?'),
+                        'method' => 'post',
+                    ],
+                ]) ?>
+    <?php    }
         }
-    }?>
+    ?>
     </p>
     
     <?php
@@ -76,14 +88,18 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <h2>Equipo - Torneo</h2>
     <?php
-    if($participanteSesion != null){  
-        if((Yii::$app->user->can('admin') || Yii::$app->user->can('sysadmin') || Yii::$app->user->can('gestor') || $participanteSesion->id == $model->id)) 
+        if((Yii::$app->user->can('admin') || Yii::$app->user->can('sysadmin') || Yii::$app->user->can('gestor'))) 
         { ?>
             <?= Html::a('Unirse a un equipo', ['add-equipo', 'id' => $model->id], ['class' => 'btn btn-success']) ?>
             <?= Html::a(Yii::t('app', 'Crear Equipo'), ['equipo/create', 'creador_id'=>$model->id], ['class' => 'btn btn-success']) ?>
         <?php 
-        } 
-    }
+        } else if($participanteSesion != null) {
+            if($participanteSesion->id == $model->id)
+            {?>
+                <?= Html::a('Unirse a un equipo', ['add-equipo', 'id' => $model->id], ['class' => 'btn btn-success']) ?>
+                <?= Html::a(Yii::t('app', 'Crear Equipo'), ['equipo/create', 'creador_id'=>$model->id], ['class' => 'btn btn-success']) ?>
+    <?php    }
+        }
     
     $columns = [
         'nombre',

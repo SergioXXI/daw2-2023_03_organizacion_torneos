@@ -15,7 +15,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <h1><?= Html::encode($this->title) ?></h1>
 
     <?php
-    if((Yii::$app->user->can('admin') || Yii::$app->user->can('sysadmin') || Yii::$app->user->can('gestor')) && $idUser==null){?>
+    if((Yii::$app->user->can('admin') || Yii::$app->user->can('sysadmin') || Yii::$app->user->can('gestor'))){?>
         <?php $form = ActiveForm::begin(); ?>
                 <?= Html::submitButton('Usuario Existente', ['name' => 'userType', 'value' => 'existing', 'class' => 'btn btn-primary']) ?>
                 <?= Html::submitButton('Nuevo Usuario', ['name' => 'userType', 'value' => 'new', 'class' => 'btn btn-secondary']) ?>

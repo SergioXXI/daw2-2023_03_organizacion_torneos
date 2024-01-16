@@ -19,8 +19,8 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <p> 
         <?php 
-        if($participanteSesion != null){
-            if((Yii::$app->user->can('admin') || Yii::$app->user->can('sysadmin') || Yii::$app->user->can('gestor') || $participanteSesion->id == $model->creador_id))
+        
+            if(Yii::$app->user->can('admin') || Yii::$app->user->can('sysadmin') || Yii::$app->user->can('gestor') )
             {?>
                 <?= Html::a(Yii::t('app', 'Actualizar'), ['update', 'id' => $model->id], ['class' => 'btn btn-primary']);?>
                 <?= Html::a(Yii::t('app', 'Borrar'), ['delete', 'id' => $model->id], [
@@ -30,8 +30,20 @@ $this->params['breadcrumbs'][] = $this->title;
                         'method' => 'post',
                     ],
                 ]);?>
-            <?php }
-        }?>
+         <?php  }else if($participanteSesion != null) {
+                    if($participanteSesion->id == $model->creador_id)
+                    {?>
+                        <?= Html::a(Yii::t('app', 'Actualizar'), ['update', 'id' => $model->id], ['class' => 'btn btn-primary']);?>
+                        <?= Html::a(Yii::t('app', 'Borrar'), ['delete', 'id' => $model->id], [
+                            'class' => 'btn btn-danger',
+                            'data' => [
+                                'confirm' => Yii::t('app', 'Are you sure you want to delete this item?'),
+                                'method' => 'post',
+                            ],
+                        ]);?>
+            <?php    }
+                }
+        ?>
     </p>
     
     <?php
@@ -93,14 +105,20 @@ $this->params['breadcrumbs'][] = $this->title;
     <?php else: ?>
         <p>Este equipo no tiene participantes.</p>
     <?php endif; 
-    if($participanteSesion != null){
-        if ((Yii::$app->user->can('admin') || Yii::$app->user->can('gestor') || Yii::$app->user->can('sysadmin')) || $participanteSesion->id === $model->creador_id) 
+ 
+        if ((Yii::$app->user->can('admin') || Yii::$app->user->can('gestor') || Yii::$app->user->can('sysadmin'))) 
         {
             ?>
             <?= Html::a('Unir el equipo a un torneo', ['add-torneo', 'id' => $model->id], ['class' => 'btn btn-success']) ?>
         <?php
-        } 
-    }?>
+        }else if($participanteSesion != null) {
+            if($participanteSesion->id == $model->creador_id)
+            {?>
+                <?= Html::a('Unir el equipo a un torneo', ['add-torneo', 'id' => $model->id], ['class' => 'btn btn-success']) ?>
+    <?php    }
+        }
+?>
+
     <h2>Torneos del equipo</h2>
 
     <h3>Torneos con incripción abierta</h3>
