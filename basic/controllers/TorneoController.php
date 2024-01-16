@@ -319,11 +319,10 @@ class TorneoController extends Controller
     {
         $usuario= new User();
         $participante= new Participante();
-        $equipo_participante= new EquipoParticipante();
         $sessionId = Yii::$app->user->id;
         $participante=$participante::findOne(['usuario_id' => $sessionId]);
-        $equipo_participante=$equipo_participante::findOne(['participante_id' => $participante->id]);
+        return $this->redirect(['participante/view', 'id' => $participante->id]);
         
-        return $this->redirect(['equipo/add-torneo', 'id' => $equipo_participante->equipo_id]);
+        
     }
 }
