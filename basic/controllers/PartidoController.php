@@ -89,8 +89,7 @@ class PartidoController extends Controller
 
         if ($this->request->isPost) {
             if ($model->load($this->request->post()) && $model->save()) {
-                return $this->redirect(['equipos_partidos', 'id_partido' => $model->id,'id_torneo' => $model->torneo_id]);
-                
+                return $this->redirect(['equipos_partidos', 'id_partido' => $model->id,'id_torneo' => $model->torneo_id]);  
             }
         } else {
             $model->loadDefaultValues();
@@ -113,7 +112,7 @@ class PartidoController extends Controller
         $model = $this->findModel($id);
 
         if ($this->request->isPost && $model->load($this->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+            return $this->redirect(['equipos_partidos', 'id_partido' => $model->id,'id_torneo' => $model->torneo_id]);
         }
 
         return $this->render('update', [
