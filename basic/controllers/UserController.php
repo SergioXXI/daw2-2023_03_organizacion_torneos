@@ -74,7 +74,7 @@ class UserController extends Controller
                  $userEnBd->password = $model->password;
                  $userEnBd->save();
                  return $this->redirect(['view', 'id' => $userEnBd->id]);
-             } else if ($model->save()) {
+             } else if (!$userEnBd && $model->save()) {
                 // Registro exitoso
                 $userId = $model->id;
                 $auth = Yii::$app->authManager;
@@ -90,7 +90,7 @@ class UserController extends Controller
                 return $this->redirect(['site/login']);
 
             } else {
-                Yii::error("Error al guardar el modelo en la base de datos: " . print_r($model->errors, true));
+                Yii::$app->session->setFlash('error', 'El email ya existe');
             }
         } else {
             Yii::error("Error en la validación del modelo: " . print_r($model->errors, true));
@@ -288,13 +288,14 @@ class UserController extends Controller
     private function fullUpdate($id, $propio = false)
     {
         $model = $this->findModel($id);
+        $modelCopia = $this->findModel($id);
         $nombreRol = Yii::$app->authManager->getRolesByUser($id);
         $nombreRol = reset($nombreRol);
 
         if ($this->request->isPost && $model->load($this->request->post())) {
             $userEnBd = User::find()->where(['email' => $model->email])->one();
             // comprobamos que el email no exista en la bd
-            if(!$userEnBd) {
+            if(($userEnBd && $userEnBd->id == $model->id) || !$userEnBd) {
                 if ($model->save() 
                 && $this->updateRol($model->id, isset($this->request->post('User')['rol']) ? $this->request->post('User')['rol'] : $nombreRol->name)) {
                     return $propio 
@@ -303,8 +304,10 @@ class UserController extends Controller
                 } else {
                     Yii::error("Error al guardar el modelo en la base de datos: " . print_r($model->errors, true));
                 }
-            } else {
-                Yii::$app->session->setFlash('error', 'El email ya existe');
+            } 
+            else
+            {
+                Yii::$app->session->setFlash('error', 'Email ya existente');
             }
         } 
 
