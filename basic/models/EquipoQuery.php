@@ -15,6 +15,7 @@ class EquipoQuery extends \yii\db\ActiveQuery
     }*/
 
     /**
+     * Función que lista todos los modelos que haya
      * {@inheritdoc}
      * @return Equipo[]|array
      */
@@ -24,6 +25,7 @@ class EquipoQuery extends \yii\db\ActiveQuery
     }
 
     /**
+     * Función que solo lista un modelo de los que haya
      * {@inheritdoc}
      * @return Equipo|array|null
      */

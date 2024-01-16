@@ -11,10 +11,11 @@ use app\models\Equipo;
  */
 class EquipoSearch extends Equipo
 {
-    public $numParticipantes;
-    public $categoriaNombre;
+    public $numParticipantes; //numero de participantes de cada equipo
+    public $categoriaNombre;  //nombre de la categoría
     
     /**
+     * Reglas de los campos del modelo
      * {@inheritdoc}
      */
     public function rules()
@@ -35,7 +36,7 @@ class EquipoSearch extends Equipo
     }
 
     /**
-     * Creates data provider instance with search query applied
+     * Crea una instancia de un provedor de datos
      *
      * @param array $params
      *
@@ -49,17 +50,18 @@ class EquipoSearch extends Equipo
         // add conditions that should always apply here
         $query->joinWith(['participantes'])->groupBy('equipo.id'); //Hay que tener una relación 'participantes' en el modelo Equipo
 
-        //Se añade la lógica para contar el número de participantes
+        //lógica para contar el número de participantes
         $query->select([
-            'equipo.*', //Se selecciona todos los campos de equipo
-            'numParticipantes' => 'COUNT(equipo_participante.participante_id)' // Cuenta los participantes
+            'equipo.*', //selecciona todos los campos de equipo
+            'numParticipantes' => 'COUNT(equipo_participante.participante_id)' //se cuentan los participantes del equipo
         ]);
         
-        
+        //guarda la informacion en el dataProvider
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
         ]);
 
+        //se ordenan ascendentemente y descendentemente
         $dataProvider->sort->attributes['categoriaNombre'] = [
             'asc' => ['categoria.nombre' => SORT_ASC],
             'desc' => ['categoria.nombre' => SORT_DESC],
@@ -74,17 +76,19 @@ class EquipoSearch extends Equipo
             return $dataProvider;
         }
 
+        //si no es nulo el numero de participantes se guarda el valor
         if ($this->numParticipantes != null) {
             $query->having(['numParticipantes' => $this->numParticipantes]);
         }
 
-       
+        //se ordenan ascendentemente y descendentemente
         $dataProvider->sort->attributes['numParticipantes']=[
 			'asc'=>['numParticipantes'=>SORT_ASC],
 			'desc'=>['numParticipantes'=>SORT_DESC],
 		];
 
         // grid filtering conditions
+        //se establecen las condiciones para realizar filtros de búsqueda en la vista de index
         $query->andFilterWhere([
             'equipo.id' => $this->id,
         ]);

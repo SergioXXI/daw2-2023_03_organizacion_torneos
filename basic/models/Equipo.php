@@ -35,6 +35,7 @@ class Equipo extends \yii\db\ActiveRecord
     }
 
     /**
+     * Reglas de los campos del modelo
      * {@inheritdoc}
      */
     public function rules()
@@ -52,6 +53,7 @@ class Equipo extends \yii\db\ActiveRecord
     }
 
     /**
+     * Etiquetas de los campos del modelo
      * {@inheritdoc}
      */
     public function attributeLabels()
@@ -68,7 +70,7 @@ class Equipo extends \yii\db\ActiveRecord
     }
 
     /**
-     * Gets query for [[Categoria]].
+     * Devuelve el valor del campo creador_id de la tabla equipo
      *
      * @return \yii\db\ActiveQuery|CreadorQuery
      */
@@ -79,7 +81,7 @@ class Equipo extends \yii\db\ActiveRecord
 
 
     /**
-     * Gets query for [[Categoria]].
+     * Devuelve el valor del campo categoria_id de la tabla equipo
      *
      * @return \yii\db\ActiveQuery|CategoriaQuery
      */
@@ -90,7 +92,7 @@ class Equipo extends \yii\db\ActiveRecord
     
 
     /**
-     * Gets query for [[EquipoParticipantes]].
+     * Devuelve los ids de equipos en los que se participa
      *
      * @return \yii\db\ActiveQuery|EquipoParticipanteQuery
      */
@@ -100,7 +102,7 @@ class Equipo extends \yii\db\ActiveRecord
     }
 
     /**
-     * Gets query for [[Participantes]].
+     * Devuelve los participantes de un equipo a partir de la tabla equipo_participante
      *
      * @return \yii\db\ActiveQuery|ParticipanteQuery
      */
@@ -110,8 +112,8 @@ class Equipo extends \yii\db\ActiveRecord
     }
 
 
-    /**creadorid->participante.usuario_id->usuario.nombre
-     * Gets query for [[Usuario]].
+    /**
+     * Devuelve los usuarios que son participantes
      *
      * @return \yii\db\ActiveQuery|UsuarioQuery
      */
@@ -120,15 +122,16 @@ class Equipo extends \yii\db\ActiveRecord
         return $this->hasOne(User::class, ['id' => 'usuario_id'])->viaTable('{{%participante}}', ['id' => 'creador_id']);
     }
     
-
-    //Función para contar cuantos participantes tiene el equipo
+    /**
+     * Cuenta cuantos participantes tiene el equipo
+     */
     public function getNumParticipantes()
     {
         return $this->getParticipantes()->count();
     }
 
     /**
-     * Gets query for [[PartidoEquipos]].
+     * Devuelve los partidos en los que participa un equipo
      *
      * @return \yii\db\ActiveQuery|PartidoEquipoQuery
      */
@@ -138,7 +141,7 @@ class Equipo extends \yii\db\ActiveRecord
     }
 
     /**
-     * Gets query for [[Partidos]].
+     * Devuelve el id de los partidos en los que participa un equipo a través de la tabla partido_equipo
      *
      * @return \yii\db\ActiveQuery|PartidoQuery
      */
@@ -148,7 +151,7 @@ class Equipo extends \yii\db\ActiveRecord
     }
 
     /**
-     * Gets query for [[Premios]].
+     * Devuelve los premios que hay
      *
      * @return \yii\db\ActiveQuery|PremioQuery
      */
@@ -158,7 +161,7 @@ class Equipo extends \yii\db\ActiveRecord
     }
 
     /**
-     * Gets query for [[TorneoEquipos]].
+     * Devuelve los torneos en los que participan los equipos
      *
      * @return \yii\db\ActiveQuery|TorneoEquipoQuery
      */
@@ -168,7 +171,7 @@ class Equipo extends \yii\db\ActiveRecord
     }
 
     /**
-     * Gets query for [[Torneos]].
+     * Devuelve los torneos a partir de la tabla torneo_equipo
      *
      * @return \yii\db\ActiveQuery|TorneoQuery
      */
