@@ -12,7 +12,21 @@ $this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Users'), 'url' => ['
 $this->params['breadcrumbs'][] = ['label' => $model->id, 'url' => ['view', 'id' => $model->id]];
 $this->params['breadcrumbs'][] = Yii::t('app', 'Update');
 
-$roles = app\views\user\HelperVistasUser::extraerRolesDesplegable(); // Extraemos los roles para el desplegable
+// si el id del usuario que queremos modificar coincide con el id del usuario logueado y es sysadmin
+// en $roles solo tiene que aparecer sysadmin
+$rolesUsuario = Yii::$app->authManager->getRolesByUser(Yii::$app->request->get('id'));
+// Se supone que cada usuario solo tiene un rol
+$rolUsuario = !empty($rolesUsuario) ? reset($rolesUsuario) : null;
+
+if (Yii::$app->user->id == Yii::$app->request->get('id') 
+    && (Yii::$app->user->can('sysadmin') || Yii::$app->user->can('admin'))
+    // admin no puede modificar el rol a sysadmin
+    || (Yii::$app->user->can('admin') && $rolUsuario->name == 'sysadmin')
+    ) {
+    $roles = null;
+} else {
+    $roles = app\views\user\HelperVistasUser::extraerRolesDesplegable(); // Extraemos los roles para el desplegable
+}
 ?>
 <div class="user-update">
 
