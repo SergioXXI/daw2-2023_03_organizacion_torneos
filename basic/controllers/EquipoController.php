@@ -18,7 +18,9 @@ use app\controllers\ArrayDataProvider;
 
 
 /**
- * EquipoController implements the CRUD actions for Equipo model.
+ * EquipoController.
+ * 
+ * actionIndex, actionView, actionCreate, actionUpdate, actionAddParticipante, actionExpulsarParticipante, actionAddTorneo, actionSalirTorneo, actionDelete
  */
 class EquipoController extends Controller
 {
@@ -48,11 +50,6 @@ class EquipoController extends Controller
                             'actions' => ['update','view','expulsar-participante','add-torneo','lider','expulsar-participante'],
                             'allow' => true,
                             'roles' => ['sysadmin','admin', 'gestor', 'usuario'],
-                        ],
-                        [
-                            'actions' => ['create', 'update', 'delete'],
-                            'allow' => true,
-                            'roles' => ['sysadmin','admin','gestor', 'usuario'],
                         ],
                     ],
                 ],
