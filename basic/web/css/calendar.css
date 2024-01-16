@@ -23,6 +23,18 @@
     white-space: normal !important;
 }
 
+.inicio{
+    color: green;
+}
+
+.fin{
+    color: indianred;
+}
+
+.plazo{
+    color: orange;
+}
+
 #calendar-pista .fc-event{
     display: flex;
     justify-content: center;
@@ -52,8 +64,7 @@
 }
 
 #calendar-calendario .fc-event:hover{
-    background-color: #2b5068 !important;
-    border-color: #2b5068 !important;
+    
     font-weight: bold;
 }
 

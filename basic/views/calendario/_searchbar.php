@@ -23,7 +23,7 @@ $form = ActiveForm::begin([
     'campos' => [
         ['atributo' => 'disciplina_id', 'tipo' => 'dropdown', 'opciones' => Disciplina::getListadoDisciplinasPorId() , 'placeholder' => 'Seleccione una disciplina'],
         ['atributo' => 'clase_id', 'tipo' => 'dropdown', 'opciones' => Clase::getListadoClasePorId() , 'placeholder' => 'Seleccione una clase'],
-        ['atributo' => 'jornada', 'tipo' => 'number', 'placeholder' => 'Introduzca el número de jornada'],
+        ['atributo' => 'jornada', 'tipo' => 'number', 'placeholder' => 'Número de jornada'],
     ],
 ]); ?>
 

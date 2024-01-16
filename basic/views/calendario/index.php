@@ -5,25 +5,6 @@ use yii\widgets\ActiveForm;
 use app\widgets\EventoTarjetaWidget;
 use yii\bootstrap5\LinkPager;
 
-
-/* $form = ActiveForm::begin([
-    'action' => ['index'],
-    'method' => 'get',
-]);
-
-echo Html::input('text', 'busquedaGlobal', Yii::$app->request->get('busquedaGlobal'), ['class' => 'form-control', 'placeholder' => 'Search Torneo events']);
-
-if (isset($torneoSearch->errors['busquedaGlobal'])) {
-    // Display validation errors
-    echo '<div class="alert alert-danger">' . implode('<br>', $torneoSearch->errors['busquedaGlobal']) . '</div>';
-}
-
-echo Html::submitButton('Search', ['class' => 'btn btn-primary']);
-ActiveForm::end();
-
-// ... your existing logic for displaying events
-
- */
 ?>
 
 <?= $this->render('_searchbar',  ['torneoSearch' => $torneoSearch]); ?>
@@ -42,6 +23,8 @@ ActiveForm::end();
 $i=0;
 $num_eventos = $eventosProvider->getCount();
 
+//Recorrer el dataProvider de proximos eventos para generar una tarjeta para cada uno de ellos
+//Para esto se va a utilizar el widget Evento Tarjeta
 foreach($eventosProvider->models as $evento) {
     echo EventoTarjetaWidget::widget([
         'datos' => [

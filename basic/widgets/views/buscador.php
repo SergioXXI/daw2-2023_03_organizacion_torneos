@@ -37,7 +37,7 @@ foreach($campos as $campo) {
             <summary class="text-center btn btn-success fw-bold shadow-sm">Filtros avanzados</summary>
             <fieldset id="filtros">
                 <div class="busqueda-filtros">
-                    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-4 mt-0">
+                    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-<?= min(count($campos),4); ?> g-4 mt-0">
                         <?php 
                             foreach($campos as $campo) {
                                 //Imprimir el input correspondiente al valor de $campo['tipo']

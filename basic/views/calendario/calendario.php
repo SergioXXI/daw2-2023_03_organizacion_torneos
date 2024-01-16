@@ -2,50 +2,38 @@
 <?php
 use yii\web\View;
 use yii\helpers\Html;
-use yii\helpers\Url;
 
 $this->registerJsFile('https://cdn.jsdelivr.net/npm/fullcalendar@6.1.10/index.global.min.js', ['position' => View::POS_HEAD]);
 $this->registerJsFile('fullcalendar/dist/index.global.js', ['position' => View::POS_HEAD]);
-
-$this->registerJsFile('https://kit.fontawesome.com/6a8d4512ef.js', ['position' => View::POS_HEAD]);
-
 $this->registerCssFile("/torneos/basic/web/css/calendar.css");
-
-$eventos = [];
-
-//print_r($torneos->getModels());
-
-foreach ($torneos->getModels() as $torneo) {
-	$eventos[] = [
-        'title' => 'Inicio - ' . Html::encode($torneo->nombre),
-        'start' => Html::encode($torneo->fecha_inicio),
-        'color' => 'green',
-		'allDay' => true,
-		'url' => Url::toRoute(['torneo/view', 'id' => $torneo->id]),
-    ];
-
-    if($torneo->fecha_fin !== null) {
-        $eventos[] = [
-            'title' => 'Fin - ' . Html::encode($torneo->nombre),
-			'start' => Html::encode($torneo->fecha_fin),
-			'color' => 'red',
-			'allDay' => true,
-			'url' => Url::toRoute(['torneo/view', 'id' => $torneo->id]),
-        ];
-    }
-
-}
-$eventos = json_encode($eventos);
 
 ?>
 
-<h1>Calendario de eventos</h1>
+<div class="d-flex justify-content-between align-items-center">
+	<div>
+		<h1 class="mb-0 h1">Calendario de torneos</h1>
+		<div class="d-flex gap-3 align-items-center mt-3">
+			<div class="d-flex gap-2 align-items-center">
+				<p class="mb-0">Inicio de torneo</p> <i class="fa-solid fa-circle inicio"></i>
+			</div>
+			<div class="d-flex gap-2 align-items-center">
+				<p class="mb-0">Fin de plazo de inscripción</p> <i class="fa-solid fa-circle plazo"></i>
+			</div>
+			<div class="d-flex gap-2 align-items-center">
+				<p class="mb-0">Finalización de torneo</p> <i class="fa-solid fa-circle fin"></i>
+			</div>
+		</div>
+	</div>
+	<?= Html::a('Ver Eventos', ['index'], ['class' => 'text-center btn btn-success fw-bold shadow-sm me-2']) ?>
+</div>
 
+
+<hr class="mt-1">
 <div id="calendar-calendario"></div>
 
 
 <script>
-
+	//Script correspondiente a visualizar los eventos generados previamente en formato calendario mediante el uso de FullCalendar
 	document.addEventListener('DOMContentLoaded', function () {
 		var calendarEl = document.getElementById('calendar-calendario');
 
@@ -56,24 +44,24 @@ $eventos = json_encode($eventos);
 			showNonCurrentDates: false,
 			eventTextColor: 'white',
 			firstDay: 1,
-
-			dayMaxEventRows: true, // for all non-TimeGrid views
-    		moreLinkClick: 'listDay', // Show a popover when the user clicks on "+X more"
-			eventLimitText: 'View more events', // Customize the "+ more" text
-			
-
+			dayMaxEventRows: true, //Establecer maximo de eventos por linea
+    		moreLinkClick: 'listDay', //Boton +x eventos
+		
+			//Texto de los botones del header
 			buttonText: {
 				today: 'Actual',
 				list: 'Lista',
 				dayGridMonth: 'Meses',
 			},
 
+			//Botones del header
 			headerToolbar: {
-				start: 'dayGridMonth,listMonth', // will normally be on the left. if RTL, will be on the right
+				start: 'dayGridMonth,listMonth', 
   				center: 'title',
-  				end: 'today,prev,next' // will normally be on the right. if RTL, will be on the left
+  				end: 'today,prev,next'
 			},
 
+			//Cambiado el texto del boton ver mas eventos
 			moreLinkContent:function(args){
       			return '+' + args.num + ' más';
     		},
@@ -82,8 +70,4 @@ $eventos = json_encode($eventos);
 
 		calendar.render();
 	});
-
-
-
-
 </script>
