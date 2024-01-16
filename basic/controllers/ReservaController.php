@@ -42,7 +42,12 @@ class ReservaController extends Controller
                         [
                             'actions' => ['index', 'view'],
                             'allow' => true,
-                            'roles' => ['sysadmin','admin', 'usuario', 'organizador', 'gestor'],
+                            'roles' => ['sysadmin','admin', 'organizador', 'gestor'],
+                        ],
+                        [
+                            'actions' => ['mis-reservas'],
+                            'allow' => true,
+                            'roles' => ['sysadmin','admin', 'organizador', 'gestor', 'usuario'],
                         ],
                         [
                             'actions' => ['create', 'update', 'delete'],
@@ -64,6 +69,18 @@ class ReservaController extends Controller
     {
         $searchModel = new ReservaSearch();
         $dataProvider = $searchModel->search($this->request->queryParams);
+        
+        return $this->render('index', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+        ]);
+    }
+
+    public function actionMisReservas()
+    {
+        $searchModel = new ReservaSearch();
+        $dataProvider = $searchModel->search($this->request->queryParams);
+        $dataProvider->query->andWhere(['usuario_id' => Yii::$app->user->id]);
 
         return $this->render('index', [
             'searchModel' => $searchModel,

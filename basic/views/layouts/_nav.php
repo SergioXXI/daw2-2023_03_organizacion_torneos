@@ -18,7 +18,8 @@ GRUPO 1 -
 GRUPO 2 -
     <- Torneos [/torneo/index] -> Todos
     A<- Partidos [partidoS/index]-> sysadmin, admin, organizador
-    <- Reservas [/reserva/index] -> Todos
+    <- Mis Reservas [/reserva/mis-reservas] -> Todos
+    <- Reservas [/reserva/index] -> sysadmin, admin, organizador, gestor
     A<- Disciplina [/disciplinas/index] -> sysadmin, admin
     A<- Categoria [/categoria/index] -> sysadmin, admin
     A<- Clase [/clase/index] -> sysadmin, admin
@@ -55,8 +56,10 @@ $elementos_izquierda = [
     ['label' => 'Torneos', 'url' => ['/torneo/index']],
     ['label' => 'Partidos', 'url' => ['/partido/index']],
     ['label' => 'Pistas', 'url' => ['/pista/pistas']],
+    ['label' => 'Mis reservas', 'url' => ['/reserva/mis-reservas'], 
+        'visible' => !Yii::$app->user->isGuest || Yii::$app->user->can('usuario')],
     ['label' => 'Reservas', 'url' => ['/reserva/index'], 
-        'visible' => !Yii::$app->user->isGuest],
+        'visible' => Yii::$app->user->can('sysadmin') || Yii::$app->user->can('admin')||Yii::$app->user->can('organizador')||Yii::$app->user->can('gestor')],
     ['label' => 'Calendario', 'url' => ['/calendario/index']],
     [
         'label' => 'Panel de administración',
