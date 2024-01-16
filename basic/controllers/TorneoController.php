@@ -2,11 +2,14 @@
 
 namespace app\controllers;
 
+use app\models\EquipoParticipante;
+use app\models\Participante;
 use app\models\TorneoImagen;
 use app\models\Imagen;
 use app\models\Torneo;
 use app\models\Premio;
 use app\models\TorneoSearch;
+use app\models\User;
 use yii\data\ActiveDataProvider;
 use yii\web\UploadedFile;
 use yii\web\Controller;
@@ -287,5 +290,16 @@ class TorneoController extends Controller
         }
 
         throw new NotFoundHttpException(Yii::t('app', 'The requested page does not exist.'));
+    }
+
+    public function actionAddTorneo($model)
+    {
+        $usuario= new User();
+        $participante= new Participante();
+        $equipo_participante= new EquipoParticipante();
+        $sessionId = Yii::$app->user->id;
+        $participante=$usuario::findOne(['usuario_id' => $sessionId]);
+        $equipo_participante::findOne(['participante_id' => $participante->id]);
+        return $this->redirect(['view', 'id' => $equipo_participante->equipo_id]);
     }
 }
