@@ -1,1 +1,0 @@
-ALTER TABLE `direccion` ADD UNIQUE(`calle`, `numero`, `cod_postal`, `ciudad`, `provincia`, `pais`);
