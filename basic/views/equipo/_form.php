@@ -23,7 +23,7 @@ use yii\widgets\ActiveForm;
         ['prompt' => 'Selecciona una Categoría']
     ) ?>
     <?php    
-    if ((Yii::$app->user->can('gestor')) && (Yii::$app->user->can('organizador')) && (Yii::$app->user->can('sysadmin')))  
+    if ((Yii::$app->user->can('gestor')) || (Yii::$app->user->can('organizador')) || (Yii::$app->user->can('sysadmin')))  
         {?>
         <?= $form->field($model, 'creador_id')->dropDownList(
             $listaParticipantes, 
