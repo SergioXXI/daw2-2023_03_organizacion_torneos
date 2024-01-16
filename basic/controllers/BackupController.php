@@ -6,6 +6,7 @@ use app\models\Backup;
 use yii\web\Controller;
 use yii\filters\VerbFilter;
 use yii\web\UploadedFile;
+use yii\data\ArrayDataProvider;
 
 use Yii;
 
@@ -53,8 +54,21 @@ class BackupController extends Controller
     public function actionIndex()
     {
         $model = new Backup();
+        $rutaBackup = Yii::getAlias('@app/backup/');
+        $ficherosBackup = glob($rutaBackup . '/*.sql');
+
+        //Ordenar los ficheros, el nombre utilizado provoca que se ordenen en nombre inverso
+        //Por lo tanto se va a hacer reverse al array de ficheros
+        $ficherosBackup = array_reverse($ficherosBackup);
+
+        $dataProvider = new ArrayDataProvider([
+            'allModels' => $ficherosBackup,
+            'pagination' => false, // Disable pagination for simplicity
+        ]);
+
         return $this->render('index', [
             'model' => $model,
+            'ficherosBackup' => $dataProvider,
         ]);
     }
 
@@ -109,16 +123,41 @@ class BackupController extends Controller
         return $this->redirect(['index']);
     }
 
-    /* Acción que permite al usuario restaurar una copia de la base de datos
-     * Esta copia de seguridad debe ser un fichero .sql
-     *                      ***** ¡IMPORTANTE! *****
-     * Para poder utilizar esta función hay que modificar el path hacia mysql.exe en
-     * los parámetros de configuración params.php 
+    /* Acción que permite al usuario restaurar una copia de seguridad a partir de un fichero
+     * tipo .sql subido mediante el formulario de la vista index.php
      */
-    public function actionRestaurarBackup()
+    public function actionRestaurarFichero()
     {
         $model = new Backup();
-        $db = Yii::$app->db;
+
+        if (Yii::$app->request->isPost) {
+            //Se obtiene el nombre del fichero pasado por post
+            $nombreBackup = Yii::$app->request->post('fichero',null);
+            //Se obtiene la ruta a la carpeta backup
+            $rutaBackup = Yii::getAlias('@app/backup/');
+            if ($nombreBackup !== null) {
+                //Si el nombre del fichero no es vacio se obtiene la ruta completa al mismo
+                $rutaFicheroBackup = $rutaBackup . '/' . $nombreBackup;
+                //Se comprueba que existe el fichero, si existe se trata de restaurar la copia
+                if (file_exists($rutaFicheroBackup)) {
+                    if (BackupController::restaurarBackup($rutaFicheroBackup)) {
+                        Yii::$app->session->setFlash('success', 'Copiar de seguridad restaurada correctamente.');
+                    } else {
+                        Yii::$app->session->setFlash('error', 'Fallo al restaurar la copia de seguridad.');
+                    }
+                }
+            }
+        }
+        
+        return $this->redirect(['index', 'model' => $model]);
+    }
+
+    /* Acción que permite al usuario restaurar una copia de seguridad a partir de un fichero
+     * tipo .sql subido mediante el formulario de la vista index.php
+     */
+    public function actionRestaurarSubido()
+    {
+        $model = new Backup();
 
         if (Yii::$app->request->isPost) {
             //Obtener una instacia del fichero subido por el usuario
@@ -126,21 +165,7 @@ class BackupController extends Controller
             //Obtener la ruta temporal del fichero
             $rutaFicheroBackup = $model->ficheroBackup->tempName; 
 
-            //Separar el nombre de la base de datos del host
-            //ya que en el db.php se establece asi: mysql:host=localhost;dbname=daw2_2023_03_organizacion_torneos
-            $database=explode(";",$db->dsn);
-            $dbname=explode("=",$database['1'])[1];
-            //Obtener la ruta al ejecutable mysql.exe
-            $mysql = Yii::$app->params['rutaMysql'];
-
-            //Si la base de datos no dispone de contraseña se omite este parametro en el comando
-            $pass = empty($db->password) ? '' : '-p{$db->password}';
-
-            $command = "\"{$mysql}\" -u{$db->username} {$pass} {$dbname} < \"{$rutaFicheroBackup}\"";
-            exec($command, $output, $returnValue);
-
-            //Resultado de la ejecución devuelto por referencia
-            if ($returnValue === 0) {
+            if (BackupController::restaurarBackup($rutaFicheroBackup)) {
                 Yii::$app->session->setFlash('success', 'Copiar de seguridad restaurada correctamente.');
             } else {
                 Yii::$app->session->setFlash('error', 'Fallo al restaurar la copia de seguridad.');
@@ -148,6 +173,32 @@ class BackupController extends Controller
             
         }
         return $this->redirect(['index', 'model' => $model]);
+    }
+
+    /* Acción que permite al usuario restaurar una copia de la base de datos
+     * Esta copia de seguridad debe ser un fichero .sql
+     *                      ***** ¡IMPORTANTE! *****
+     * Para poder utilizar esta función hay que modificar el path hacia mysql.exe en
+     * los parámetros de configuración params.php 
+     */
+    protected static function restaurarBackup($rutaficheroBackup) {
+    
+        $db = Yii::$app->db;
+        //Separar el nombre de la base de datos del host
+        //ya que en el db.php se establece asi: mysql:host=localhost;dbname=daw2_2023_03_organizacion_torneos
+        $database=explode(";",$db->dsn);
+        $dbname=explode("=",$database['1'])[1];
+        //Obtener la ruta al ejecutable mysql.exe
+        $mysql = Yii::$app->params['rutaMysql'];
+
+        //Si la base de datos no dispone de contraseña se omite este parametro en el comando
+        $pass = empty($db->password) ? '' : '-p{$db->password}';
+
+        $command = "\"{$mysql}\" -u{$db->username} {$pass} {$dbname} < \"{$rutaficheroBackup}\"";
+        exec($command, $output, $returnValue);
+
+        //Resultado de la ejecución devuelto por referencia
+        return $returnValue === 0;
     }
 
 }
