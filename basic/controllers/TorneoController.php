@@ -17,6 +17,8 @@ use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\data\ArrayDataProvider;
 
+use Yii;
+
 /**
  * TorneoController implements the CRUD actions for Torneo model.
  */
@@ -42,7 +44,7 @@ class TorneoController extends Controller
                     'class' => \yii\filters\AccessControl::class,
                     'rules' => [
                         [
-                            'actions' => ['index', 'view'],
+                            'actions' => ['index', 'view','ver-partidos'],
                             'allow' => true,
                             //'roles' => ['sysadmin','admin', 'usuario', 'organizador', 'gestor'],
                             
@@ -274,6 +276,26 @@ class TorneoController extends Controller
         $model->delete();
 
         return $this->redirect(['index']);
+    }
+
+    public function actionVerPartidos($id)
+    {
+        $model = $this->findModel($id);
+        $partidos = new ArrayDataProvider([
+            'allModels' => $model->partidos,
+            'sort' => [
+                'attributes' => ['fecha'], //Se va a ordenar por fecha por defecto
+                'defaultOrder' => ['fecha' => SORT_ASC],
+            ],
+            'pagination' => [
+                'pageSize' => Yii::$app->params['limitePartidos'],
+            ],
+        ]);
+
+        return $this->render('ver_partidos', [
+            'torneo' => $model,
+            'partidos' => $partidos,
+        ]);
     }
 
     /**

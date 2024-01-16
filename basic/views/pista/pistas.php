@@ -17,7 +17,7 @@ use yii\helpers\Html;
 <?= $this->render('_searchbar',  ['model' => $searchModel]); ?>
 
 <!-- Mostrar elementos visualizados y total -->
-<div class="summary mt-2 ms-2">Se han encontrado <b> <?= Html::encode($models->getTotalCount()) ?> </b> elementos.</div>
+<div class="summary mt-2 ms-2 mb-2">Se han encontrado <b> <?= Html::encode($models->getTotalCount()) ?> </b> elementos.</div>
 
 
 <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-5 mb-5">
