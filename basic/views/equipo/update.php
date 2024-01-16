@@ -10,7 +10,7 @@ use yii\widgets\DetailView;
 /** @var yii\web\View $this */
 /** @var app\models\Equipo $model */
 
-$this->title = Yii::t('app', 'Update Equipo: {name}', [
+$this->title = Yii::t('app', 'Editar Equipo: {name}', [
     'name' => $model->id,
 ]);
 $this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Equipos'), 'url' => ['index']];

@@ -25,10 +25,6 @@ use yii\widgets\ActiveForm;
     <?php    
     if ((Yii::$app->user->can('gestor')) || (Yii::$app->user->can('organizador')) || (Yii::$app->user->can('sysadmin')))  
         {?>
-        <?= $form->field($model, 'creador_id')->dropDownList(
-            $listaParticipantes, 
-            ['prompt' => 'Selecciona un Lider']
-        ) ?>
     <?php } else{?>
         <?= $form->field($model, 'creador_id')->hiddenInput(['value' => $participanteSesion->id])->label(false) ?>
     <?php } ?>

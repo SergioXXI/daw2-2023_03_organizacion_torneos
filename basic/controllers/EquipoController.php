@@ -288,7 +288,7 @@ class EquipoController extends Controller
 
         // Convierte los participantes en un array para su uso en un dropdown, usando 'id' como clave y el nombre del usuario como valor
         $listaParticipantes = ArrayHelper::map($participantes, 'id', 'usuario.nombre');
-        
+
         // Logica de clonación
         if ((!\Yii::$app->user->can('gestor'))&&(!\Yii::$app->user->can('organizador'))&&(!\Yii::$app->user->can('sysadmin'))&&(\Yii::$app->user->can('usuario'))) 
         { 
@@ -343,21 +343,15 @@ class EquipoController extends Controller
         // Determina si el equipo tiene participantes
         $tieneParticipantes = $query->count() > 0;
 
+        // Obtiene el usuario asociado al modelo de Equipo
+        $usuario = $model->getUsuario()->one();
+
         // Verifica si la solicitud es POST y carga los datos en el modelo para guardarlos
         if ($this->request->isPost && $model->load($this->request->post()) && $model->save()) {
-            // Si se asignó un creador, inserta una relación en la tabla 'equipo_participante'
-            if($model->creador_id != null){
-                \Yii::$app->db->createCommand()->insert('equipo_participante', [
-                    'equipo_id' => $model->id,
-                    'participante_id' => $model->creador_id,
-                ])->execute();
-            }
             // Redirige a la vista del equipo
             return $this->redirect(['view', 'id' => $model->id]);
         }
 
-        // Obtiene el usuario asociado al modelo de Equipo
-        $usuario = $model->getUsuario()->one();
 
         // Renderiza la vista 'update' con todos los datos necesarios
         return $this->render('update', [
@@ -413,7 +407,6 @@ class EquipoController extends Controller
                 return $this->redirect(['view', 'id' => $id]);
             }
         }
-        
         // Renderiza la vista 'add-participante' con los datos necesarios
         return $this->render('add-participante', [
             'equipo' => $equipo, // Pasa la información del equipo a la vista
