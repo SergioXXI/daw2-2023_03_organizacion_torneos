@@ -42,12 +42,12 @@ class ReservaController extends Controller
                         [
                             'actions' => ['index', 'view'],
                             'allow' => true,
-                            'roles' => ['sysadmin','admin', 'participante', 'organizador', 'gestor'],
+                            'roles' => ['sysadmin','admin', 'usuario', 'organizador', 'gestor'],
                         ],
                         [
                             'actions' => ['create', 'update', 'delete'],
                             'allow' => true,
-                            'roles' => ['sysadmin','admin','organizador', 'gestor'],
+                            'roles' => ['sysadmin','admin','organizador', 'gestor', 'usuario'],
                         ],
                     ],
                 ],

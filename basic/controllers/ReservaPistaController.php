@@ -29,6 +29,15 @@ class ReservaPistaController extends Controller
                         'delete' => ['POST'],
                     ],
                 ],
+                'access' => [
+                    'class' => \yii\filters\AccessControl::class,
+                    'rules' => [
+                        [
+                            'allow' => true,
+                            'roles' => ['sysadmin','admin'],
+                        ],
+                    ],
+                ],
             ]
         );
     }
