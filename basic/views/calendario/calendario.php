@@ -5,7 +5,7 @@ use yii\helpers\Html;
 
 $this->registerJsFile('https://cdn.jsdelivr.net/npm/fullcalendar@6.1.10/index.global.min.js', ['position' => View::POS_HEAD]);
 $this->registerJsFile('fullcalendar/dist/index.global.js', ['position' => View::POS_HEAD]);
-$this->registerCssFile("/torneos/basic/web/css/calendar.css");
+$this->registerCssFile(Yii::getAlias('@web/css/calendar.css'));
 
 ?>
 
