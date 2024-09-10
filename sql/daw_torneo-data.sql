@@ -1,5 +1,5 @@
 START TRANSACTION;
-
+--adsfdsfadsfad
 -- Insertar datos de prueba para la tabla 'usuario'
 INSERT INTO usuario (nombre, apellido1, apellido2, email, password) VALUES
     ('Juan', 'Pérez', 'Gómez', 'juan@example.com', '123'),
